@@ -26,22 +26,22 @@
 
 $hp_achieve_stats = array(
 	array(
-		'value'    => 1272,
+		'value'    => 681,
 		'label'    => 'Total Prestasi',
 		'label_en' => 'Total Achievements',
 	),
 	array(
-		'value'    => 196,
+		'value'    => 129,
 		'label'    => 'Internasional',
 		'label_en' => 'International',
 	),
 	array(
-		'value'    => 533,
+		'value'    => 190,
 		'label'    => 'Nasional',
 		'label_en' => 'National',
 	),
 	array(
-		'value'    => 543,
+		'value'    => 362,
 		'label'    => 'Regional',
 		'label_en' => 'Regional',
 	),
