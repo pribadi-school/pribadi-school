@@ -1,0 +1,35 @@
+# This repo is scoped to just the custom child theme + project docs -
+# see CLAUDE.md's "What is NOT in this folder". WordPress core, plugins,
+# other themes, and the database are deliberately not tracked here: core/
+# plugins are managed by the host and add nothing but update-noise diffs,
+# and the database (all page content, Elementor's header/footer, the
+# homepage's template assignment) isn't file-based to begin with - moving
+# the site means a real DB export/import, not a git pull.
+#
+# Ignore everything by default, then explicitly un-ignore the paths that
+# are actually hand-written source for this project.
+/*
+!/wp-content/
+/wp-content/*
+!/wp-content/themes/
+/wp-content/themes/*
+!/wp-content/themes/oceanwp-child/
+!/CLAUDE.md
+!/.gitignore
+!/.cpanel.yml
+
+# Even inside the tracked theme folder, don't track secrets, DB dumps, or
+# OS/editor cruft that might land in there.
+*.sql
+*.sql.gz
+*.sql.zip
+*.log
+error_log
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+node_modules/
+vendor/
+package-lock.json

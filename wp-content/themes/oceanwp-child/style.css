@@ -1,0 +1,182 @@
+/*
+Theme Name: OceanWP Child
+Theme URI: https://oceanwp.org/
+Description: Child theme for OceanWP used by the Sekolah Pribadi Depok site. Holds custom styles and scripts so they survive parent theme updates.
+Author: Sekolah Pribadi Depok
+Template: oceanwp
+Version: 1.0.0
+Text Domain: oceanwp-child
+*/
+
+/* Site-wide custom styles go here.
+   Feature-specific styles live in assets/css/ and are enqueued from functions.php. */
+
+/* Swap the site's font (set site-wide via the Elementor kit as Montserrat)
+   for Inter. !important because the kit prints these same custom properties
+   unprefixed on .elementor-kit-8 with no !important of its own - this beats
+   it regardless of stylesheet load order. */
+:root {
+	--e-global-typography-primary-font-family: 'Inter', sans-serif !important;
+	--e-global-typography-secondary-font-family: 'Inter', sans-serif !important;
+	--e-global-typography-text-font-family: 'Inter', sans-serif !important;
+	--e-global-typography-accent-font-family: 'Inter', sans-serif !important;
+}
+
+/* The header's nav-menu widget hardcodes "Montserrat" directly (not via
+   the kit variables above) on this specific Elementor instance, so it
+   needs its own override. */
+#site-header .elementor-nav-menu .elementor-item,
+#site-header .elementor-nav-menu--dropdown .elementor-item,
+#site-header .elementor-nav-menu--dropdown .elementor-sub-item {
+	font-family: 'Inter', sans-serif !important;
+	letter-spacing: 0.2px !important;
+}
+
+/* Kit hardcodes generous 33px/16px item padding on this nav-menu instance -
+   tighten the gap between items and the bar's overall height. */
+#site-header .elementor-nav-menu--main .elementor-item {
+	padding-left: 22px !important;
+	padding-right: 22px !important;
+	padding-top: 8px !important;
+	padding-bottom: 8px !important;
+}
+
+/* Center the menu items within their column instead of hugging its left
+   edge next to the logo. The <ul> itself shrinks to its content width, so
+   centering it needs auto margins on the <ul>, not just justify-content
+   (which only affects how its own items sit inside its own, already-tight,
+   width). */
+#site-header .elementor-nav-menu--layout-horizontal .elementor-nav-menu {
+	justify-content: center;
+	margin-inline-start: auto;
+	margin-inline-end: auto;
+}
+
+/* ---------------------------------------------------------------
+   Header size, site-wide.
+   The empty top bar and the kit's generous section/logo sizing used to
+   only get tightened on the front page (bundled with the transparent-
+   header treatment in assets/css/transparent-header.css), so every other
+   page rendered a visibly taller header. Top bar has no content on any
+   page, so it's safe to hide everywhere; the compact padding/logo size
+   is now the one header size used everywhere, and transparent-header.css
+   only adds the front-page-only floating/color behaviour on top of it.
+   --------------------------------------------------------------- */
+
+#top-bar-wrap {
+	display: none;
+}
+
+#site-header .elementor-section {
+	padding-top: 8px;
+	padding-bottom: 8px;
+}
+
+#site-header .elementor-element-populated {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+#site-header .elementor-widget-image img {
+	max-height: 44px;
+	width: auto;
+	/* Position, not just size: this was previously bundled into the
+	   front-page-only transparent-header.css alongside the colour-swap
+	   logic, so every other page rendered the logo 72px further left and
+	   6px lower than the homepage. Same bug class as the top-bar/padding
+	   fix above - anything about how the header looks belongs here so
+	   every page matches; transparent-header.css should only ever add
+	   front-page-only floating/colour behaviour on top of it. */
+	margin-left: 72px;
+	margin-top: -6px;
+}
+
+@media only screen and (max-width: 767px) {
+	#site-header .elementor-widget-image img {
+		max-height: 42px;
+	}
+}
+
+/* ---------------------------------------------------------------
+   ID/EN language switch, inserted next to the Admission button by
+   assets/js/language-switch.js (DOM insertion only - Elementor's own
+   header data is never edited; see the docblock above
+   oceanwp_child_current_lang() in functions.php for the full picture).
+   --------------------------------------------------------------- */
+
+/* .btn-admission is this column's own existing class (not one this
+   project added) - a reliable, already-unique hook to lay the inserted
+   switch and the button out side by side without touching Elementor's
+   column/section structure itself. */
+#site-header .elementor-column.btn-admission .elementor-widget-wrap {
+	display: flex;
+	/* Elementor's own default for a populated widget-wrap is
+	   flex-direction: column (it's built to stack multiple widgets in one
+	   column vertically) - display:flex alone inherits that, which is
+	   exactly what put the switch above the button instead of beside it. */
+	flex-direction: row;
+	flex-wrap: nowrap;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 10px;
+}
+
+#site-header .hp-lang-switch {
+	display: inline-flex;
+	align-items: center;
+	flex-shrink: 0;
+	/* Pulls the switch away from the Admission button so it centres in the
+	   gap between the last nav item (Careers/Karier) and the button,
+	   instead of sitting flush against the button's left edge. Measured
+	   directly against the rendered gap, not guessed. */
+	margin-right: 63px;
+	border: 1.5px solid rgba(24, 168, 250, 0.35);
+	border-radius: 999px;
+	padding: 2px;
+	gap: 2px;
+}
+
+#site-header .hp-lang-btn {
+	display: inline-block;
+	border: 0;
+	background: transparent;
+	color: #5a6472;
+	font-family: 'Inter', sans-serif;
+	font-weight: 700;
+	font-size: 11px;
+	letter-spacing: 0.4px;
+	line-height: 1;
+	padding: 6px 10px;
+	border-radius: 999px;
+	cursor: pointer;
+	transition: background-color 200ms ease, color 200ms ease;
+}
+
+#site-header .hp-lang-btn:hover {
+	color: #18a8fa;
+}
+
+#site-header .hp-lang-btn.is-active {
+	background: #18a8fa;
+	color: #fff;
+}
+
+#site-header .hp-lang-btn.is-active:hover {
+	color: #fff;
+}
+
+#site-header .hp-lang-btn:focus-visible {
+	outline: 2px solid #18a8fa;
+	outline-offset: 2px;
+}
+
+/* This column is already hidden below tablet width (elementor-hidden-tablet
+   on its parent section, same as the rest of the desktop nav row) - the
+   mobile hamburger menu has its own completely different structure with no
+   equivalent slot, so the switch simply isn't shown there yet rather than
+   being wedged in somewhere that fights the mobile layout. */
+@media only screen and (max-width: 767px) {
+	#site-header .hp-lang-switch {
+		display: none;
+	}
+}

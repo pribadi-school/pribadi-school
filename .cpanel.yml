@@ -1,0 +1,16 @@
+---
+# Deploy step for cPanel's Git Version Control ("Pull or Deploy").
+#
+# This repo is intentionally scoped to just wp-content/themes/oceanwp-child
+# (see .gitignore / CLAUDE.md) - it's cloned into a private, non-web-facing
+# path, and this copies just that one folder into the real site's theme
+# directory on every deploy. Everything else (WP core, plugins, the
+# database) is managed separately by the host, not by this repo.
+#
+# DEPLOYPATH is new.pribadidepok.sch.id's theme directory, cPanel user
+# pribadisch (both confirmed via cPanel > Domains). If this site is ever
+# moved to a different cPanel account/user, update this path to match.
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/pribadisch/public_html/new.pribadidepok.sch.id/wp-content/themes/oceanwp-child/
+    - /bin/cp -R wp-content/themes/oceanwp-child/. $DEPLOYPATH

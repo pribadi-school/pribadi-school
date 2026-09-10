@@ -1,0 +1,1477 @@
+/**
+ * Custom homepage template styles.
+ * Only enqueued when page-homepage-custom.php is the active template
+ * (see oceanwp_child_enqueue_homepage_template_assets() in functions.php).
+ */
+
+/* ---------------------------------------------------------------
+   Design tokens - see design-system/sekolah-pribadi-depok/MASTER.md
+   (generated with the ui-ux-pro-max skill, hand-corrected to this
+   project's real brand rather than the tool's generic suggestion).
+   Scoped to #homepage-custom rather than :root so it can't leak into
+   Elementor-rendered pages that don't opt into this design system.
+   --------------------------------------------------------------- */
+#homepage-custom {
+	--color-primary: #18a8fa;
+	--color-primary-dark: #0d8fdb;
+	--color-gradient-start: #0172bb;
+	--color-gradient-end: #01a6a1;
+	--color-accent: #f26522;
+	--color-on-primary: #ffffff;
+	--color-foreground: #12233c;
+	--color-foreground-alt: #1c2733;
+	--color-muted-foreground: #5a6472;
+	--color-surface: #ffffff;
+	--color-surface-muted: #f7f9fc;
+	--color-border: rgba(18, 35, 60, 0.08);
+	--color-dark-surface: #0a0a0c;
+
+	/* Dark-surface variants of the brand gradient. The base gradient
+	   (#0172bb -> #01a6a1) is mixed for light backgrounds and goes muddy
+	   on the achievement section's near-black tiles, so these lightened
+	   stops are the on-dark counterpart - the same relationship the
+	   design system already documents for elevation on dark surfaces. */
+	--color-gradient-start-on-dark: #2bb6ff;
+	--color-gradient-end-on-dark: #4fe0da;
+
+	/* Teal accent used specifically on the intro/quote band (icon +
+	   underline rule) - distinct from --color-primary so this one section
+	   can be retuned without affecting every other blue element site-wide. */
+	--color-quote-accent: #0097b2;
+
+	--elevation-1: 0 1px 3px rgba(18, 35, 60, 0.08);
+	--elevation-2: 0 8px 20px rgba(18, 35, 60, 0.1);
+	--elevation-3: 0 20px 40px -12px rgba(18, 35, 60, 0.18);
+	--elevation-4: 0 30px 56px -14px rgba(18, 35, 60, 0.28);
+
+	--radius-sm: 10px;
+	--radius-md: 14px;
+	--radius-lg: 20px;
+
+	--motion-fast: 200ms;
+	--motion-base: 250ms;
+	--motion-slow: 300ms;
+	/* Entrance motion, not tap feedback, so it sits outside the 200-300ms
+	   interaction range. 500ms is mid-band for a standard scroll reveal
+	   (400-600ms); the previous 650ms overshot it and was the main reason
+	   the reveal read as sluggish.
+	   The curve is easeOutCubic - equivalent to GSAP's power2.out, the
+	   deceleration curve this pattern calls for. (It was previously named
+	   "quad", which is a different, weaker curve: quad is
+	   0.25/0.46/0.45/0.94. The value was always cubic; only the name was
+	   wrong.) */
+	--motion-reveal: 500ms;
+	--ease-out-cubic: cubic-bezier(0.22, 0.61, 0.36, 1);
+	/* One stagger step, used everywhere. Multiples of this only. */
+	--motion-stagger: 80ms;
+
+	/* clip, not hidden: overflow:hidden on an ancestor turns it into a
+	   scroll container, which silently breaks position:sticky on the hero
+	   below. overflow:clip does the same clipping without that side effect.
+	   (The achievement marquee clips itself via .hp-achieve-strip, so
+	   nothing here depends on this for horizontal containment.) */
+	overflow-x: clip;
+	background: #fff;
+	-webkit-font-smoothing: antialiased;
+}
+
+#homepage-custom .hp-container {
+	width: 1200px;
+	max-width: 90%;
+	margin: 0 auto;
+}
+
+#homepage-custom .hp-section {
+	padding: 90px 0;
+}
+
+/* Alternate background rhythm between sections. The magazine section sets
+   its own textured background further down. */
+#homepage-custom .hp-cards-section {
+	background: var(--color-surface-muted);
+}
+
+/* ---------------------------------------------------------------
+   Hero (video background, no overlaid content - the transparent
+   header sits on top of this, handled by transparent-header.css/js)
+   --------------------------------------------------------------- */
+
+/* Pinned: the video holds at the top of the viewport while the content
+   sheet below scrolls up over it. This replaces the old gradient fade -
+   there is no seam to disguise any more, because the sheet physically
+   covers the video instead of blending into it. */
+#homepage-custom .hp-hero.hero-video {
+	position: sticky;
+	top: 0;
+	z-index: 0;
+	min-height: 100vh;
+	overflow: hidden;
+	background: #000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+#homepage-custom .hp-hero video {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	min-width: 100%;
+	min-height: 100%;
+	width: auto;
+	height: auto;
+	transform: translate(-50%, -50%);
+	object-fit: cover;
+}
+
+/* Darken the video so the headline stays readable regardless of what's
+   playing underneath it. */
+#homepage-custom .hp-hero-overlay {
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(180deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.55));
+	z-index: 1;
+}
+
+#homepage-custom .hp-hero-content {
+	position: relative;
+	z-index: 2;
+	max-width: 760px;
+	margin: 0 auto;
+	padding: 0 24px;
+	text-align: center;
+	transition: opacity 260ms ease, transform 260ms ease;
+}
+
+/* Toggled by assets/js/hero-text-scroll.js as soon as the visitor scrolls. */
+#homepage-custom .hp-hero-content--hidden {
+	opacity: 0;
+	transform: translateY(-16px);
+	pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	#homepage-custom .hp-hero-content {
+		transition: none;
+	}
+}
+
+#homepage-custom .hp-hero-eyebrow {
+	font-family: 'Inter', sans-serif;
+	font-weight: 300;
+	font-size: clamp(1.1em, 2.2vw, 1.4em);
+	letter-spacing: 0.5px;
+	color: #fff;
+	opacity: 0.85;
+	margin: 0 0 6px;
+}
+
+#homepage-custom .hp-hero-headline {
+	font-family: 'Inter', sans-serif;
+	font-weight: 700;
+	font-size: clamp(1.8em, 4.2vw, 2.9em);
+	line-height: 1.2;
+	letter-spacing: -0.3px;
+	color: #fff;
+	margin: 0;
+}
+
+#homepage-custom .hp-hero-headline em {
+	color: #fff;
+	font-style: italic;
+	font-weight: 700;
+}
+
+/* Trigger point for the header's transparent -> solid swap, standing in
+   for the hero now that the hero no longer scrolls. See the note in
+   page-homepage-custom.php and assets/js/transparent-header.js. */
+#homepage-custom .hp-hero-sentinel {
+	height: 1px;
+	margin-top: -1px;
+	pointer-events: none;
+}
+
+/* The sheet that rises over the pinned hero. Opaque background is
+   load-bearing, not decoration: without it the video shows through every
+   section that doesn't set its own background. The upward shadow is what
+   sells the depth - it lands on the video as the sheet approaches, so the
+   two layers read as separate planes rather than one flat scroll. */
+#homepage-custom .hp-below-hero {
+	position: relative;
+	z-index: 1;
+	background: var(--color-surface);
+	box-shadow: 0 -30px 60px -18px rgba(0, 0, 0, 0.45);
+}
+
+@media only screen and (max-width: 767px) {
+	#homepage-custom .hp-hero.hero-video {
+		min-height: 70vh;
+	}
+}
+
+/* Pinning the hero while content slides over it is differential motion,
+   which is the class of effect prefers-reduced-motion exists to suppress.
+   Falling back to normal flow means the hero simply scrolls away; the
+   sheet's shadow still softens the join. */
+@media (prefers-reduced-motion: reduce) {
+	#homepage-custom .hp-hero.hero-video {
+		position: relative;
+	}
+}
+
+/* ---------------------------------------------------------------
+   Intro ("We Don't Just Teach, We Inspire")
+   --------------------------------------------------------------- */
+
+/* The soft brand wash is what keeps this band from reading as a blank
+   white gap between the video and the cards. It's a background, not a
+   panel - no edges, so it adds depth without reintroducing the boxed
+   look this section deliberately moved away from. */
+#homepage-custom .hp-intro {
+	position: relative;
+	z-index: 5;
+	text-align: center;
+	padding-top: 96px;
+	padding-bottom: 96px;
+	background:
+		radial-gradient(ellipse 900px 420px at 50% 45%, rgba(24, 168, 250, 0.08), transparent 70%),
+		var(--color-surface);
+}
+
+/* Dot grid, masked to fade out where the copy sits. The mask is the whole
+   point: an unmasked grid runs straight under the statement and makes it
+   harder to read, whereas this only shows in the empty margins that made
+   the band look bare in the first place. Dot colour is --color-foreground
+   (#12233c = rgb(18,35,60)) at low alpha, matching how the elevation
+   tokens express the same navy. */
+#homepage-custom .hp-intro::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	pointer-events: none;
+	background-image: radial-gradient(rgba(18, 35, 60, 0.16) 1px, transparent 1px);
+	background-size: 24px 24px;
+	-webkit-mask-image: radial-gradient(ellipse 640px 280px at 50% 48%, transparent 38%, #000 100%);
+	mask-image: radial-gradient(ellipse 640px 280px at 50% 48%, transparent 38%, #000 100%);
+	-webkit-mask-repeat: no-repeat;
+	mask-repeat: no-repeat;
+}
+
+@media only screen and (max-width: 767px) {
+	/* Tighter grid and a smaller clear area, so the dots still read as
+	   texture rather than crowding the copy on a narrow screen. */
+	#homepage-custom .hp-intro::before {
+		background-size: 18px 18px;
+		-webkit-mask-image: radial-gradient(ellipse 300px 220px at 50% 48%, transparent 30%, #000 100%);
+		mask-image: radial-gradient(ellipse 300px 220px at 50% 48%, transparent 30%, #000 100%);
+	}
+}
+
+/* Full-width statement band: no card, no surface of its own. The copy
+   sits directly on the section so it reads as part of the page rather
+   than a panel dropped onto it, and the hero's gradient fade above runs
+   straight into this white background with nothing breaking the seam. */
+#homepage-custom .hp-intro-statement {
+	max-width: 980px;
+	margin: 0 auto;
+}
+
+/* Scroll-triggered reveal (assets/js/scroll-reveal.js adds .is-visible via
+   IntersectionObserver, once per element). Reusable class: every section
+   below the hero marks its content .hp-reveal to get the same treatment.
+   easeOutQuad rather than a spring/back curve - it settles without any
+   overshoot, so the motion reads as calm instead of bouncy. */
+/* Descends into place (starts above, settles down) rather than rising up
+   from below - matches the direction of travel of scrolling down the page,
+   so content arrives moving the same way the viewport is moving instead of
+   against it. */
+#homepage-custom .hp-reveal {
+	opacity: 0;
+	transform: translateY(-24px);
+	transition: opacity var(--motion-reveal) var(--ease-out-cubic),
+		transform var(--motion-reveal) var(--ease-out-cubic);
+}
+
+#homepage-custom .hp-reveal.is-visible {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	#homepage-custom .hp-reveal {
+		opacity: 1;
+		transform: none;
+		transition: none;
+	}
+}
+
+#homepage-custom .hp-quote-icon {
+	display: inline-block;
+	margin-bottom: 22px;
+	color: var(--color-quote-accent);
+	font-size: 1.3em;
+}
+
+/* Sole content of the section, so it scales up to carry the band on its
+   own rather than sitting at body-copy size. The size is also what keeps
+   the line length honest: at 980px wide, body-copy size would run ~88
+   characters per line, well past the 65-75 readable measure. Scaling the
+   type up fixes the measure without narrowing the block back down. */
+#homepage-custom .hp-intro-text {
+	font-family: 'Inter', sans-serif;
+	font-size: clamp(1.2em, 2.4vw, 1.75em);
+	font-weight: 400;
+	line-height: 1.6;
+	letter-spacing: -0.2px;
+	color: var(--color-foreground);
+	margin: 0;
+}
+
+/* Typographic texture so the statement isn't one flat gray block: the
+   three values the copy names get weight, and the headline phrase gets a
+   highlighter sweep. The sweep sits behind the text rather than recolouring
+   it, so the 4.5:1 contrast of the copy is untouched - recolouring to the
+   brand gradient would have failed it, since the teal end is only ~2.9:1
+   on white. */
+#homepage-custom .hp-intro-text strong {
+	font-weight: 600;
+	color: inherit;
+}
+
+#homepage-custom .hp-intro-text .hp-mark {
+	background-image: linear-gradient(transparent 60%, rgba(24, 168, 250, 0.24) 60%);
+	background-repeat: no-repeat;
+	padding: 0 2px;
+}
+
+/* Closes the composition and puts a touch of brand colour at the bottom
+   of an otherwise very quiet band. */
+#homepage-custom .hp-intro-rule {
+	display: block;
+	width: 64px;
+	height: 4px;
+	margin: 34px auto 0;
+	border-radius: 999px;
+	background: var(--color-quote-accent);
+}
+
+@media only screen and (max-width: 767px) {
+	#homepage-custom .hp-intro {
+		padding-top: 56px;
+		padding-bottom: 56px;
+	}
+}
+
+/* ---------------------------------------------------------------
+   Section headings (shared by program-cards / achievements / etc.)
+   --------------------------------------------------------------- */
+
+#homepage-custom .hp-section-head {
+	text-align: center;
+	max-width: 700px;
+	margin: 0 auto 50px;
+}
+
+#homepage-custom .hp-section-head h2 {
+	font-family: 'Inter', sans-serif;
+	font-weight: 700;
+	font-size: 2.1em;
+	letter-spacing: -0.4px;
+	color: var(--color-foreground);
+	margin: 0;
+}
+
+/* Section-heading emphasis word: italic + the brand gradient rendered as
+   text fill rather than a background. Reuses --color-gradient-start/-end
+   (#0172bb/#01a6a1) rather than new hex, since that's the exact pair
+   MASTER.md already documents for "accent gradients" - this is one more
+   use of that same role, not a new colour. -webkit-background-clip is
+   still required even in browsers that no longer need the -webkit- prefix
+   for other properties; there is no unprefixed-only way to do this yet. */
+#homepage-custom .hp-heading-accent {
+	/* Upright, not italic, per later direction - the padding fix below was
+	   only ever compensating for italic glyphs' slanted ink poking past
+	   their upright advance-width box; with font-style back to normal that
+	   overhang doesn't exist, so no padding is needed here any more. */
+	background-image: linear-gradient(90deg, var(--color-gradient-start), var(--color-gradient-end));
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+}
+
+/* No breakpoint had ever reduced this 2.1em heading size below desktop, so a
+   long heading + an italic accent word had the least breathing room right
+   where phone screens are narrowest. Not reproducible in a correctly
+   viewport-emulated 390px render (checked - it wraps cleanly), but this is
+   a defensive tightening regardless: smaller text on phones is standard
+   practice here anyway, and it removes any margin for edge-cropping on
+   devices/zoom levels this test rig can't reproduce (e.g. accessibility
+   text-size-adjust). */
+@media only screen and (max-width: 480px) {
+	#homepage-custom .hp-section-head h2 {
+		font-size: 1.7em;
+	}
+}
+
+/* Supporting line under a section heading on light backgrounds. The
+   achievement section overrides this to white for its dark backdrop. */
+#homepage-custom .hp-section-head p {
+	font-family: 'Montserrat', sans-serif;
+	line-height: 1.7;
+	color: var(--color-muted-foreground);
+	margin: 14px 0 0;
+}
+
+/* ---------------------------------------------------------------
+   Program cards (Digital Classroom / Career Planning / Character Building)
+   --------------------------------------------------------------- */
+
+/* This section breaks out of the shared 1200px container and runs the
+   full width of the viewport, with gutters that scale instead of a fixed
+   max-width. Only the grid goes full-bleed: .hp-section-head keeps its own
+   700px cap just below, because stretching the supporting paragraph across
+   1900px would blow well past a readable line length. */
+#homepage-custom .hp-cards-section .hp-container {
+	width: 100%;
+	max-width: none;
+	padding-left: clamp(20px, 3.5vw, 64px);
+	padding-right: clamp(20px, 3.5vw, 64px);
+}
+
+#homepage-custom .hp-cards {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: clamp(24px, 2.2vw, 40px);
+}
+
+#homepage-custom .hp-card {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	background: var(--color-surface);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-lg);
+	overflow: hidden;
+	box-shadow: var(--elevation-2);
+	transition: transform var(--motion-slow) ease, box-shadow var(--motion-slow) ease;
+}
+
+#homepage-custom .hp-card:hover {
+	transform: translateY(-8px);
+	box-shadow: var(--elevation-4);
+}
+
+#homepage-custom .hp-card-media {
+	aspect-ratio: 4 / 3;
+	overflow: hidden;
+}
+
+#homepage-custom .hp-card-media img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+	transition: transform 0.4s ease;
+}
+
+#homepage-custom .hp-card:hover .hp-card-media img {
+	transform: scale(1.06);
+}
+
+#homepage-custom .hp-card-body {
+	padding: 28px 26px 30px;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+}
+
+#homepage-custom .hp-card-body h3 {
+	font-family: 'Inter', sans-serif;
+	font-weight: 700;
+	color: var(--color-foreground);
+	font-size: 1.3em;
+	margin: 0 0 14px;
+}
+
+#homepage-custom .hp-card-body p {
+	color: var(--color-muted-foreground);
+	line-height: 1.7;
+	font-size: 0.96em;
+	flex: 1;
+	margin: 0 0 22px;
+}
+
+@media only screen and (max-width: 900px) {
+	#homepage-custom .hp-cards {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* ---------------------------------------------------------------
+   Shared button style
+   --------------------------------------------------------------- */
+
+/* Neutral elevation, not a saturated colour glow: the rest of the page
+   (cards, covers, program video frames) all lift on hover using the
+   navy-tinted --elevation-* scale, never a shadow tinted to match the
+   fill colour. A colour-matched glow shadow is one of the clearest
+   "generic AI landing page" tells - it's also the one thing the project's
+   own base style (Minimalism & Swiss Style, per MASTER.md) explicitly
+   warns against: sharp/neutral shadows only, no colour-tinted glows. */
+#homepage-custom .hp-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	background: var(--color-primary);
+	color: var(--color-on-primary);
+	font-family: 'Inter', sans-serif;
+	font-weight: 600;
+	font-size: 0.86em;
+	padding: 13px 26px;
+	border-radius: 30px;
+	text-decoration: none;
+	box-shadow: var(--elevation-2);
+	transition: background-color var(--motion-base) ease,
+		transform var(--motion-base) ease,
+		box-shadow var(--motion-base) ease;
+	align-self: flex-start;
+}
+
+#homepage-custom .hp-btn:hover,
+#homepage-custom .hp-btn:focus {
+	background: var(--color-primary-dark);
+	color: var(--color-on-primary);
+	transform: translateY(-2px);
+	box-shadow: var(--elevation-3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	#homepage-custom .hp-btn {
+		transition: none;
+	}
+}
+
+#homepage-custom .hp-btn-outline {
+	background: transparent;
+	color: var(--color-on-primary);
+	border: 2px solid var(--color-on-primary);
+	box-shadow: none;
+}
+
+#homepage-custom .hp-btn-outline:hover,
+#homepage-custom .hp-btn-outline:focus {
+	background: var(--color-on-primary);
+	color: var(--color-primary);
+	box-shadow: var(--elevation-2);
+}
+
+/* ---------------------------------------------------------------
+   Pribadi Berbagi / Pribadi Mengajar
+   --------------------------------------------------------------- */
+
+/* Was flat white with no texture, sandwiched between the cards section's
+   tint and the achievement section's own wash - it read as an empty gap
+   rather than a section. Two soft, off-centre colour blooms (one per row,
+   teal then blue) give it presence without repeating the dot-grid texture
+   already used twice elsewhere on the page. */
+#homepage-custom .hp-programs-section {
+	position: relative;
+	isolation: isolate;
+	padding-top: 90px;
+	background:
+		radial-gradient(ellipse 620px 460px at 14% 22%, rgba(1, 166, 161, 0.08), transparent 65%),
+		radial-gradient(ellipse 620px 460px at 86% 78%, rgba(24, 168, 250, 0.09), transparent 65%),
+		var(--color-surface);
+}
+
+#homepage-custom .hp-program-row {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 60px;
+	align-items: center;
+	margin-bottom: 90px;
+}
+
+#homepage-custom .hp-program-row:last-child {
+	margin-bottom: 0;
+}
+
+#homepage-custom .hp-program-row:nth-child(even) .hp-program-video {
+	order: 2;
+}
+
+#homepage-custom .hp-program-video {
+	position: relative;
+	aspect-ratio: 16 / 9;
+	background: #000;
+	border-radius: var(--radius-lg);
+	overflow: hidden;
+	box-shadow: var(--elevation-3);
+	transition: transform var(--motion-base) ease, box-shadow var(--motion-base) ease;
+}
+
+#homepage-custom .hp-program-video:hover {
+	transform: translateY(-6px);
+	box-shadow: var(--elevation-4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	#homepage-custom .hp-program-video {
+		transition: none;
+	}
+}
+
+#homepage-custom .hp-program-video iframe {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	border: 0;
+}
+
+/* The name is now carried by this image alone - the h3 that used to
+   repeat it in text is screen-reader-only (kept for heading-navigation
+   structure, not shown). Margin absorbs the gap the visible heading used
+   to provide before the body paragraph. */
+#homepage-custom .hp-program-logo {
+	max-width: 200px;
+	height: auto;
+	margin-bottom: 28px;
+}
+
+#homepage-custom .hp-program-text p {
+	line-height: 1.8;
+	color: var(--color-muted-foreground);
+	font-size: 0.98em;
+	margin: 0 0 22px;
+}
+
+#homepage-custom .hp-program-text .hp-btn {
+	margin-top: 0;
+}
+
+@media only screen and (max-width: 767px) {
+	#homepage-custom .hp-program-row,
+	#homepage-custom .hp-program-row:nth-child(even) {
+		grid-template-columns: 1fr;
+	}
+
+	#homepage-custom .hp-program-row:nth-child(even) .hp-program-video {
+		order: 0;
+	}
+}
+
+/* ---------------------------------------------------------------
+   Achievements showcase: count-up stats + auto-scrolling card marquee.
+   Markup lives in template-parts/achievements-showcase.php. Counters are
+   driven by assets/js/achievements-counter.js; the marquee loop is
+   CSS-only - the card list is rendered twice back to back and the track
+   animates to -50%, which repeats seamlessly since both halves match.
+   --------------------------------------------------------------- */
+
+/* Light section. The medal-wall photo that used to back this needed a 70%
+   black scrim to keep text readable, which meant nobody could really see
+   the photo anyway - it was doing nothing but darkening the page. White
+   plus a soft wash carries the same weight without fighting the content.
+   Heading and body colours are inherited from the base .hp-section-head
+   rules now, so there are no light-on-light overrides left here. */
+#homepage-custom .hp-achieve-showcase {
+	position: relative;
+	background:
+		radial-gradient(ellipse 1100px 520px at 50% 28%, rgba(24, 168, 250, 0.10), transparent 70%),
+		var(--color-surface);
+	isolation: isolate;
+}
+
+/* Same masked dot grid as the intro band, so the two light "quiet"
+   sections share a texture rather than each inventing one. Cleared where
+   the heading and stats sit so it never sits under the copy. */
+#homepage-custom .hp-achieve-showcase::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	pointer-events: none;
+	background-image: radial-gradient(rgba(18, 35, 60, 0.14) 1px, transparent 1px);
+	background-size: 26px 26px;
+	-webkit-mask-image: radial-gradient(ellipse 760px 380px at 50% 30%, transparent 42%, #000 100%);
+	mask-image: radial-gradient(ellipse 760px 380px at 50% 30%, transparent 42%, #000 100%);
+	-webkit-mask-repeat: no-repeat;
+	mask-repeat: no-repeat;
+}
+
+#homepage-custom .hp-achieve-stats {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 24px;
+	max-width: 900px;
+	margin: 0 auto 56px;
+}
+
+#homepage-custom .hp-achieve-stat {
+	text-align: center;
+}
+
+/* --color-gradient-start (#0172bb), not --color-primary (#18a8fa): the
+   light brand blue was fine on the old dark backdrop but only reaches
+   2.6:1 on white, which fails even the 3:1 large-text minimum. The deeper
+   blue measures 5.1:1 and clears AA outright. Same light-vs-dark variant
+   split the gradient tokens already document. */
+#homepage-custom .hp-achieve-stat-number {
+	display: block;
+	font-family: 'Inter', sans-serif;
+	font-weight: 800;
+	font-size: 3em;
+	line-height: 1;
+	color: var(--color-gradient-start);
+}
+
+#homepage-custom .hp-achieve-stat-label {
+	display: block;
+	margin-top: 10px;
+	font-family: 'Inter', sans-serif;
+	font-weight: 600;
+	font-size: 0.85em;
+	letter-spacing: 0.4px;
+	color: var(--color-muted-foreground);
+	text-transform: capitalize;
+}
+
+/* Deliberately outside .hp-container so the strip bleeds full-width.
+   This is the clipping "viewport" - hp-achieve-track underneath is the
+   part that actually scrolls, non-stop, right to left, looping forever.
+   No manual scrollbar, no user-driven scroll: overflow is hidden, not
+   auto. */
+#homepage-custom .hp-achieve-strip {
+	position: relative;
+	overflow: hidden;
+	padding: 18px 0 24px;
+	-webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+	mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+
+/* Doubled tile list (see the template's two-pass loop) animated to -50%,
+   which loops seamlessly since both halves are identical. Keeps rolling
+   even while a tile is hovered/lifted - it does not pause. */
+#homepage-custom .hp-achieve-track {
+	display: flex;
+	width: max-content;
+	gap: 18px;
+	animation: hp-achieve-scroll 42s linear infinite;
+}
+
+@keyframes hp-achieve-scroll {
+	from {
+		transform: translateX(0);
+	}
+	to {
+		transform: translateX(-50%);
+	}
+}
+
+#homepage-custom .hp-achieve-tile {
+	position: relative;
+	flex: 0 0 200px;
+	aspect-ratio: 3 / 4;
+	overflow: hidden;
+	border-radius: var(--radius-md);
+	cursor: pointer;
+	/* Light fill, not --color-dark-surface: on the white section a black
+	   tile reads as a hole, and it's what any entry still missing its photo
+	   falls back to. The rim is now a dark hairline (a white one is
+	   invisible here) and shadows do the lifting, which they can on light.
+	   box-shadow isn't clipped by this element's own overflow:hidden - that
+	   only clips descendants - so the hover lift still reads. */
+	background: var(--color-surface-muted);
+	border: 1px solid var(--color-border);
+	box-shadow: var(--elevation-2);
+	transition: transform var(--motion-slow) ease, box-shadow var(--motion-slow) ease, border-color var(--motion-slow) ease;
+}
+
+/* The actual tile lifts here (not just the photo cropping inside it), and
+   z-index brings it above its neighbors so the raised edge/shadow isn't
+   tucked underneath the next tile in the row. */
+#homepage-custom .hp-achieve-tile:hover,
+#homepage-custom .hp-achieve-tile.is-active {
+	transform: translateY(-10px);
+	z-index: 2;
+	border-color: rgba(18, 35, 60, 0.16);
+	box-shadow: var(--elevation-4);
+}
+
+/* Stand-in for entries that have no photo file yet. Deliberately quiet -
+   it should read as "photo pending", not as a designed graphic. */
+#homepage-custom .hp-achieve-tile-placeholder {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: linear-gradient(160deg, #eef2f8, #dfe6f0);
+	color: rgba(18, 35, 60, 0.22);
+	font-size: 2.4em;
+}
+
+#homepage-custom .hp-achieve-tile-photo {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform var(--motion-slow) ease;
+}
+
+#homepage-custom .hp-achieve-tile:hover .hp-achieve-tile-photo,
+#homepage-custom .hp-achieve-tile.is-active .hp-achieve-tile-photo {
+	transform: translateY(-16px);
+}
+
+/* Sits above the photo (so it visually slides up "over" the lower part of
+   it) and starts pushed below the tile's own clip boundary, so it's fully
+   hidden until the hover/tap state brings it up. */
+#homepage-custom .hp-achieve-tile-reveal {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 2;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	padding: 16px 14px 14px;
+	background: linear-gradient(180deg, rgba(10, 10, 12, 0) 0%, rgba(10, 10, 12, 0.92) 55%);
+	transform: translateY(100%);
+	opacity: 0;
+	transition: transform var(--motion-base) ease, opacity var(--motion-base) ease;
+}
+
+#homepage-custom .hp-achieve-tile:hover .hp-achieve-tile-reveal,
+#homepage-custom .hp-achieve-tile.is-active .hp-achieve-tile-reveal {
+	transform: translateY(0);
+	opacity: 1;
+}
+
+#homepage-custom .hp-achieve-tile-title {
+	font-family: 'Inter', sans-serif;
+	font-weight: 400;
+	font-size: 0.82em;
+	line-height: 1.35;
+	color: #fff;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+#homepage-custom .hp-achieve-tile-name {
+	font-family: 'Inter', sans-serif;
+	font-weight: 800;
+	font-size: 0.92em;
+	letter-spacing: -0.1px;
+	background: linear-gradient(90deg, var(--color-gradient-start-on-dark), var(--color-gradient-end-on-dark));
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+}
+
+@media only screen and (max-width: 900px) {
+	#homepage-custom .hp-achieve-stats {
+		grid-template-columns: repeat(2, 1fr);
+		gap: 32px 24px;
+	}
+}
+
+@media only screen and (max-width: 767px) {
+	#homepage-custom .hp-achieve-stat-number {
+		font-size: 2.2em;
+	}
+
+	#homepage-custom .hp-achieve-tile {
+		flex-basis: 150px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	#homepage-custom .hp-achieve-track {
+		animation: none;
+	}
+
+	#homepage-custom .hp-achieve-tile-photo,
+	#homepage-custom .hp-achieve-tile-reveal {
+		transition: none;
+	}
+}
+
+/* ---------------------------------------------------------------
+   Pribadi Magazine
+   --------------------------------------------------------------- */
+
+/* Deliberately a different texture from the intro and achievement bands,
+   which both use a masked dot grid: this one is a fine crosshatch, which
+   suits a print/magazine section and keeps the three "quiet" light
+   sections from looking like the same background repeated three times.
+   Washes sit in opposite corners rather than centred, for the same reason. */
+#homepage-custom .hp-magazine {
+	position: relative;
+	isolation: isolate;
+	text-align: center;
+	background:
+		radial-gradient(ellipse 760px 420px at 8% 6%, rgba(24, 168, 250, 0.12), transparent 62%),
+		radial-gradient(ellipse 760px 420px at 92% 94%, rgba(1, 166, 161, 0.10), transparent 62%),
+		var(--color-surface-muted);
+}
+
+#homepage-custom .hp-magazine::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	pointer-events: none;
+	background-image:
+		repeating-linear-gradient(0deg, rgba(18, 35, 60, 0.05) 0 1px, transparent 1px 46px),
+		repeating-linear-gradient(90deg, rgba(18, 35, 60, 0.05) 0 1px, transparent 1px 46px);
+	-webkit-mask-image: radial-gradient(ellipse 820px 300px at 50% 16%, transparent 42%, #000 100%);
+	mask-image: radial-gradient(ellipse 820px 300px at 50% 16%, transparent 42%, #000 100%);
+	-webkit-mask-repeat: no-repeat;
+	mask-repeat: no-repeat;
+}
+
+#homepage-custom .hp-magazine h2 {
+	font-family: 'Inter', sans-serif;
+	font-weight: 700;
+	font-size: 2.1em;
+	letter-spacing: -0.4px;
+	color: var(--color-foreground);
+	margin: 0 0 18px;
+}
+
+#homepage-custom .hp-magazine > .hp-container > p {
+	font-family: 'Montserrat', sans-serif;
+	max-width: 760px;
+	margin: 0 auto 50px;
+	line-height: 1.75;
+	color: var(--color-muted-foreground);
+}
+
+/* Reverted from full-bleed: at 1920px an uncapped grid gave ~580px-wide
+   portrait covers, each running ~810px tall, and the whole section dwarfed
+   every other section on the page. Back to the shared .hp-container
+   (1200px / 90vw) that everything else on the homepage uses, so this
+   section reads as part of the same page rather than an oversized outlier. */
+#homepage-custom .hp-magazine-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: clamp(24px, 2.2vw, 40px);
+	align-items: start;
+}
+
+/* Cover + its own download button, as one unit. */
+#homepage-custom .hp-magazine-item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 24px;
+}
+
+#homepage-custom .hp-magazine-cover {
+	display: block;
+	width: 100%;
+	border-radius: var(--radius-md);
+	overflow: hidden;
+	box-shadow: var(--elevation-2);
+	transition: transform var(--motion-base) ease, box-shadow var(--motion-base) ease;
+}
+
+#homepage-custom .hp-magazine-cover:hover {
+	transform: translateY(-6px);
+	box-shadow: var(--elevation-4);
+}
+
+#homepage-custom .hp-magazine-cover img {
+	width: 100%;
+	height: auto;
+	display: block;
+}
+
+/* Outline treatment keeps these visually subordinate to the primary CTAs
+   elsewhere on the page. Auto width, not 100% - stretched across a
+   full-bleed column a solid bar would read as a banner, not a button. */
+#homepage-custom .hp-magazine-download {
+	background: var(--color-surface);
+	color: var(--color-primary);
+	border: 2px solid var(--color-primary);
+	box-shadow: none;
+	align-self: center;
+}
+
+#homepage-custom .hp-magazine-download:hover,
+#homepage-custom .hp-magazine-download:focus {
+	background: var(--color-primary);
+	color: var(--color-on-primary);
+	box-shadow: 0 8px 18px rgba(24, 168, 250, 0.28);
+}
+
+@media only screen and (max-width: 767px) {
+	#homepage-custom .hp-magazine-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	#homepage-custom .hp-magazine-cover {
+		transition: none;
+	}
+}
+
+/* ---------------------------------------------------------------
+   Alumni world map
+   Markup + projection: template-parts/alumni-map.php
+   Interaction:         assets/js/alumni-map.js
+   --------------------------------------------------------------- */
+
+/* Concentric radar rings rather than the dot-grid (intro, achievements) or
+   crosshatch (magazine) used elsewhere - deliberately a different texture
+   family so the page's light sections don't start reading as one background
+   repeated three times, and one that echoes the pins' own radar-ping
+   animation instead of being an arbitrary new pattern.
+
+   Sits behind everything (z-index:-1 inside this section's own stacking
+   context, via isolation:isolate) and stays low and faint on purpose: the
+   mask's centre and falloff are pulled well down and tightened so the
+   rings have fully disappeared before they reach the heading/copy - the
+   goal is a texture the map quietly sits on, not something competing with
+   the text for attention. */
+#homepage-custom .hp-alumni-map {
+	position: relative;
+	isolation: isolate;
+	background: var(--color-surface-muted);
+}
+
+#homepage-custom .hp-alumni-map::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	pointer-events: none;
+	background-image: repeating-radial-gradient(
+		circle at 50% 74%,
+		rgba(18, 35, 60, 0.03) 0,
+		rgba(18, 35, 60, 0.03) 1px,
+		transparent 1px,
+		transparent 64px
+	);
+	-webkit-mask-image: radial-gradient(circle at 50% 74%, #000 0%, #000 32%, transparent 62%);
+	mask-image: radial-gradient(circle at 50% 74%, #000 0%, #000 32%, transparent 62%);
+}
+
+@media only screen and (max-width: 767px) {
+	#homepage-custom .hp-alumni-map::before {
+		background-image: repeating-radial-gradient(
+			circle at 50% 74%,
+			rgba(18, 35, 60, 0.03) 0,
+			rgba(18, 35, 60, 0.03) 1px,
+			transparent 1px,
+			transparent 40px
+		);
+	}
+}
+
+#homepage-custom .hp-map-wrap {
+	position: relative;
+	max-width: 1000px;
+	margin: 0 auto;
+}
+
+/* Must match the SVG viewBox ratio (360/140) exactly. The pins are placed
+   in percentages of this box, so any mismatch here would slide every pin
+   off the coastline. */
+#homepage-custom .hp-map-canvas {
+	position: relative;
+	aspect-ratio: 360 / 140;
+	width: 100%;
+}
+
+#homepage-custom .hp-map-svg {
+	width: 100%;
+	height: 100%;
+	display: block;
+}
+
+/* Landmass: --color-foreground (#12233c = rgb(18,35,60)) at low alpha,
+   the same way the elevation tokens express this navy. Muted on purpose -
+   the map is a backdrop for the pins, not the subject. Darker than the
+   original 0.10 so it doesn't read as barely-there. */
+#homepage-custom .hp-map-svg path {
+	fill: rgba(18, 35, 60, 0.20);
+	stroke: rgba(18, 35, 60, 0.32);
+	stroke-width: 0.4;
+	stroke-linejoin: round;
+}
+
+#homepage-custom .hp-map-point {
+	position: absolute;
+	/* left/top are set inline from the projection; this centres the pin on
+	   its coordinate rather than hanging it below-right of it. */
+	transform: translate(-50%, -50%);
+}
+
+/* 28px hit area for a 12px dot. WCAG 2.2 AA sets the web minimum at 24 CSS
+   px (native 44pt/48dp guidance does not define web conformance), and these
+   pins sit close together around Europe, so the padded target matters. */
+#homepage-custom .hp-map-pin {
+	display: block;
+	width: 28px;
+	height: 28px;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	cursor: pointer;
+	touch-action: manipulation;
+	position: relative;
+}
+
+/* Classic teardrop map-pin, not a plain dot: a single SVG silhouette (outer
+   drop shape + a punched-out circular hole, combined with fill-rule:evenodd
+   in the one path) recoloured via mask rather than shipped as an <img>, so
+   it takes the brand blue like any other CSS colour and needs no separate
+   asset file. Anchored by its point, not its centre - translate(-50%,-100%)
+   sits the drop's tip exactly on the button's centre (the actual lng/lat
+   coordinate), with the body rising above it, same as every real map pin. */
+#homepage-custom .hp-map-pin::before {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 22px;
+	height: 29px;
+	transform: translate(-50%, -100%);
+	transform-origin: 50% 100%;
+	/* Brand blue, not the design system's orange accent - explicit choice
+	   for these markers over the "names/achievements/warmth" role orange
+	   otherwise plays here. */
+	background-color: var(--color-primary);
+	-webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 32'%3E%3Cpath fill-rule='evenodd' d='M12,0 C5.373,0 0,5.373 0,12 C0,21 12,32 12,32 C12,32 24,21 24,12 C24,5.373 18.627,0 12,0 Z M12,6.5 A5.5,5.5 0 1 0 12,17.5 A5.5,5.5 0 1 0 12,6.5 Z'/%3E%3C/svg%3E");
+	mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 32'%3E%3Cpath fill-rule='evenodd' d='M12,0 C5.373,0 0,5.373 0,12 C0,21 12,32 12,32 C12,32 24,21 24,12 C24,5.373 18.627,0 12,0 Z M12,6.5 A5.5,5.5 0 1 0 12,17.5 A5.5,5.5 0 1 0 12,6.5 Z'/%3E%3C/svg%3E");
+	-webkit-mask-repeat: no-repeat;
+	mask-repeat: no-repeat;
+	-webkit-mask-position: center;
+	mask-position: center;
+	-webkit-mask-size: contain;
+	mask-size: contain;
+	filter: drop-shadow(0 1px 2px rgba(18, 35, 60, 0.35));
+	transition: transform var(--motion-base) ease, filter var(--motion-base) ease;
+	z-index: 1;
+}
+
+/* Radar-blip ring: expands out from the pin's tip (the real coordinate) and
+   fades, looping. Independent of the pin drawn above it, and unaffected by
+   its hover/focus scale, so the actual click/hover target stays a stable,
+   unmoving reference point throughout the animation - motion on the thing
+   you're aiming at would fight the pointer instead of just drawing the eye
+   to it. Sits behind the pin (no z-index, pin has z-index:1) and ignores
+   pointer events so it can never steal the click. */
+#homepage-custom .hp-map-pin::after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 12px;
+	height: 12px;
+	margin: -6px 0 0 -6px;
+	border-radius: 50%;
+	background: var(--color-primary);
+	pointer-events: none;
+	animation: hp-map-radar-ping 2.2s ease-out infinite;
+}
+
+@keyframes hp-map-radar-ping {
+	0% {
+		transform: scale(1);
+		opacity: 0.55;
+	}
+	100% {
+		transform: scale(2.6);
+		opacity: 0;
+	}
+}
+
+/* Staggered offsets (negative delays start each ring already mid-cycle) so
+   the pins ping out of sync with each other, like an actual radar sweep
+   across the map rather than the whole board blinking in unison. Values are
+   arbitrary fractions of the 2.2s loop, not tied to pin order/importance.
+
+   Cycles every 7 rather than enumerating one rule per pin: the pin count
+   comes from a data file and has already changed once (12 -> 18): with a
+   fixed list, any pin past the end silently falls back to delay 0 and a
+   clump of them pings in unison. Seven offsets across pins scattered over a
+   world map never reads as a repeating pattern. */
+#homepage-custom .hp-map-point:nth-child(7n + 1) .hp-map-pin::after { animation-delay: -0.1s; }
+#homepage-custom .hp-map-point:nth-child(7n + 2) .hp-map-pin::after { animation-delay: -0.9s; }
+#homepage-custom .hp-map-point:nth-child(7n + 3) .hp-map-pin::after { animation-delay: -1.7s; }
+#homepage-custom .hp-map-point:nth-child(7n + 4) .hp-map-pin::after { animation-delay: -0.5s; }
+#homepage-custom .hp-map-point:nth-child(7n + 5) .hp-map-pin::after { animation-delay: -1.3s; }
+#homepage-custom .hp-map-point:nth-child(7n + 6) .hp-map-pin::after { animation-delay: -0.3s; }
+#homepage-custom .hp-map-point:nth-child(7n + 7) .hp-map-pin::after { animation-delay: -1.5s; }
+
+/* transform-origin is already 50% 100% (the pin's tip), so scaling here
+   grows the drop upward from the same coordinate it points at rather than
+   from its own centre - the tip doesn't drift off the pin's actual spot. */
+#homepage-custom .hp-map-pin:hover::before,
+#homepage-custom .hp-map-pin:focus-visible::before,
+#homepage-custom .hp-map-point.is-open .hp-map-pin::before {
+	transform: translate(-50%, -100%) scale(1.15);
+	filter: drop-shadow(0 2px 4px rgba(18, 35, 60, 0.45)) drop-shadow(0 0 5px rgba(24, 168, 250, 0.55));
+}
+
+#homepage-custom .hp-map-pin:focus-visible {
+	outline: 2px solid var(--color-foreground);
+	outline-offset: 2px;
+	border-radius: 50%;
+}
+
+/* Popup sits above the pin and is centred on it. z-index keeps an open
+   popup above neighbouring pins instead of tucked behind them.
+   Fixed width rather than max-content: the content is now a list of
+   institution names of wildly varying length, and a width that changed per
+   country would make the popup jump around as you move between pins. */
+#homepage-custom .hp-map-tip {
+	position: absolute;
+	bottom: calc(100% + 8px);
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 3;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	width: 250px;
+	padding: 12px 14px;
+	border-radius: var(--radius-sm);
+	background: var(--color-surface);
+	color: var(--color-foreground);
+	border: 1.5px solid var(--color-primary);
+	box-shadow: var(--elevation-3);
+	text-align: center;
+	/* Interactive, unlike the old two-line tooltip: the institution list
+	   scrolls for the few countries that overflow, so the pointer has to be
+	   able to reach and scroll it. */
+	pointer-events: auto;
+}
+
+/* Invisible bridge across the 8px gap between pin and popup. Without it,
+   moving the pointer from the pin toward the popup crosses a dead zone that
+   is outside .hp-map-point entirely, firing mouseleave and closing the popup
+   before it can be reached - which would make the scrollable list
+   unusable with a mouse. */
+#homepage-custom .hp-map-tip::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 100%;
+	height: 10px;
+}
+
+/* Upper half of the map: open downwards instead, or the popup spills out
+   over the section heading above. Set from the projected latitude in
+   template-parts/alumni-map.php. */
+#homepage-custom .hp-map-point--below .hp-map-tip {
+	bottom: auto;
+	top: calc(100% + 8px);
+}
+
+#homepage-custom .hp-map-point--below .hp-map-tip::before {
+	top: auto;
+	bottom: 100%;
+}
+
+/* `display: flex` above outranks the [hidden] attribute, whose display:none
+   is only a low-specificity user-agent style - without this the JS sets
+   hidden but every tooltip stays on screen. */
+#homepage-custom .hp-map-tip[hidden] {
+	display: none;
+}
+
+#homepage-custom .hp-map-tip::after {
+	content: '';
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	margin-left: -5px;
+	border: 5px solid transparent;
+	border-top-color: var(--color-surface);
+}
+
+/* Arrow flips with the popup so it still points back at its pin. */
+#homepage-custom .hp-map-point--below .hp-map-tip::after {
+	top: auto;
+	bottom: 100%;
+	border-top-color: transparent;
+	border-bottom-color: var(--color-surface);
+}
+
+/* Country is now the heading of the popup; the institutions are the list
+   below it - the inverse of the old name-over-country hierarchy. */
+#homepage-custom .hp-map-tip-country {
+	font-family: 'Inter', sans-serif;
+	font-weight: 700;
+	font-size: 0.86em;
+	line-height: 1.3;
+	letter-spacing: 0.2px;
+}
+
+/* Scroll rather than truncate. 13 of the 18 countries have five or fewer
+   institutions and never scroll at all; capping the height keeps the three
+   long ones (Turkey 26, Malaysia 13, Australia 12) from growing a popup
+   taller than the map itself, without hiding entries behind a "+N more"
+   that has nowhere to link to. */
+#homepage-custom .hp-map-tip-list {
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+	max-height: 150px;
+	overflow-y: auto;
+	padding-top: 8px;
+	border-top: 1px solid var(--color-primary);
+	scrollbar-width: thin;
+	scrollbar-color: var(--color-primary) transparent;
+	overscroll-behavior: contain;
+}
+
+#homepage-custom .hp-map-tip-list::-webkit-scrollbar {
+	width: 6px;
+}
+
+#homepage-custom .hp-map-tip-list::-webkit-scrollbar-thumb {
+	background: var(--color-primary);
+	border-radius: 999px;
+}
+
+#homepage-custom .hp-map-tip-item {
+	font-family: 'Inter', sans-serif;
+	font-size: 0.74em;
+	line-height: 1.35;
+	color: var(--color-muted-foreground);
+}
+
+#homepage-custom .hp-map-point.is-open {
+	z-index: 3;
+}
+
+#homepage-custom .hp-map-cta {
+	margin: 24px 0 0;
+	text-align: center;
+}
+
+/* Continuously-running logo strip. Same clip + edge-fade + doubled-track
+   pattern as the achievements marquee above (see .hp-achieve-strip /
+   .hp-achieve-track) - full-bleed regardless of the shared .hp-container,
+   mask-faded at both edges so logos don't hard-cut at the section boundary. */
+#homepage-custom .hp-map-logos-wrap {
+	position: relative;
+	overflow: hidden;
+	margin: 44px calc(50% - 50vw) 0;
+	padding: 12px 0;
+	-webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+	mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+
+/* No hover-pause and no per-logo hover effect by design - unlike the
+   achievement tiles, this strip is meant to just keep running. 100s was
+   slowed down from an initial 60s, which read as rushing past. */
+#homepage-custom .hp-map-logos-track {
+	display: flex;
+	align-items: center;
+	width: max-content;
+	gap: 56px;
+	animation: hp-map-logos-scroll 100s linear infinite;
+}
+
+@keyframes hp-map-logos-scroll {
+	from {
+		transform: translateX(0);
+	}
+	to {
+		transform: translateX(-50%);
+	}
+}
+
+/* Fixed-height box with object-fit:contain rather than each logo at its
+   native size - the 50 source crops range from roughly square emblems to
+   wide wordmarks (aspect ratios from well under 1 to well over 4), so
+   without this the strip's row height would visibly jump logo to logo. */
+#homepage-custom .hp-map-logo {
+	flex: 0 0 auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 56px;
+}
+
+#homepage-custom .hp-map-logo img {
+	max-height: 100%;
+	max-width: 180px;
+	width: auto;
+	height: auto;
+	object-fit: contain;
+	/* Source PNGs vary in surrounding transparent padding; a small uniform
+	   opacity/grayscale-free display keeps this a "logo wall" rather than
+	   drawing attention to which crops happen to sit tighter than others. */
+	opacity: 0.85;
+}
+
+@media only screen and (max-width: 767px) {
+	/* The map is already small at this width; shrinking the dots further
+	   would make them hard to hit, so the hit area stays put. */
+	#homepage-custom .hp-map-tip {
+		max-width: 150px;
+	}
+
+	#homepage-custom .hp-map-logos-track {
+		gap: 36px;
+	}
+
+	#homepage-custom .hp-map-logo {
+		height: 42px;
+	}
+
+	#homepage-custom .hp-map-logo img {
+		max-width: 130px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	#homepage-custom .hp-map-logos-track {
+		animation: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	#homepage-custom .hp-map-pin::before {
+		transition: none;
+	}
+
+	/* An infinite looping animation is exactly the class of motion this
+	   media query exists to suppress - stop it and drop the ring entirely
+	   rather than leave a static enlarged circle sitting behind the dot. */
+	#homepage-custom .hp-map-pin::after {
+		animation: none;
+		content: none;
+	}
+}
+
+/* ---------------------------------------------------------------
+   Section-level responsive padding
+   --------------------------------------------------------------- */
+
+@media only screen and (max-width: 767px) {
+	#homepage-custom .hp-section {
+		padding: 56px 0;
+	}
+
+	#homepage-custom .hp-intro {
+		padding-bottom: 40px;
+	}
+
+	#homepage-custom .hp-programs-section {
+		padding-top: 56px;
+	}
+}

@@ -1,0 +1,232 @@
+[
+  {
+    "country": "Turki",
+    "lat": 38.9637,
+    "lng": 35.2433,
+    "totalStudents": 55,
+    "institutions": [
+      {"institution": "Middle East Technical University (ODTÜ)", "students": 12},
+      {"institution": "Fatih University", "students": 5},
+      {"institution": "Marmara University", "students": 4},
+      {"institution": "Erciyes University", "students": 4},
+      {"institution": "Izmir Institute of Technology", "students": 3},
+      {"institution": "Bogazici University", "students": 2},
+      {"institution": "Ankara University", "students": 2},
+      {"institution": "Gaziantep University", "students": 2},
+      {"institution": "Istanbul Technical University", "students": 2},
+      {"institution": "Istanbul University", "students": 2},
+      {"institution": "Karadeniz University", "students": 2},
+      {"institution": "Yildiz Teknik University", "students": 1},
+      {"institution": "Gazi University", "students": 1},
+      {"institution": "Koc University", "students": 1},
+      {"institution": "Selcuk University", "students": 1},
+      {"institution": "Anadolu University", "students": 1},
+      {"institution": "Akdeniz University", "students": 1},
+      {"institution": "Çukurova University", "students": 1},
+      {"institution": "Dil Kursu University", "students": 1},
+      {"institution": "Hacettepe University", "students": 1},
+      {"institution": "Uludag University", "students": 1},
+      {"institution": "Ege University", "students": 1},
+      {"institution": "Sutcu Imam University", "students": 1},
+      {"institution": "Suleyman Demirel University", "students": 1},
+      {"institution": "Ankara Yildirim Beyazit University", "students": 1},
+      {"institution": "Bahcesehir University", "students": 1}
+    ]
+  },
+  {
+    "country": "Australia",
+    "lat": -25.2744,
+    "lng": 133.7751,
+    "totalStudents": 30,
+    "institutions": [
+      {"institution": "Monash University", "students": 7},
+      {"institution": "The University of Sydney", "students": 7},
+      {"institution": "The University of Western Australia", "students": 5},
+      {"institution": "The University of Queensland", "students": 3},
+      {"institution": "Victoria University", "students": 1},
+      {"institution": "Swingborn University", "students": 1},
+      {"institution": "Deakin University", "students": 1},
+      {"institution": "The University of Melbourne", "students": 1},
+      {"institution": "University of Auckland", "students": 1},
+      {"institution": "Australian National University", "students": 1},
+      {"institution": "RMIT University", "students": 1},
+      {"institution": "Curtin University", "students": 1}
+    ]
+  },
+  {
+    "country": "Malaysia",
+    "lat": 4.2105,
+    "lng": 101.9758,
+    "totalStudents": 28,
+    "institutions": [
+      {"institution": "Universiti Malaya", "students": 6},
+      {"institution": "Universiti Kebangsaan Malaysia", "students": 5},
+      {"institution": "Asia Pacific University of Technology & Innovation", "students": 4},
+      {"institution": "Universiti Teknologi Malaysia", "students": 3},
+      {"institution": "Universiti Utara Malaysia", "students": 2},
+      {"institution": "Monash University Malaysia", "students": 1},
+      {"institution": "International Islamic University", "students": 1},
+      {"institution": "Help University", "students": 1},
+      {"institution": "All Asia Aviation Academy", "students": 1},
+      {"institution": "APU Malaysia", "students": 1},
+      {"institution": "Universiti Teknologi Malaya", "students": 1},
+      {"institution": "Taylor's University", "students": 1},
+      {"institution": "Universiti Teknologi PETRONAS", "students": 1}
+    ]
+  },
+  {
+    "country": "Singapura",
+    "lat": 1.3521,
+    "lng": 103.8198,
+    "totalStudents": 14,
+    "institutions": [
+      {"institution": "National University of Singapore", "students": 6},
+      {"institution": "Nanyang Technological University", "students": 5},
+      {"institution": "Singapore Management University", "students": 2},
+      {"institution": "Singapore University of Design & Technology (SUTD)", "students": 1}
+    ]
+  },
+  {
+    "country": "Hong Kong",
+    "lat": 22.3193,
+    "lng": 114.1694,
+    "totalStudents": 14,
+    "institutions": [
+      {"institution": "The Hong Kong Polytechnic University", "students": 5},
+      {"institution": "Hong Kong University of Science and Technology", "students": 4},
+      {"institution": "City University of Hong Kong", "students": 2},
+      {"institution": "The University of Hong Kong", "students": 2},
+      {"institution": "Chinese University of Hong Kong", "students": 1}
+    ]
+  },
+  {
+    "country": "Jepang",
+    "lat": 36.2048,
+    "lng": 138.2529,
+    "totalStudents": 10,
+    "institutions": [
+      {"institution": "Tokyo International University", "students": 5},
+      {"institution": "Kyoto University", "students": 3},
+      {"institution": "Kyoto University of Advanced Science", "students": 2}
+    ]
+  },
+  {
+    "country": "Jerman",
+    "lat": 51.1657,
+    "lng": 10.4515,
+    "totalStudents": 7,
+    "institutions": [
+      {"institution": "Studenkolleg / German Preparation", "students": 3},
+      {"institution": "University of Munich", "students": 1},
+      {"institution": "Martin Luther Universitat Halle-Wittenberg", "students": 1},
+      {"institution": "Karlsruhe Institute of Technology", "students": 1},
+      {"institution": "FH Aachen", "students": 1}
+    ]
+  },
+  {
+    "country": "Kazakhstan",
+    "lat": 48.0196,
+    "lng": 66.9237,
+    "totalStudents": 6,
+    "institutions": [
+      {"institution": "SDU University", "students": 6}
+    ]
+  },
+  {
+    "country": "Kanada",
+    "lat": 56.1304,
+    "lng": -106.3468,
+    "totalStudents": 5,
+    "institutions": [
+      {"institution": "The University of British Columbia", "students": 3},
+      {"institution": "University of Toronto", "students": 2}
+    ]
+  },
+  {
+    "country": "Amerika Serikat",
+    "lat": 37.0902,
+    "lng": -95.7129,
+    "totalStudents": 5,
+    "institutions": [
+      {"institution": "University of Colorado", "students": 1},
+      {"institution": "University of California, Davis", "students": 1},
+      {"institution": "University of Illinois", "students": 1},
+      {"institution": "University of Arizona", "students": 1},
+      {"institution": "University of Texas at Austin", "students": 1}
+    ]
+  },
+  {
+    "country": "Belanda",
+    "lat": 52.1326,
+    "lng": 5.2913,
+    "totalStudents": 3,
+    "institutions": [
+      {"institution": "Wageningen University", "students": 2},
+      {"institution": "Saxion Hogeschool Deventer", "students": 1}
+    ]
+  },
+  {
+    "country": "Rumania",
+    "lat": 45.9432,
+    "lng": 24.9668,
+    "totalStudents": 2,
+    "institutions": [
+      {"institution": "University of Constanta", "students": 1},
+      {"institution": "Babes-Bolyai University", "students": 1}
+    ]
+  },
+  {
+    "country": "India",
+    "lat": 20.5937,
+    "lng": 78.9629,
+    "totalStudents": 1,
+    "institutions": [
+      {"institution": "Uttarakhand Ayurved University", "students": 1}
+    ]
+  },
+  {
+    "country": "Inggris",
+    "lat": 55.3781,
+    "lng": -3.4360,
+    "totalStudents": 1,
+    "institutions": [
+      {"institution": "University of Glasgow", "students": 1}
+    ]
+  },
+  {
+    "country": "Taiwan",
+    "lat": 23.6978,
+    "lng": 120.9605,
+    "totalStudents": 1,
+    "institutions": [
+      {"institution": "Tamkang University", "students": 1}
+    ]
+  },
+  {
+    "country": "Rusia",
+    "lat": 61.5240,
+    "lng": 105.3188,
+    "totalStudents": 1,
+    "institutions": [
+      {"institution": "Gubkin Russian State University of Oil and Gas", "students": 1}
+    ]
+  },
+  {
+    "country": "Korea Selatan",
+    "lat": 35.9078,
+    "lng": 127.7669,
+    "totalStudents": 1,
+    "institutions": [
+      {"institution": "Yonsei University", "students": 1}
+    ]
+  },
+  {
+    "country": "Prancis",
+    "lat": 46.2276,
+    "lng": 2.2137,
+    "totalStudents": 1,
+    "institutions": [
+      {"institution": "National Institute of Applied Sciences", "students": 1}
+    ]
+  }
+]

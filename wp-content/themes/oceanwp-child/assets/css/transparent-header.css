@@ -1,0 +1,200 @@
+/**
+ * Transparent-to-solid sticky header.
+ *
+ * Only loads where oceanwp_child_has_transparent_header() returns true
+ * (front page by default), and every rule is scoped to .owpc-transparent-header
+ * so other pages keep OceanWP's normal header behaviour.
+ *
+ * The class is namespaced on purpose: OceanWP emits its own
+ * "has-transparent-header" body class, so that name would be ambiguous.
+ *
+ * State is driven by the .is-solid class that assets/js/transparent-header.js
+ * toggles on #site-header once the hero has scrolled past.
+ */
+
+:root {
+	--owpc-header-speed: 300ms;
+}
+
+/* ---------------------------------------------------------------
+   1. Layout - pin the header over the hero
+   Header size (top bar hidden, section padding, logo height, populated
+   margins) is now handled site-wide in style.css so every page shares
+   one header size; this file only adds the floating/transparent/color
+   behaviour that's exclusive to the front page's video hero.
+   --------------------------------------------------------------- */
+
+body.owpc-transparent-header #transparent-header-wrap {
+	position: relative;
+	z-index: 999;
+}
+
+body.owpc-transparent-header #site-header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	width: 100%;
+	z-index: 999;
+	background: transparent;
+	box-shadow: none;
+	transition: background-color var(--owpc-header-speed) ease,
+		box-shadow var(--owpc-header-speed) ease;
+}
+
+/* Elementor puts its own box-shadow on the header sections; it looks wrong
+   floating over the video, so it is deferred to the solid state below. */
+body.owpc-transparent-header #site-header .elementor-section {
+	background-color: transparent;
+	box-shadow: none;
+	transition: box-shadow var(--owpc-header-speed) ease;
+}
+
+/* ---------------------------------------------------------------
+   2. Solid state - after the hero scrolls past
+   --------------------------------------------------------------- */
+
+body.owpc-transparent-header #site-header.is-solid {
+	background-color: #fff;
+	box-shadow: 0 2px 14px rgba(0, 0, 0, 0.12);
+}
+
+/* ---------------------------------------------------------------
+   3. Logo color
+   --------------------------------------------------------------- */
+
+/* Position (margin-left/margin-top) now lives sitewide in style.css so
+   every page's logo lines up, not just the homepage - see the comment
+   there. This file only ever touches colour/opacity for the front-page
+   floating-over-video treatment. */
+body.owpc-transparent-header #site-header .elementor-widget-image img {
+	opacity: 1;
+	transition: opacity calc(var(--owpc-header-speed) / 2) ease;
+}
+
+/* White logo while floating over the video; swap back to the header's own
+   (red) logo once solid. `content: url()` can't be animated - there's no
+   in-between frame - so transparent-header.js dips this to 0 opacity for
+   the swap and fades it back in, rather than letting the image just pop. */
+body.owpc-transparent-header #site-header:not(.is-solid) .elementor-widget-image img {
+	content: url('../img/logo-white.png');
+}
+
+body.owpc-transparent-header #site-header .elementor-widget-image img.owpc-logo-swapping {
+	opacity: 0;
+}
+
+/* ---------------------------------------------------------------
+   4. Readability over the video
+   Scoped to top-level items (.elementor-item) only - dropdown/submenu
+   links carry .elementor-sub-item instead, so they keep their own
+   colors below instead of inheriting this white-on-white.
+   --------------------------------------------------------------- */
+
+body.owpc-transparent-header #site-header .elementor-nav-menu .elementor-item {
+	transition: color var(--owpc-header-speed) ease, text-shadow var(--owpc-header-speed) ease;
+}
+
+body.owpc-transparent-header #site-header:not(.is-solid) .elementor-nav-menu .elementor-item {
+	color: #fff;
+	text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+}
+
+body.owpc-transparent-header #site-header:not(.is-solid) .elementor-nav-menu .elementor-item:hover,
+body.owpc-transparent-header #site-header:not(.is-solid) .elementor-nav-menu .elementor-item.elementor-item-active {
+	color: #ffffff;
+	opacity: 0.75;
+}
+
+/* Dropdown/submenu: clean white card with dark text, its own explicit
+   colors so it never inherits the header's white-on-transparent styling
+   above regardless of scroll state. */
+body.owpc-transparent-header #site-header .elementor-nav-menu--dropdown {
+	background-color: #fff;
+	border-radius: 6px;
+	box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+	padding: 8px 0;
+}
+
+body.owpc-transparent-header #site-header .elementor-nav-menu--dropdown a {
+	color: #1f2124;
+	text-shadow: none;
+	padding: 12px 24px;
+	border-inline-start: 0;
+}
+
+body.owpc-transparent-header #site-header .elementor-nav-menu--dropdown a:hover,
+body.owpc-transparent-header #site-header .elementor-nav-menu--dropdown a:focus,
+body.owpc-transparent-header #site-header .elementor-nav-menu--dropdown a.elementor-item-active,
+body.owpc-transparent-header #site-header .elementor-nav-menu--dropdown a.highlighted {
+	background-color: rgba(0, 0, 0, 0.05);
+	color: #1f2124;
+}
+
+/* ---------------------------------------------------------------
+   5. Hero section
+   Applied to the Elementor section given the CSS class "hero-video".
+   --------------------------------------------------------------- */
+
+.hero-video {
+	position: relative;
+	min-height: 100vh;
+	overflow: hidden;
+}
+
+/* Elementor renders the background video into this container. */
+.hero-video .elementor-background-video-container,
+.hero-video .elementor-background-video-embed,
+.hero-video video.elementor-background-video-hosted {
+	pointer-events: none;
+}
+
+.hero-video video.elementor-background-video-hosted {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+/* Keep hero content above the video and its overlay. */
+.hero-video > .elementor-container,
+.hero-video > .elementor-column-gap-default {
+	position: relative;
+	z-index: 2;
+}
+
+/* ---------------------------------------------------------------
+   6. Logged-in admin bar
+   --------------------------------------------------------------- */
+
+body.owpc-transparent-header.admin-bar #site-header {
+	top: 32px;
+}
+
+@media screen and (max-width: 782px) {
+	body.owpc-transparent-header.admin-bar #site-header {
+		top: 46px;
+	}
+}
+
+/* ---------------------------------------------------------------
+   7. Small screens
+   --------------------------------------------------------------- */
+
+@media only screen and (max-width: 767px) {
+	.hero-video {
+		min-height: 70vh;
+	}
+}
+
+/* ---------------------------------------------------------------
+   8. Reduced motion
+   --------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+	body.owpc-transparent-header #site-header,
+	body.owpc-transparent-header #site-header .elementor-section,
+	body.owpc-transparent-header #site-header .elementor-widget-image img,
+	body.owpc-transparent-header #site-header .elementor-nav-menu .elementor-item {
+		transition: none;
+	}
+}
