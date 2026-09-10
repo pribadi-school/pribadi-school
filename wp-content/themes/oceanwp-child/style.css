@@ -94,6 +94,12 @@ Text Domain: oceanwp-child
 @media only screen and (max-width: 767px) {
 	#site-header .elementor-widget-image img {
 		max-height: 42px;
+		/* The 72px/-6px nudge above positions the logo against the desktop
+		   nav row. The mobile header is a different Elementor section with
+		   its own two-column layout, where that nudge just shoves the logo
+		   off its own column and toward the middle of a 390px screen. */
+		margin-left: 0;
+		margin-top: 0;
 	}
 }
 
@@ -172,11 +178,178 @@ Text Domain: oceanwp-child
 
 /* This column is already hidden below tablet width (elementor-hidden-tablet
    on its parent section, same as the rest of the desktop nav row) - the
-   mobile hamburger menu has its own completely different structure with no
-   equivalent slot, so the switch simply isn't shown there yet rather than
+   mobile header is a separate Elementor section with its own structure and
+   no equivalent slot, so the switch simply isn't shown there yet rather than
    being wedged in somewhere that fights the mobile layout. */
 @media only screen and (max-width: 767px) {
 	#site-header .hp-lang-switch {
 		display: none;
+	}
+}
+
+/* ---------------------------------------------------------------
+   Mobile header navigation, inserted into the mobile header section's
+   empty menu column by assets/js/mobile-nav.js - see that file for why
+   the menu is built there instead of in the Elementor header template.
+
+   No media query wraps any of this: the whole section it lives in is
+   elementor-hidden-desktop, so the markup only exists below tablet
+   width in the first place.
+
+   Colours are the raw hex already established for header chrome in this
+   file and in transparent-header.css (#18a8fa brand blue, #1f2124
+   dropdown text, #5a6472 muted) rather than the design-system tokens -
+   those are scoped to #homepage-custom and aren't defined site-wide.
+   --------------------------------------------------------------- */
+
+/* Positioning context for the panel, added from JS so nothing here has to
+   guess at Elementor's generated section classes. */
+#site-header .hp-mnav-host {
+	position: relative;
+}
+
+#site-header .hp-mnav-toggle {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	/* Pushes the burger to the far edge of its column, opposite the logo. */
+	margin-left: auto;
+	/* 44px: the WCAG 2.2 AA target-size minimum, met by the button box
+	   rather than by the 24px bars drawn inside it. */
+	width: 44px;
+	height: 44px;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: #1f2124;
+	cursor: pointer;
+}
+
+/* Three bars from one element: the middle bar is the element itself and the
+   outer two are its pseudo-elements, so the close state is just a matter of
+   rotating two of them and hiding the third. */
+#site-header .hp-mnav-bars {
+	position: relative;
+}
+
+#site-header .hp-mnav-bars,
+#site-header .hp-mnav-bars::before,
+#site-header .hp-mnav-bars::after {
+	display: block;
+	width: 24px;
+	height: 2px;
+	border-radius: 2px;
+	background: currentColor;
+	transition: transform 200ms ease, background-color 200ms ease;
+}
+
+#site-header .hp-mnav-bars::before,
+#site-header .hp-mnav-bars::after {
+	content: '';
+	position: absolute;
+	left: 0;
+}
+
+#site-header .hp-mnav-bars::before {
+	top: -7px;
+}
+
+#site-header .hp-mnav-bars::after {
+	top: 7px;
+}
+
+#site-header .hp-mnav-toggle.is-open .hp-mnav-bars {
+	background: transparent;
+}
+
+#site-header .hp-mnav-toggle.is-open .hp-mnav-bars::before {
+	transform: translateY(7px) rotate(45deg);
+}
+
+#site-header .hp-mnav-toggle.is-open .hp-mnav-bars::after {
+	transform: translateY(-7px) rotate(-45deg);
+}
+
+#site-header .hp-mnav-toggle:focus-visible {
+	outline: 2px solid #18a8fa;
+	outline-offset: 2px;
+	border-radius: 6px;
+}
+
+#site-header .hp-mnav-panel {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	right: 0;
+	/* Above the hero video and its overlay, which the front-page header
+	   floats over. */
+	z-index: 999;
+	/* 72px is this header's own height; the panel scrolls internally rather
+	   than running off the bottom of a short screen. */
+	max-height: calc(100vh - 72px);
+	overflow-y: auto;
+	overscroll-behavior: contain;
+	padding: 8px 0 12px;
+	background: #fff;
+	box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+}
+
+/* The panel is a flex/block context of its own, so the [hidden] attribute
+   needs backing up the same way Elementor's own hidden utilities do. */
+#site-header .hp-mnav-panel[hidden] {
+	display: none;
+}
+
+#site-header .hp-mnav-list,
+#site-header .hp-mnav-sublist {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+#site-header .hp-mnav-link,
+#site-header .hp-mnav-group {
+	display: block;
+	font-family: 'Inter', sans-serif;
+	line-height: 1.3;
+	text-decoration: none;
+}
+
+#site-header .hp-mnav-link {
+	padding: 13px 24px;
+	color: #1f2124;
+	font-size: 15px;
+	font-weight: 500;
+}
+
+#site-header .hp-mnav-link:hover,
+#site-header .hp-mnav-link:focus {
+	background: rgba(0, 0, 0, 0.05);
+	color: #1f2124;
+}
+
+/* Parent items that only ever opened a submenu on desktop hover: rendered as
+   a section label rather than a dead "#" link, so every tappable row in the
+   panel actually goes somewhere. */
+#site-header .hp-mnav-group {
+	padding: 14px 24px 4px;
+	color: #5a6472;
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: 0.6px;
+	text-transform: uppercase;
+}
+
+#site-header .hp-mnav-link--sub {
+	padding-left: 40px;
+	color: #5a6472;
+	font-weight: 400;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	#site-header .hp-mnav-bars,
+	#site-header .hp-mnav-bars::before,
+	#site-header .hp-mnav-bars::after {
+		transition: none;
 	}
 }

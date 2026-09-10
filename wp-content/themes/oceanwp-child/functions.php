@@ -130,6 +130,21 @@ function oceanwp_child_enqueue_assets() {
 		array( 'current' => oceanwp_child_current_lang() )
 	);
 
+	// Builds the mobile header's menu, which the Elementor header template
+	// never had a widget for - see the docblock in mobile-nav.js. Depends on
+	// the language switch rather than merely being enqueued after it: the
+	// menu is cloned from the rendered nav, so it has to run once that script
+	// has already translated the nav's labels, or Indonesian visitors would
+	// get an English mobile menu. Not gated to the front page - same shared
+	// header on every page.
+	wp_enqueue_script(
+		'oceanwp-child-mobile-nav',
+		get_stylesheet_directory_uri() . '/assets/js/mobile-nav.js',
+		array( 'oceanwp-child-language-switch' ),
+		oceanwp_child_asset_version( '/assets/js/mobile-nav.js' ),
+		true
+	);
+
 	if ( ! oceanwp_child_has_transparent_header() ) {
 		return;
 	}

@@ -131,6 +131,24 @@ body.owpc-transparent-header #site-header .elementor-nav-menu--dropdown a.highli
 	color: #1f2124;
 }
 
+/* The mobile burger (assets/js/mobile-nav.js) gets the same treatment as the
+   logo and top-level nav items above: its dark default lives in style.css so
+   interior pages share it, and it only turns white here, while floating over
+   the video. The bars are drawn with currentColor, so setting `color` is
+   enough. drop-shadow rather than the nav's text-shadow because the bars are
+   backgrounds, not glyphs - same intent, readability against a moving image. */
+body.owpc-transparent-header #site-header .hp-mnav-toggle {
+	transition: color var(--owpc-header-speed) ease, filter var(--owpc-header-speed) ease;
+}
+
+body.owpc-transparent-header #site-header:not(.is-solid) .hp-mnav-toggle {
+	color: #fff;
+	filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.45));
+}
+
+/* The panel itself stays a white card in both states, exactly like the
+   desktop dropdown above - so it needs no scroll-state rules of its own. */
+
 /* ---------------------------------------------------------------
    5. Hero section
    Applied to the Elementor section given the CSS class "hero-video".
@@ -194,7 +212,8 @@ body.owpc-transparent-header.admin-bar #site-header {
 	body.owpc-transparent-header #site-header,
 	body.owpc-transparent-header #site-header .elementor-section,
 	body.owpc-transparent-header #site-header .elementor-widget-image img,
-	body.owpc-transparent-header #site-header .elementor-nav-menu .elementor-item {
+	body.owpc-transparent-header #site-header .elementor-nav-menu .elementor-item,
+	body.owpc-transparent-header #site-header .hp-mnav-toggle {
 		transition: none;
 	}
 }
