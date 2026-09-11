@@ -113,6 +113,16 @@ function oceanwp_child_enqueue_assets() {
 		true
 	);
 
+	// Same shared header, same reasoning - see the docblock in
+	// header-logo-tooltip.js.
+	wp_enqueue_script(
+		'oceanwp-child-header-logo-tooltip',
+		get_stylesheet_directory_uri() . '/assets/js/header-logo-tooltip.js',
+		array(),
+		oceanwp_child_asset_version( '/assets/js/header-logo-tooltip.js' ),
+		true
+	);
+
 	// Same reasoning: the header (and its Admission button) is shared by
 	// every page, so the switch button next to it is too - see the
 	// language-switch docblock above oceanwp_child_current_lang().
