@@ -131,8 +131,10 @@
 	color: var(--color-on-primary);
 }
 
-/* Two soft light blooms, off-centre and opposite each other, so the flat
-   gradient gains some depth without anything reading as a "shape". */
+/* Soft light blooms, off-centre and at different corners, plus a faint
+   diagonal sheen - so the flat gradient gains some depth without anything
+   reading as a "shape". A third, smaller bloom breaks the two-blob
+   symmetry the original pair had. */
 #homepage-custom .hp-hotnews::before {
 	content: '';
 	position: absolute;
@@ -140,8 +142,13 @@
 	z-index: -2;
 	pointer-events: none;
 	background:
+		linear-gradient(120deg, transparent 38%, rgba(255, 255, 255, 0.10) 50%, transparent 62%),
 		radial-gradient(ellipse 720px 520px at 8% 12%, rgba(255, 255, 255, 0.20), transparent 62%),
-		radial-gradient(ellipse 820px 560px at 94% 88%, rgba(255, 255, 255, 0.14), transparent 66%);
+		radial-gradient(ellipse 820px 560px at 94% 88%, rgba(255, 255, 255, 0.14), transparent 66%),
+		radial-gradient(ellipse 420px 420px at 82% 6%, rgba(255, 255, 255, 0.16), transparent 60%),
+		/* Faint edge darkening for depth - farthest-corner so it always
+		   reaches past the box's corners and never clamps to a hard ring. */
+		radial-gradient(ellipse farthest-corner at 50% 50%, transparent 60%, rgba(18, 35, 60, 0.16) 100%);
 }
 
 /* Dot grid, faded out through the middle so it never sits behind the
