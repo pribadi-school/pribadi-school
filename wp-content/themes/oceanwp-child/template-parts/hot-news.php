@@ -14,37 +14,28 @@
  * $hp_hot_news is PLACEHOLDER content: the photos are existing library
  * images and the headlines describe achievements already listed further
  * down the page. Swap in real news before launch - each entry needs a
- * landscape image (roughly 16:9 fills the frame best), an eyebrow, a
- * headline, and optionally a link. Entries with an empty 'link' simply
- * render without a button.
+ * landscape image (roughly 16:9 fills the frame best) and a headline. No
+ * eyebrow label or "read more" link, by direction - the headline is the
+ * whole of the copy.
  *
  * @package OceanWP_Child
  */
 
 $hp_hot_news = array(
 	array(
-		'image'      => 'https://pribadidepok.sch.id/wp-content/uploads/2023/10/Digital-Classroom-6-1.jpg',
-		'eyebrow'    => 'Prestasi Internasional',
-		'eyebrow_en' => 'International Achievement',
-		'title'      => 'Luvidi meraih medali emas di Olimpiade Internasional Kecerdasan Buatan',
-		'title_en'   => 'Luvidi takes gold at the International Olympiad in Artificial Intelligence',
-		'link'       => '',
+		'image'    => 'https://pribadidepok.sch.id/wp-content/uploads/2023/10/Digital-Classroom-6-1.jpg',
+		'title'    => 'Luvidi meraih medali emas di Olimpiade Internasional Kecerdasan Buatan',
+		'title_en' => 'Luvidi takes gold at the International Olympiad in Artificial Intelligence',
 	),
 	array(
-		'image'      => 'https://pribadidepok.sch.id/wp-content/uploads/2025/09/16.jpg',
-		'eyebrow'    => 'Kabar Sekolah',
-		'eyebrow_en' => 'School News',
-		'title'      => 'Pribadi Mengajar kembali hadir bersama relawan penutur asing dari Australia',
-		'title_en'   => 'Pribadi Mengajar returns with native-speaker volunteers from Australia',
-		'link'       => '/post/pribadi-mengajar-2023/',
+		'image'    => 'https://pribadidepok.sch.id/wp-content/uploads/2025/09/16.jpg',
+		'title'    => 'Pribadi Mengajar kembali hadir bersama relawan penutur asing dari Australia',
+		'title_en' => 'Pribadi Mengajar returns with native-speaker volunteers from Australia',
 	),
 	array(
-		'image'      => 'https://pribadidepok.sch.id/wp-content/uploads/2023/10/Character-Building-2.jpg',
-		'eyebrow'    => 'Prestasi Siswa',
-		'eyebrow_en' => 'Student Achievement',
-		'title'      => 'Biru membawa pulang medali perunggu dari SIMSO 2026',
-		'title_en'   => 'Biru brings home a bronze medal from SIMSO 2026',
-		'link'       => '',
+		'image'    => 'https://pribadidepok.sch.id/wp-content/uploads/2023/10/Character-Building-2.jpg',
+		'title'    => 'Biru membawa pulang medali perunggu dari SIMSO 2026',
+		'title_en' => 'Biru brings home a bronze medal from SIMSO 2026',
 	),
 );
 
@@ -72,8 +63,6 @@ $hp_hot_news_count = count( $hp_hot_news );
 			<ul class="hp-hotnews-track">
 				<?php foreach ( $hp_hot_news as $hp_news_index => $hp_news ) : ?>
 					<?php
-					$hp_news_link = trim( (string) $hp_news['link'] );
-
 					// Slot offset from the active (first) slide, wrapped so the last
 					// item sits to the left: 0, 1, ..., -1. Same formula hot-news.js
 					// uses, so the peeks are in place before the script runs.
@@ -100,14 +89,7 @@ $hp_hot_news_count = count( $hp_hot_news );
 						</div>
 
 						<div class="hp-hotnews-copy">
-							<span class="hp-hotnews-eyebrow"><?php echo esc_html( hp_t( $hp_news['eyebrow'], $hp_news['eyebrow_en'] ) ); ?></span>
 							<h3 class="hp-hotnews-title"><?php echo esc_html( hp_t( $hp_news['title'], $hp_news['title_en'] ) ); ?></h3>
-
-							<?php if ( '' !== $hp_news_link ) : ?>
-								<a class="hp-hotnews-link" href="<?php echo esc_url( $hp_news_link ); ?>">
-									<?php echo hp_t( 'Baca selengkapnya', 'Read more' ); ?> &raquo;
-								</a>
-							<?php endif; ?>
 						</div>
 					</li>
 				<?php endforeach; ?>

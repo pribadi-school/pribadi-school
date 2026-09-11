@@ -341,19 +341,6 @@
 	translate: 0 var(--hn-text-rise);
 }
 
-#homepage-custom .hp-hotnews-eyebrow {
-	font-family: 'Inter', sans-serif;
-	font-size: 0.74em;
-	font-weight: 700;
-	letter-spacing: 1.4px;
-	text-transform: uppercase;
-	color: var(--color-on-primary);
-	padding: 6px 12px;
-	border-radius: 999px;
-	background: rgba(255, 255, 255, 0.18);
-	backdrop-filter: blur(4px);
-}
-
 #homepage-custom .hp-hotnews-title {
 	margin: 0;
 	font-family: 'Inter', sans-serif;
@@ -366,22 +353,6 @@
 	/* The headline crosses from the flat gradient onto an arbitrary photo;
 	   a soft shadow keeps it legible over whatever the photo has there. */
 	text-shadow: 0 2px 18px rgba(6, 24, 44, 0.35);
-}
-
-#homepage-custom .hp-hotnews-link {
-	font-family: 'Inter', sans-serif;
-	font-size: 0.88em;
-	font-weight: 600;
-	color: var(--color-on-primary);
-	text-decoration: none;
-	border-bottom: 2px solid rgba(255, 255, 255, 0.5);
-	padding-bottom: 2px;
-	transition: border-color var(--motion-base) ease;
-}
-
-#homepage-custom .hp-hotnews-link:hover,
-#homepage-custom .hp-hotnews-link:focus {
-	border-bottom-color: var(--color-on-primary);
 }
 
 /* ---- Controls ---- */
