@@ -1352,11 +1352,12 @@
 		flex-basis: 150px;
 	}
 
-	/* Much quicker than the desktop pass. The tiles are narrower here and
-	   only a couple fit on screen at once, so at the desktop duration the
-	   strip covers far less ground per second and reads as barely moving. */
+	/* Quicker than the desktop pass. The tiles are narrower here and only a
+	   couple fit on screen at once, so at the desktop duration the strip
+	   covers far less ground per second and reads as barely moving. 14s was
+	   the other extreme and read as hurried. */
 	#homepage-custom .hp-achieve-strip {
-		--hp-achieve-duration: 14s;
+		--hp-achieve-duration: 24s;
 	}
 }
 
