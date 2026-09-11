@@ -33,15 +33,21 @@ define( 'OCEANWP_CHILD_VERSION', '1.0.0' );
  * page reload keeps the implementation small while still rendering the
  * chosen language server-side (no flash of the wrong language, unlike a
  * client-side-only text swap).
+ *
+ * Default (no cookie yet, i.e. a first-time visitor) is English, by
+ * direction. language-switch.js's ID translation of the Elementor nav
+ * already only runs when the active language is Indonesian, so this default
+ * needed no change there - an unset cookie now just resolves to the branch
+ * that leaves the nav's own English labels alone.
  */
 function oceanwp_child_current_lang() {
 	if ( ! isset( $_COOKIE['hp_lang'] ) ) {
-		return 'id';
+		return 'en';
 	}
 
 	$lang = sanitize_text_field( wp_unslash( $_COOKIE['hp_lang'] ) );
 
-	return ( 'en' === $lang ) ? 'en' : 'id';
+	return ( 'id' === $lang ) ? 'id' : 'en';
 }
 
 /**
