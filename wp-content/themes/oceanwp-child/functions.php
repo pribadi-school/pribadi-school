@@ -206,6 +206,14 @@ function oceanwp_child_enqueue_homepage_template_assets() {
 	);
 
 	wp_enqueue_script(
+		'oceanwp-child-achievements-marquee',
+		get_stylesheet_directory_uri() . '/assets/js/achievements-marquee.js',
+		array(),
+		oceanwp_child_asset_version( '/assets/js/achievements-marquee.js' ),
+		true
+	);
+
+	wp_enqueue_script(
 		'oceanwp-child-scroll-reveal',
 		get_stylesheet_directory_uri() . '/assets/js/scroll-reveal.js',
 		array(),

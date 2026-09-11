@@ -1171,25 +1171,57 @@
 
 /* Deliberately outside .hp-container so the strip bleeds full-width.
    This is the clipping "viewport" - hp-achieve-track underneath is the
-   part that actually scrolls, non-stop, right to left, looping forever.
-   No manual scrollbar, no user-driven scroll: overflow is hidden, not
-   auto. */
+   part that actually moves, non-stop, right to left, looping forever.
+
+   Not a scroll container on purpose, even though the strip can be dragged:
+   assets/js/achievements-marquee.js does that with pointer events instead,
+   because a horizontally-scrollable box swallows the vertical wheel in
+   Chrome and this loop has no end for that scroll to chain out of. */
 #homepage-custom .hp-achieve-strip {
+	/* Seconds per full pass. Read by achievements-marquee.js as well as by
+	   the fallback animation below, so both stay on one value. */
+	--hp-achieve-duration: 42s;
 	position: relative;
 	overflow: hidden;
 	padding: 18px 0 24px;
+	/* Sideways gestures drive the strip; up/down ones stay with the page. */
+	touch-action: pan-y;
 	-webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
 	mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
 }
 
+@media (hover: hover) and (pointer: fine) {
+	#homepage-custom .hp-achieve-strip.is-manual {
+		cursor: grab;
+	}
+
+	#homepage-custom .hp-achieve-strip.is-dragging {
+		cursor: grabbing;
+	}
+}
+
 /* Doubled tile list (see the template's two-pass loop) animated to -50%,
-   which loops seamlessly since both halves are identical. Keeps rolling
-   even while a tile is hovered/lifted - it does not pause. */
+   which loops near-seamlessly since both halves are identical. Keeps rolling
+   even while a tile is hovered/lifted - it does not pause.
+
+   This is the no-JS fallback: achievements-marquee.js adds .is-manual and
+   drives the same movement itself, so the strip can be dragged while it
+   runs. */
 #homepage-custom .hp-achieve-track {
 	display: flex;
 	width: max-content;
 	gap: 18px;
-	animation: hp-achieve-scroll 42s linear infinite;
+	animation: hp-achieve-scroll var(--hp-achieve-duration) linear infinite;
+}
+
+#homepage-custom .hp-achieve-strip.is-manual .hp-achieve-track {
+	animation: none;
+}
+
+/* Nothing should animate its way to a new position under a finger/cursor
+   that is dragging it. */
+#homepage-custom .hp-achieve-strip.is-dragging .hp-achieve-tile {
+	transition: none;
 }
 
 @keyframes hp-achieve-scroll {
@@ -1318,6 +1350,13 @@
 
 	#homepage-custom .hp-achieve-tile {
 		flex-basis: 150px;
+	}
+
+	/* Much quicker than the desktop pass. The tiles are narrower here and
+	   only a couple fit on screen at once, so at the desktop duration the
+	   strip covers far less ground per second and reads as barely moving. */
+	#homepage-custom .hp-achieve-strip {
+		--hp-achieve-duration: 14s;
 	}
 }
 
