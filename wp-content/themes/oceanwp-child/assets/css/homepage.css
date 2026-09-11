@@ -21,8 +21,17 @@
 	--color-foreground: #12233c;
 	--color-foreground-alt: #1c2733;
 	--color-muted-foreground: #5a6472;
+	/* Three light tones, not two. --color-surface stays pure white and is
+	   now only what MASTER.md always said it was - the *raised* tone, for
+	   cards, tooltips and buttons. The page itself sits on
+	   --color-surface-page, a few percent down from white, because a full
+	   page of #fff is tiring to read against; the alternating sections step
+	   down again from there so that rhythm survives the change instead of
+	   flattening into one tone. White components now lift further off the
+	   page than they did, which is the point. */
 	--color-surface: #ffffff;
-	--color-surface-muted: #f7f9fc;
+	--color-surface-page: #f2f5f9;
+	--color-surface-muted: #e9eef5;
 	--color-border: rgba(18, 35, 60, 0.08);
 	--color-dark-surface: #0a0a0c;
 
@@ -80,7 +89,7 @@
 	   (The achievement marquee clips itself via .hp-achieve-strip, so
 	   nothing here depends on this for horizontal containment.) */
 	overflow-x: clip;
-	background: #fff;
+	background: var(--color-surface-page);
 	-webkit-font-smoothing: antialiased;
 }
 
@@ -208,7 +217,7 @@
 #homepage-custom .hp-below-hero {
 	position: relative;
 	z-index: 1;
-	background: var(--color-surface);
+	background: var(--color-surface-page);
 	box-shadow: 0 -30px 60px -18px rgba(0, 0, 0, 0.45);
 }
 
@@ -244,7 +253,7 @@
 	padding-bottom: 96px;
 	background:
 		radial-gradient(ellipse 900px 420px at 50% 45%, rgba(24, 168, 250, 0.08), transparent 70%),
-		var(--color-surface);
+		var(--color-surface-page);
 }
 
 /* Dot grid, masked to fade out where the copy sits. The mask is the whole
@@ -626,7 +635,7 @@
 	background:
 		radial-gradient(ellipse 620px 460px at 14% 22%, rgba(1, 166, 161, 0.08), transparent 65%),
 		radial-gradient(ellipse 620px 460px at 86% 78%, rgba(24, 168, 250, 0.09), transparent 65%),
-		var(--color-surface);
+		var(--color-surface-page);
 }
 
 #homepage-custom .hp-program-row {
@@ -724,7 +733,7 @@
 	position: relative;
 	background:
 		radial-gradient(ellipse 1100px 520px at 50% 28%, rgba(24, 168, 250, 0.10), transparent 70%),
-		var(--color-surface);
+		var(--color-surface-page);
 	isolation: isolate;
 }
 

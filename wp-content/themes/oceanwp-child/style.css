@@ -11,6 +11,27 @@ Text Domain: oceanwp-child
 /* Site-wide custom styles go here.
    Feature-specific styles live in assets/css/ and are enqueued from functions.php. */
 
+/* ---------------------------------------------------------------
+   Page canvas.
+
+   body is the only thing painting a background on interior pages -
+   #outer-wrap, #wrap and #main are all transparent - so this one rule
+   tints every Elementor-authored page. A full page of pure #fff is
+   tiring to read against for any length of time; this steps a few
+   percent down to a soft cool grey while leaving cards, panels and
+   other raised white surfaces to lift off it.
+
+   Raw hex rather than a token: the design system's custom properties
+   are scoped to #homepage-custom so they can't leak into Elementor
+   pages, so they aren't in scope here. This value is the same
+   --color-surface-page that assets/css/homepage.css defines, and the
+   two are meant to stay in step - change both, or the homepage and
+   the rest of the site drift apart.
+   --------------------------------------------------------------- */
+body {
+	background-color: #f2f5f9;
+}
+
 /* Swap the site's font (set site-wide via the Elementor kit as Montserrat)
    for Inter. !important because the kit prints these same custom properties
    unprefixed on .elementor-kit-8 with no !important of its own - this beats
