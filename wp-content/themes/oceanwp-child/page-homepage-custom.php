@@ -20,7 +20,7 @@ get_header();
 	<!-- Hero: full-bleed looping video background under the transparent header -->
 	<section class="hp-hero hero-video">
 		<video autoplay muted loop playsinline
-			poster="<?php echo esc_url( 'http://sekolahpribadi.local/wp-content/uploads/2026/09/Untitled-design-1-scaled.png' ); ?>">
+			poster="<?php echo esc_url( wp_get_upload_dir()['baseurl'] . '/2026/09/Untitled-design-1-scaled.png' ); ?>">
 			<source src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/video/shortprofiles.mp4' ); ?>" type="video/mp4">
 		</video>
 		<div class="hp-hero-overlay"></div>
