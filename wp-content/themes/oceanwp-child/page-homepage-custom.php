@@ -67,6 +67,9 @@ get_header();
 		</div>
 	</section>
 
+	<!-- Headline news carousel -->
+	<?php get_template_part( 'template-parts/hot-news' ); ?>
+
 	<!-- Program cards -->
 	<section class="hp-section hp-cards-section">
 		<div class="hp-container">

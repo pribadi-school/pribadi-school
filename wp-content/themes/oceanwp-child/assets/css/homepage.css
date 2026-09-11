@@ -110,6 +110,374 @@
 }
 
 /* ---------------------------------------------------------------
+   Kabar Terkini / Latest News carousel
+   (template-parts/hot-news.php + assets/js/hot-news.js)
+
+   The one saturated band in the page body: the brand gradient runs
+   edge to edge and the slide sits on top of it, so the section reads
+   as a single deliberate block rather than a photo with a coloured
+   border around it.
+
+   Ornament here is texture and depth rather than drawn shapes - the
+   same vocabulary the intro and achievement bands already use (a
+   masked dot grid, soft off-centre blooms), just tuned to sit on
+   colour instead of on white.
+   --------------------------------------------------------------- */
+#homepage-custom .hp-hotnews {
+	position: relative;
+	isolation: isolate;
+	overflow: hidden;
+	background: linear-gradient(115deg, var(--color-gradient-start), var(--color-gradient-end));
+	color: var(--color-on-primary);
+}
+
+/* Two soft light blooms, off-centre and opposite each other, so the flat
+   gradient gains some depth without anything reading as a "shape". */
+#homepage-custom .hp-hotnews::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	z-index: -2;
+	pointer-events: none;
+	background:
+		radial-gradient(ellipse 720px 520px at 8% 12%, rgba(255, 255, 255, 0.20), transparent 62%),
+		radial-gradient(ellipse 820px 560px at 94% 88%, rgba(255, 255, 255, 0.14), transparent 66%);
+}
+
+/* Dot grid, faded out through the middle so it never sits behind the
+   headline copy - same treatment as the intro band's grid. */
+#homepage-custom .hp-hotnews::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	pointer-events: none;
+	background-image: radial-gradient(rgba(255, 255, 255, 0.28) 1px, transparent 1px);
+	background-size: 26px 26px;
+	-webkit-mask-image: radial-gradient(ellipse 820px 420px at 50% 46%, transparent 38%, #000 100%);
+	mask-image: radial-gradient(ellipse 820px 420px at 50% 46%, transparent 38%, #000 100%);
+}
+
+/* ---- Stage: centred "peek" carousel ----
+
+   The active photo sits centred and its neighbours stay in view on both
+   sides, so there is always a visible "next" to pull the eye along. Every
+   slide shares one grid cell and is placed by its slot offset --k (0 is the
+   active slide, 1 the next, -1 the previous), set by hot-news.js; moving the
+   carousel just renumbers the slots and lets the transition carry each
+   photo to its new place. The template writes the same --k values
+   server-side, so the layout is right before the script runs. */
+#homepage-custom .hp-hotnews-stage {
+	/* Cinema-wide frame that takes most of the width. The gap is generous
+	   on purpose: with the frame this wide it leaves only a narrow edge of
+	   the previous and next photos showing - a tease, not a second photo. */
+	--hn-w: min(1180px, 68vw);
+	--hn-gap: clamp(40px, 7vw, 110px);
+	--hn-ratio: 21 / 9;
+	/* Slower than the page's other motion on purpose: this is a large,
+	   slow-moving picture, not a control responding to a tap. The headline
+	   starts rising partway through the photo's move and takes its time. */
+	--hn-slide: 1100ms;
+	--hn-text: 1300ms;
+	--hn-text-delay: 450ms;
+	/* How far the headline travels up as it arrives. */
+	--hn-text-rise: 72px;
+	/* The peeking photos sit this much lower than the active one - staggered
+	   rather than lined up in a strip. */
+	--hn-drop: clamp(28px, 4.5vw, 72px);
+	position: relative;
+}
+
+/* Full width, clipped horizontally only: the peeking slides run off the
+   page edges, while the active photo's shadow is still free to fall below
+   it. The bottom padding is room for the lowered neighbours, so they end
+   above the progress bar instead of running into it. */
+#homepage-custom .hp-hotnews-viewport {
+	position: relative;
+	overflow-x: clip;
+	padding-bottom: var(--hn-drop);
+}
+
+#homepage-custom .hp-hotnews-track {
+	display: grid;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+/* The slide itself is unclipped - the photo's crop lives on
+   .hp-hotnews-frame inside it - so the headline can hang out past the
+   photo's edge. */
+#homepage-custom .hp-hotnews-slide {
+	--k: 0;
+	grid-area: 1 / 1;
+	justify-self: center;
+	position: relative;
+	width: var(--hn-w);
+	/* % in translate is the slide's own width, so one slot is exactly one
+	   slide plus the gap at every screen size. Every slot but the active one
+	   is also lowered by --hn-drop, so a photo rises into line as it slides
+	   into the centre and sinks back as it leaves. */
+	translate: calc(var(--k) * (100% + var(--hn-gap))) var(--hn-drop);
+	/* Neighbours sit back a little - slightly smaller and dimmer - so the
+	   centre photo reads as the one being shown. */
+	scale: 0.97;
+	opacity: 0.5;
+	cursor: pointer;
+	transition:
+		/* --ease-fade rather than the deceleration curve the rest of the page
+		   moves on: easeOutCubic covers ~60% of the distance in the first
+		   quarter, which made even a long slide read as a quick snap. This
+		   curve eases in as well, so the photo visibly glides. */
+		translate var(--hn-slide) var(--ease-fade),
+		scale var(--hn-slide) var(--ease-fade),
+		opacity var(--hn-slide) var(--ease-fade);
+}
+
+#homepage-custom .hp-hotnews-slide.is-active {
+	z-index: 1;
+	translate: calc(var(--k) * (100% + var(--hn-gap))) 0;
+	scale: 1;
+	opacity: 1;
+	cursor: auto;
+}
+
+/* Set by the script for the one frame in which a slide jumps from one end
+   of the loop to the other. It is off-screen at both ends of that jump;
+   without this it would visibly fly across behind the others. */
+#homepage-custom .hp-hotnews-slide.is-wrapping {
+	transition: none;
+}
+
+#homepage-custom .hp-hotnews-slide:not(.is-active):hover {
+	opacity: 0.75;
+}
+
+#homepage-custom .hp-hotnews-frame {
+	position: relative;
+	aspect-ratio: var(--hn-ratio);
+	overflow: hidden;
+	/* Square corners, by direction. */
+	box-shadow: var(--elevation-4);
+}
+
+#homepage-custom .hp-hotnews-photo {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	/* Biased above centre: these are photos of people, and a letterbox crop
+	   of a taller frame otherwise takes the slice through the middle and
+	   cuts heads off at the top. */
+	object-position: center 30%;
+}
+
+/* Scrim behind the part of the headline that lands on the photo. Angled
+   from the top left, where the text sits - a flat overlay across the
+   whole photo would dull the image for no benefit. */
+#homepage-custom .hp-hotnews-frame::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(
+		to bottom right,
+		rgba(6, 24, 44, 0.78) 0%,
+		rgba(6, 24, 44, 0.42) 32%,
+		rgba(6, 24, 44, 0.04) 58%,
+		transparent 100%
+	);
+	transition: opacity var(--hn-slide) var(--ease-fade);
+}
+
+/* The peeks are there to be seen as photos, so they drop the scrim along
+   with their headline. */
+#homepage-custom .hp-hotnews-slide:not(.is-active) .hp-hotnews-frame::after {
+	opacity: 0;
+}
+
+/* Top-left, starting out on the band's gradient and running on over the
+   photo - the headline belongs to the section as much as to the picture.
+   The overhang is capped at 48px: enough to read as breaking out of the
+   frame, without pushing the headline off towards the page edge. */
+#homepage-custom .hp-hotnews-copy {
+	position: absolute;
+	top: clamp(28px, 3.6vw, 56px);
+	left: calc(-1 * min(48px, var(--hn-gap) * 0.75));
+	/* Above the frame and its scrim. */
+	z-index: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 12px;
+	max-width: min(560px, 48%);
+	/* Only the active slide's headline shows. It rises in once its photo has
+	   mostly arrived, rather than travelling in with it. */
+	opacity: 0;
+	translate: 0 var(--hn-text-rise);
+	pointer-events: none;
+	/* Leaving is quick, so the outgoing headline is gone before the photos
+	   have really moved; arriving (below) is the slow part. */
+	transition:
+		opacity var(--motion-slow) var(--ease-fade),
+		translate var(--motion-slow) var(--ease-out-cubic);
+}
+
+#homepage-custom .hp-hotnews-slide.is-active .hp-hotnews-copy {
+	opacity: 1;
+	translate: 0 0;
+	pointer-events: auto;
+	transition:
+		opacity var(--hn-text) var(--ease-fade) var(--hn-text-delay),
+		translate var(--hn-text) var(--ease-out-cubic) var(--hn-text-delay);
+}
+
+/* First appearance: the first headline is active from page load, so on its
+   own it would simply ride in with the stage's entrance. Held down and
+   hidden until scroll-reveal marks the stage visible, it instead gets the
+   same slow rise as every later headline, once the photo has come up. */
+#homepage-custom .hp-hotnews-stage:not(.is-visible) .hp-hotnews-slide.is-active .hp-hotnews-copy {
+	opacity: 0;
+	translate: 0 var(--hn-text-rise);
+}
+
+#homepage-custom .hp-hotnews-eyebrow {
+	font-family: 'Inter', sans-serif;
+	font-size: 0.74em;
+	font-weight: 700;
+	letter-spacing: 1.4px;
+	text-transform: uppercase;
+	color: var(--color-on-primary);
+	padding: 6px 12px;
+	border-radius: 999px;
+	background: rgba(255, 255, 255, 0.18);
+	backdrop-filter: blur(4px);
+}
+
+#homepage-custom .hp-hotnews-title {
+	margin: 0;
+	font-family: 'Inter', sans-serif;
+	font-size: clamp(1.5em, 2.7vw, 2.6em);
+	font-weight: 700;
+	line-height: 1.18;
+	letter-spacing: -0.6px;
+	color: var(--color-on-primary);
+	text-wrap: balance;
+	/* The headline crosses from the flat gradient onto an arbitrary photo;
+	   a soft shadow keeps it legible over whatever the photo has there. */
+	text-shadow: 0 2px 18px rgba(6, 24, 44, 0.35);
+}
+
+#homepage-custom .hp-hotnews-link {
+	font-family: 'Inter', sans-serif;
+	font-size: 0.88em;
+	font-weight: 600;
+	color: var(--color-on-primary);
+	text-decoration: none;
+	border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+	padding-bottom: 2px;
+	transition: border-color var(--motion-base) ease;
+}
+
+#homepage-custom .hp-hotnews-link:hover,
+#homepage-custom .hp-hotnews-link:focus {
+	border-bottom-color: var(--color-on-primary);
+}
+
+/* ---- Controls ---- */
+/* Progress bar: one segment per item, together spanning the full width of
+   the section. Static - the current item's segment is solid white, the
+   rest dim; nothing counts down. */
+#homepage-custom .hp-hotnews-dots {
+	display: flex;
+	gap: 8px;
+	margin-top: 30px;
+	padding-inline: clamp(16px, 2.5vw, 40px);
+}
+
+/* The button is a 20px-tall hit area; the visible bar is only the 2px
+   line drawn through its middle. */
+#homepage-custom .hp-hotnews-dot {
+	position: relative;
+	flex: 1 1 0;
+	height: 20px;
+	padding: 0;
+	border: 0;
+	background: none;
+	cursor: pointer;
+}
+
+#homepage-custom .hp-hotnews-dot::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 50%;
+	height: 2px;
+	margin-top: -1px;
+	border-radius: 999px;
+	background: rgba(255, 255, 255, 0.3);
+	transition: background-color var(--hn-text) var(--ease-fade);
+}
+
+#homepage-custom .hp-hotnews-dot:hover::before {
+	background: rgba(255, 255, 255, 0.55);
+}
+
+#homepage-custom .hp-hotnews-dot.is-active::before {
+	background: var(--color-on-primary);
+}
+
+#homepage-custom .hp-hotnews-dot:focus-visible {
+	outline: 2px solid var(--color-on-primary);
+	outline-offset: 2px;
+	border-radius: 4px;
+}
+
+/* The stage takes focus for keyboard control, but it is a container, not a
+   button - the ring should read as "this is now driveable", not as a
+   pressable thing. */
+#homepage-custom .hp-hotnews-stage:focus-visible {
+	outline: 2px solid rgba(255, 255, 255, 0.8);
+	outline-offset: 8px;
+}
+
+@media only screen and (max-width: 767px) {
+	#homepage-custom .hp-hotnews-stage {
+		--hn-w: 76vw;
+		--hn-gap: 18px;
+		--hn-drop: 18px;
+		--hn-text-rise: 40px;
+		/* A letterbox this narrow would be a strip; 16:9 is as wide as a
+		   phone frame can go and still show anyone's face. */
+		--hn-ratio: 16 / 9;
+	}
+
+	/* No room to hang the headline over the photo at this width, so it
+	   moves below it - still outside the frame, just stacked. */
+	#homepage-custom .hp-hotnews-copy {
+		position: static;
+		max-width: none;
+		margin-top: 18px;
+		gap: 10px;
+	}
+
+	#homepage-custom .hp-hotnews-title {
+		font-size: 1.3em;
+		text-shadow: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	#homepage-custom .hp-hotnews-slide,
+	#homepage-custom .hp-hotnews-frame::after,
+	#homepage-custom .hp-hotnews-copy,
+	#homepage-custom .hp-hotnews-slide.is-active .hp-hotnews-copy {
+		transition: none;
+	}
+}
+
+/* ---------------------------------------------------------------
    Hero (video background, no overlaid content - the transparent
    header sits on top of this, handled by transparent-header.css/js)
    --------------------------------------------------------------- */
@@ -355,6 +723,38 @@
 	}
 
 	#homepage-custom .hp-reveal.is-visible {
+		animation: none;
+	}
+}
+
+/* Rising variant: starts below and slides up into place, over a longer
+   distance and a little more time than the default descent. Used by the
+   Latest News band, which is meant to arrive as an event rather than
+   settle in quietly like the sections around it. */
+#homepage-custom .hp-reveal.hp-reveal--up {
+	translate: 0 56px;
+}
+
+#homepage-custom .hp-reveal.hp-reveal--up.is-visible {
+	animation: hp-reveal-fade var(--motion-reveal) var(--ease-fade) both,
+		hp-reveal-up calc(var(--motion-reveal) + var(--motion-slow)) var(--ease-out-cubic) both;
+}
+
+@keyframes hp-reveal-up {
+	from {
+		translate: 0 56px;
+	}
+	to {
+		translate: 0 0;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	#homepage-custom .hp-reveal.hp-reveal--up {
+		translate: none;
+	}
+
+	#homepage-custom .hp-reveal.hp-reveal--up.is-visible {
 		animation: none;
 	}
 }

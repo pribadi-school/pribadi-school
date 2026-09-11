@@ -220,6 +220,17 @@ function oceanwp_child_enqueue_homepage_template_assets() {
 		oceanwp_child_asset_version( '/assets/js/alumni-map.js' ),
 		true
 	);
+
+	// Depends on the language switch for the same reason the mobile nav does:
+	// it builds a couple of control labels itself and needs to know which
+	// language the page actually rendered in.
+	wp_enqueue_script(
+		'oceanwp-child-hot-news',
+		get_stylesheet_directory_uri() . '/assets/js/hot-news.js',
+		array( 'oceanwp-child-language-switch' ),
+		oceanwp_child_asset_version( '/assets/js/hot-news.js' ),
+		true
+	);
 }
 add_action( 'wp_enqueue_scripts', 'oceanwp_child_enqueue_homepage_template_assets', 20 );
 
