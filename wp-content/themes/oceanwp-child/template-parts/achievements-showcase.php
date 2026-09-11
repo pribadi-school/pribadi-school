@@ -16,10 +16,16 @@
  * fallback for touch, where :hover doesn't apply.
  *
  * Photos: drop real achievement/student photos into
- * assets/img/achievements/ using the filenames below (any image format;
- * a portrait-ish crop, roughly 3:4, will fill the tile best). Entries
- * whose file doesn't exist yet render a neutral medal placeholder instead
- * of a broken <img>, so a half-populated set still looks deliberate.
+ * assets/img/achievements/ using the filenames below. A portrait-ish crop,
+ * roughly 3:4, fills the tile best. Entries whose file doesn't exist yet
+ * render a neutral medal placeholder instead of a broken <img>, so a
+ * half-populated set still looks deliberate.
+ *
+ * Save them as WebP around 600x800 and well under ~100KB each. The tile
+ * renders at 200x267 (150x200 on mobile), so that is already ~3x oversampled
+ * - anything bigger is wasted bytes on a strip that loads eight of them.
+ * These started life as 1350x1800 PNGs averaging 2MB each, 16.5MB for the
+ * set, which is what made the strip slow to fill in.
  *
  * @package OceanWP_Child
  */
@@ -55,49 +61,49 @@ $hp_achieve_stats = array(
  */
 $hp_achievements = array(
 	array(
-		'photo'    => 'luvidi-ioai.png',
+		'photo'    => 'luvidi-ioai.webp',
 		'title'    => 'Medali Emas Olimpiade Internasional Kecerdasan Buatan (IOAI)',
 		'title_en' => 'Gold Medal, International Olympiad in Artificial Intelligence (IOAI)',
 		'name'     => 'Luvidi',
 	),
 	array(
-		'photo'    => 'aleksa-horse.png',
+		'photo'    => 'aleksa-horse.webp',
 		'title'    => 'Prestasi Berkuda (Equestrian)',
 		'title_en' => 'Equestrian Achievement',
 		'name'     => 'Aleksa',
 	),
 	array(
-		'photo'    => 'biru-simso.png',
+		'photo'    => 'biru-simso.webp',
 		'title'    => 'Medali Perunggu, SIMSO 2026',
 		'title_en' => 'Bronze Medal, SIMSO 2026',
 		'name'     => 'Biru',
 	),
 	array(
-		'photo'    => 'fayha-sumbawa.png',
+		'photo'    => 'fayha-sumbawa.webp',
 		'title'    => 'Memberikan Dampak Nyata di Sumbawa',
 		'title_en' => 'Making an Impact in Sumbawa',
 		'name'     => 'Fayha',
 	),
 	array(
-		'photo'    => 'lala-fashion-week.png',
+		'photo'    => 'lala-fashion-week.webp',
 		'title'    => 'Desainer Muda di Indonesia Trend Fashion Week 2026 melalui Program Dream Fashion',
 		'title_en' => 'Young Designer, Indonesia Trend Fashion Week 2026 (Dream Fashion Program)',
 		'name'     => 'Lala',
 	),
 	array(
-		'photo'    => 'musa-jismo-silver-bronze.png',
+		'photo'    => 'musa-jismo-silver-bronze.webp',
 		'title'    => 'Jismo Silver Bronze',
 		'title_en' => 'Jismo Silver Bronze',
 		'name'     => 'Musa',
 	),
 	array(
-		'photo'    => 'tobias-bronze-science-jismo.png',
+		'photo'    => 'tobias-bronze-science-jismo.webp',
 		'title'    => 'Bronze Science Jismo',
 		'title_en' => 'Bronze Science Jismo',
 		'name'     => 'Tobias',
 	),
 	array(
-		'photo'    => 'ayu-swimming-competition.png',
+		'photo'    => 'ayu-swimming-competition.webp',
 		'title'    => 'Swimming Competition',
 		'title_en' => 'Swimming Competition',
 		'name'     => 'Ayu',
