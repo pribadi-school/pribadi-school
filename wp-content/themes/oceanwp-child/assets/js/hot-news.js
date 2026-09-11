@@ -272,10 +272,9 @@
 		 * Sideways scrolling (trackpad swipes, Shift+wheel) always moves the
 		 * carousel. The ordinary vertical wheel is the page's own scroll, so
 		 * it is borrowed carefully: only while the carousel is fully on
-		 * screen, and only to walk through the items once - scrolling down
-		 * past the last item (or up past the first) releases the wheel back
-		 * to the page. Without that bound a looping carousel would trap
-		 * anyone who happened to scroll with the pointer over it.
+		 * screen. Scrolling past the last item wraps back to the first (and
+		 * vice versa), by direction - matching autoplay/dots/swipe, which
+		 * already loop.
 		 *
 		 * One step per gesture: a wheel spin or trackpad fling fires dozens
 		 * of events, so after a step the rest of that gesture is swallowed
@@ -312,13 +311,8 @@
 
 			var direction = delta > 0 ? 1 : -1;
 
-			if ( ! horizontal ) {
-				var real = current % count;
-				var atEnd = direction > 0 ? real === count - 1 : real === 0;
-
-				if ( atEnd || ! fullyInView() ) {
-					return;
-				}
+			if ( ! horizontal && ! fullyInView() ) {
+				return;
 			}
 
 			event.preventDefault();
