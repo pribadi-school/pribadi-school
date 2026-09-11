@@ -58,11 +58,11 @@ get_header();
 		<div class="hp-container">
 			<div class="hp-intro-statement">
 				<span class="hp-quote-icon hp-reveal"><i class="fas fa-quote-left" aria-hidden="true"></i></span>
-				<p class="hp-intro-text hp-reveal" style="transition-delay: 80ms;"><?php echo hp_t(
+				<p class="hp-intro-text hp-reveal" style="animation-delay: 80ms;"><?php echo hp_t(
 					'Sekolah Pribadi Depok berkomitmen mewujudkan <strong class="hp-mark">generasi emas</strong> yang <strong>berakhlak mulia, cerdas, dan berwawasan global</strong>. Guru-guru kami tak sekadar mengajar, tapi menginspirasi setiap siswa menjadi versi terbaik dari diri mereka.',
 					'Sekolah Pribadi Depok is committed to shaping a <strong class="hp-mark">golden generation</strong> &mdash; <strong>principled, sharp-minded, and globally aware</strong>. Our teachers don&#8217;t just teach; they inspire every student to become the best version of themselves.'
 				); ?></p>
-				<span class="hp-intro-rule hp-reveal" style="transition-delay: 160ms;" aria-hidden="true"></span>
+				<span class="hp-intro-rule hp-reveal" style="animation-delay: 160ms;" aria-hidden="true"></span>
 			</div>
 		</div>
 	</section>
@@ -95,7 +95,7 @@ get_header();
 					</div>
 				</article>
 
-				<article class="hp-card hp-reveal" style="transition-delay: 80ms;">
+				<article class="hp-card hp-reveal" style="animation-delay: 80ms;">
 					<div class="hp-card-media">
 						<img src="https://pribadidepok.sch.id/wp-content/uploads/2025/09/16.jpg" alt="Career Planning">
 					</div>
@@ -109,7 +109,7 @@ get_header();
 					</div>
 				</article>
 
-				<article class="hp-card hp-reveal" style="transition-delay: 160ms;">
+				<article class="hp-card hp-reveal" style="animation-delay: 160ms;">
 					<div class="hp-card-media">
 						<img src="https://pribadidepok.sch.id/wp-content/uploads/2023/10/Character-Building-2.jpg" alt="Character Building">
 					</div>
@@ -143,7 +143,7 @@ get_header();
 				<div class="hp-program-video hp-reveal">
 					<iframe src="https://www.youtube.com/embed/EpzFrHNMIiw" title="Pribadi Berbagi" loading="lazy" allowfullscreen></iframe>
 				</div>
-				<div class="hp-program-text hp-reveal" style="transition-delay: 80ms;">
+				<div class="hp-program-text hp-reveal" style="animation-delay: 80ms;">
 					<img class="hp-program-logo" src="https://pribadidepok.sch.id/wp-content/uploads/2023/02/Pribadi-Berbagi.png" alt="Pribadi Berbagi">
 					<h3 class="screen-reader-text">Pribadi Berbagi</h3>
 					<p><?php echo hp_t(
@@ -158,7 +158,7 @@ get_header();
 				<div class="hp-program-video hp-reveal">
 					<iframe src="https://www.youtube.com/embed/M2x96TTh1tI" title="Pribadi Mengajar" loading="lazy" allowfullscreen></iframe>
 				</div>
-				<div class="hp-program-text hp-reveal" style="transition-delay: 80ms;">
+				<div class="hp-program-text hp-reveal" style="animation-delay: 80ms;">
 					<img class="hp-program-logo" src="https://pribadidepok.sch.id/wp-content/uploads/2023/02/Logo-Pribadi-Mengajar.png" alt="Pribadi Mengajar">
 					<h3 class="screen-reader-text">Pribadi Mengajar</h3>
 					<p><?php echo hp_t(
@@ -208,7 +208,7 @@ get_header();
 	<section class="hp-section hp-magazine">
 		<div class="hp-container">
 			<h2 class="hp-reveal">Pribadi Magazine <span class="hp-heading-accent">INSPIRE</span></h2>
-			<p class="hp-reveal" style="transition-delay: 80ms;"><?php echo hp_t(
+			<p class="hp-reveal" style="animation-delay: 80ms;"><?php echo hp_t(
 				'<strong>Jangan lewatkan edisi terbaru <em>Pribadi Magazine Inspire</em>!</strong> Temukan highlight seru dari berbagai kegiatan sekolah, berita informatif terkini, hingga deretan prestasi membanggakan siswa kami. Semua kisah inspiratif dan pencapaian luar biasa terangkum di sini, siap memberikan wawasan dan motivasi untuk Anda. Klik dan baca sekarang untuk merasakan semangat dan kebanggaan menjadi bagian dari komunitas Pribadi!',
 				'<strong>Don&#8217;t miss the latest issue of <em>Pribadi Magazine Inspire</em>!</strong> Discover the highlights from our school activities, the latest news, and a lineup of achievements we&#8217;re proud of. All our inspiring stories and outstanding accomplishments are gathered here, ready to inform and motivate you. Click through and read now to feel the pride and spirit of being part of the Pribadi community!'
 			); ?></p>
@@ -230,14 +230,14 @@ get_header();
 					<a class="hp-btn hp-magazine-download" href="https://drive.google.com/file/d/1mqHglr9u5mccZ6WNLoSHHhTSiSn3_WuJ/view?usp=sharing" target="_blank" rel="noopener"><?php echo hp_t( 'Unduh Edisi 1', 'Download Issue 1' ); ?></a>
 				</article>
 
-				<article class="hp-magazine-item hp-reveal" style="transition-delay: 80ms;">
+				<article class="hp-magazine-item hp-reveal" style="animation-delay: 80ms;">
 					<a class="hp-magazine-cover" href="https://heyzine.com/flip-book/abfbd761f0.html" target="_blank" rel="noopener">
 						<img src="https://pribadidepok.sch.id/wp-content/uploads/2025/01/Inspire-Pribadi-Magazine-Edisi-2-20242025.png" alt="Pribadi Magazine Inspire Edisi 2">
 					</a>
 					<a class="hp-btn hp-magazine-download" href="https://drive.google.com/file/d/1SreW7ERCFK6r9OovgD90wmb2F20t54qq/view?usp=sharing" target="_blank" rel="noopener"><?php echo hp_t( 'Unduh Edisi 2', 'Download Issue 2' ); ?></a>
 				</article>
 
-				<article class="hp-magazine-item hp-reveal" style="transition-delay: 160ms;">
+				<article class="hp-magazine-item hp-reveal" style="animation-delay: 160ms;">
 					<a class="hp-magazine-cover" href="https://heyzine.com/flip-book/7346a6ab6a.html" target="_blank" rel="noopener">
 						<img src="https://pribadidepok.sch.id/wp-content/uploads/2025/08/Inspire-Pribadi-Magazine-Edisi-3-20242025.png" alt="Pribadi Magazine Inspire Edisi 3">
 					</a>

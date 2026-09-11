@@ -21,24 +21,47 @@
 		return;
 	}
 
+	/**
+	 * Reveal an element, and any .hp-reveal descendants along with it.
+	 *
+	 * The cascade exists for the achievement strip: its tiles sit on a track
+	 * that scrolls horizontally forever inside an overflow:hidden parent, so
+	 * whether a given tile intersects depends on where that 42s animation
+	 * happens to be when the strip scrolls into view, not on the reader's
+	 * position. A tile that is off the clip edge at that moment never
+	 * intersects and stays at opacity 0 - a permanent hole in the strip.
+	 * Revealing descendants with their container takes the animation's phase
+	 * out of it; each tile still stages itself with its own animation-delay.
+	 */
+	function reveal( el ) {
+		el.classList.add( 'is-visible' );
+		observer.unobserve( el );
+
+		el.querySelectorAll( '.hp-reveal' ).forEach( function ( child ) {
+			child.classList.add( 'is-visible' );
+			observer.unobserve( child );
+		} );
+	}
+
 	var observer = new IntersectionObserver( function ( entries ) {
 		entries.forEach( function ( entry ) {
 			if ( entry.isIntersecting ) {
-				entry.target.classList.add( 'is-visible' );
-				observer.unobserve( entry.target );
+				reveal( entry.target );
 			}
 		} );
 	}, {
-		// Fire as soon as the element's top edge crosses ~85% of the viewport
-		// height, matching the standard scroll-reveal trigger point.
+		// Small positive bottom margin, so the root extends slightly past the
+		// fold and an element starts revealing just before its top edge
+		// appears. Without that head start the very top of the element is
+		// briefly on screen at opacity 0; with too much of one the animation
+		// finishes before anything is visible and the reveal is wasted. At 5%
+		// most of the fade still plays in view.
 		//
-		// The previous config (threshold 0.2 + a fixed -60px) waited until a
-		// fifth of the element was already on screen, which on tall elements
-		// like the program rows meant a visible beat of empty space before
-		// anything moved. Threshold 0 plus a percentage bottom margin scales
-		// with the viewport instead of assuming a fixed pixel offset.
+		// Both previous configs triggered well after the element was already
+		// on screen (threshold 0.2 + -60px, then threshold 0 + -15%), so the
+		// reader scrolled past a blank gap before anything moved.
 		threshold: 0,
-		rootMargin: '0px 0px -15% 0px',
+		rootMargin: '0px 0px 5% 0px',
 	} );
 
 	els.forEach( function ( el ) {

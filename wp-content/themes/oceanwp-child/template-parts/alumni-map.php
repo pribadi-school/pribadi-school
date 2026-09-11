@@ -343,7 +343,7 @@ $hp_map_instance = wp_unique_id( 'hp-map-' );
  * motion is the point here, unlike the achievement tiles' hover reveal.
  */
 ?>
-<div class="hp-map-logos-wrap hp-reveal" style="transition-delay: 80ms;">
+<div class="hp-map-logos-wrap hp-reveal" style="animation-delay: 80ms;">
 	<div class="hp-map-logos-track">
 		<?php for ( $hp_pass = 0; $hp_pass < 2; $hp_pass++ ) : ?>
 			<?php foreach ( $hp_university_logos as $hp_logo ) : ?>

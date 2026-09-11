@@ -52,16 +52,25 @@
 	--motion-base: 250ms;
 	--motion-slow: 300ms;
 	/* Entrance motion, not tap feedback, so it sits outside the 200-300ms
-	   interaction range. 500ms is mid-band for a standard scroll reveal
-	   (400-600ms); the previous 650ms overshot it and was the main reason
-	   the reveal read as sluggish.
+	   interaction range. Kept inside the 400-600ms band a standard scroll
+	   reveal wants - the previous 650ms overshot it and read as sluggish -
+	   but at the top of that band rather than the middle, now that the
+	   reveal starts before the element reaches the fold (see the rootMargin
+	   in assets/js/scroll-reveal.js) and so has room to breathe instead of
+	   having to finish in front of the reader.
 	   The curve is easeOutCubic - equivalent to GSAP's power2.out, the
 	   deceleration curve this pattern calls for. (It was previously named
 	   "quad", which is a different, weaker curve: quad is
 	   0.25/0.46/0.45/0.94. The value was always cubic; only the name was
 	   wrong.) */
-	--motion-reveal: 500ms;
+	--motion-reveal: 600ms;
 	--ease-out-cubic: cubic-bezier(0.22, 0.61, 0.36, 1);
+	/* Opacity gets an even ramp instead of the transform's deceleration
+	   curve. easeOutCubic is ~86% complete by the halfway point, which is
+	   right for travel settling into place but on a fade means the element
+	   is essentially fully opaque in the first third of the duration - it
+	   reads as snapping on rather than arriving. */
+	--ease-fade: cubic-bezier(0.4, 0, 0.2, 1);
 	/* One stagger step, used everywhere. Multiples of this only. */
 	--motion-stagger: 80ms;
 
@@ -286,23 +295,58 @@
    from below - matches the direction of travel of scrolling down the page,
    so content arrives moving the same way the viewport is moving instead of
    against it. */
+/* Driven by animation rather than transition, deliberately. `transition` is
+   one list per element, so any reveal target that declares its own - the
+   cards and magazine items both do, for their hover lift - replaced this
+   rule's list wholesale and silently dropped the opacity fade, leaving the
+   element to snap from 0 to 1 with no animation at all. Equal specificity,
+   later rule wins; nothing about it looked broken in the source. `animation`
+   is a separate property, so it composes with those hover transitions
+   instead of competing with them, and every reveal target behaves the same
+   way regardless of what else it styles.
+
+   Two animations rather than one so each property keeps its own curve (see
+   --ease-fade). A single animation-delay value applies to both, which is
+   what the inline stagger on the markup sets. */
 #homepage-custom .hp-reveal {
 	opacity: 0;
-	transform: translateY(-24px);
-	transition: opacity var(--motion-reveal) var(--ease-out-cubic),
-		transform var(--motion-reveal) var(--ease-out-cubic);
+	/* `translate`, not `transform`: same reasoning one level down - the cards
+	   use transform for their hover lift, and the independent property
+	   composes with it instead of overwriting it mid-reveal. */
+	translate: 0 -24px;
 }
 
 #homepage-custom .hp-reveal.is-visible {
-	opacity: 1;
-	transform: translateY(0);
+	animation: hp-reveal-fade var(--motion-reveal) var(--ease-fade) both,
+		hp-reveal-rise var(--motion-reveal) var(--ease-out-cubic) both;
+}
+
+@keyframes hp-reveal-fade {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes hp-reveal-rise {
+	from {
+		translate: 0 -24px;
+	}
+	to {
+		translate: 0 0;
+	}
 }
 
 @media (prefers-reduced-motion: reduce) {
 	#homepage-custom .hp-reveal {
 		opacity: 1;
-		transform: none;
-		transition: none;
+		translate: none;
+	}
+
+	#homepage-custom .hp-reveal.is-visible {
+		animation: none;
 	}
 }
 

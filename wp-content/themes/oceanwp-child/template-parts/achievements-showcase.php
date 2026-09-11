@@ -118,14 +118,23 @@ unset( $hp_key, $hp_entry );
 
 <div class="hp-achieve-stats">
 	<?php foreach ( $hp_achieve_stats as $hp_stat_index => $hp_stat ) : ?>
-		<div class="hp-achieve-stat hp-reveal" style="transition-delay: <?php echo (int) ( $hp_stat_index * 80 ); ?>ms;">
+		<div class="hp-achieve-stat hp-reveal" style="animation-delay: <?php echo (int) ( $hp_stat_index * 80 ); ?>ms;">
 			<span class="hp-achieve-stat-number" data-count-to="<?php echo (int) $hp_stat['value']; ?>">0</span>
 			<span class="hp-achieve-stat-label"><?php echo esc_html( hp_t( $hp_stat['label'], $hp_stat['label_en'] ) ); ?></span>
 		</div>
 	<?php endforeach; ?>
 </div>
 
-<div class="hp-achieve-strip">
+<?php
+/*
+ * The strip is a reveal target itself, not just a container: its tiles ride a
+ * looping horizontal track inside this overflow:hidden box, so a tile sitting
+ * past the clip edge when the strip scrolls into view would never intersect
+ * on its own and would stay invisible. scroll-reveal.js reveals descendants
+ * along with their container, so this is what guarantees every tile arrives.
+ */
+?>
+<div class="hp-achieve-strip hp-reveal">
 	<div class="hp-achieve-track">
 		<?php for ( $hp_pass = 0; $hp_pass < 2; $hp_pass++ ) : ?>
 			<?php foreach ( $hp_achievements as $hp_item_index => $hp_item ) : ?>
@@ -134,7 +143,7 @@ unset( $hp_key, $hp_entry );
 					class="hp-achieve-tile<?php echo $hp_is_first_pass ? ' hp-reveal' : ''; ?>"
 					<?php if ( $hp_is_first_pass ) : ?>
 						<?php // Capped at 6 steps: past ~8 staggered children the last ones read as lag, not sequence. ?>
-						style="transition-delay: <?php echo (int) ( ( $hp_item_index % 6 ) * 80 ); ?>ms;" tabindex="0"
+						style="animation-delay: <?php echo (int) ( ( $hp_item_index % 6 ) * 80 ); ?>ms;" tabindex="0"
 					<?php else : ?>
 						aria-hidden="true" tabindex="-1"
 					<?php endif; ?>
