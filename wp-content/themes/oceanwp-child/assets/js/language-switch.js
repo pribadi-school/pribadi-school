@@ -146,6 +146,16 @@
 		column.insertBefore( buildSwitcher(), column.firstChild );
 	}
 
+	// mobile-nav.js has no slot of its own for this - the desktop switch this
+	// file builds lives in a column that's hidden below tablet width (see
+	// style.css) - so it reuses this same builder to put a second instance
+	// inside the mobile menu panel. Declared as a dependency in functions.php
+	// so this assignment always runs first.
+	window.oceanwpChildLangSwitch = {
+		current: current,
+		buildSwitcher: buildSwitcher,
+	};
+
 	function init() {
 		insertSwitcher();
 

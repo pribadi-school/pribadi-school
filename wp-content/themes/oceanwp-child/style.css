@@ -367,6 +367,22 @@ body {
 	font-weight: 400;
 }
 
+/* Second instance of the ID/EN switch, built by mobile-nav.js reusing
+   language-switch.js's own switcher. That file's desktop copy is hidden
+   below 767px (its column has no mobile equivalent) - the extra
+   .hp-mnav-lang ancestor here outweighs that rule's specificity, so this
+   instance stays visible without touching the desktop one's media query. */
+#site-header .hp-mnav-lang {
+	margin-top: 8px;
+	padding: 16px 24px 4px;
+	border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+#site-header .hp-mnav-lang .hp-lang-switch {
+	display: inline-flex;
+	margin-right: 0;
+}
+
 @media (prefers-reduced-motion: reduce) {
 	#site-header .hp-mnav-bars,
 	#site-header .hp-mnav-bars::before,

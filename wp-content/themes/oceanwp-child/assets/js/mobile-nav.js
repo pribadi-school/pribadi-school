@@ -190,6 +190,17 @@
 		panel.hidden = true;
 		panel.appendChild( list );
 
+		// The ID/EN switch (language-switch.js) only has a slot in the
+		// desktop header row, which is hidden below tablet width - so mobile
+		// visitors had no way to change language at all. Reuses that file's
+		// own builder rather than duplicating the markup/click handling.
+		if ( window.oceanwpChildLangSwitch ) {
+			var langWrap = document.createElement( 'div' );
+			langWrap.className = 'hp-mnav-lang';
+			langWrap.appendChild( window.oceanwpChildLangSwitch.buildSwitcher() );
+			panel.appendChild( langWrap );
+		}
+
 		var toggle = document.createElement( 'button' );
 		toggle.type = 'button';
 		toggle.className = 'hp-mnav-toggle';
