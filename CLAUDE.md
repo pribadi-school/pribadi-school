@@ -1,7 +1,8 @@
 # Sekolah Pribadi Depok — project notes
 
 WordPress site for SD-SMP-SMA Pribadi Depok, running locally under **LocalWP**.
-Local domain: `http://sekolahpribadi.local/`. Production: `pribadidepok.sch.id`.
+Local domain: `http://sekolahpribadi.local/`. Deployed (staging/preview) at
+`new.pribadidepok.sch.id`; production domain is `pribadidepok.sch.id`.
 
 ## The homepage is deliberately NOT Elementor
 
@@ -80,9 +81,23 @@ file. No ad-hoc hex values.
   `C:\Users\<user>\AppData\Roaming\Local\lightning-services\php-8.2.29+0\bin\win64\php.exe`
 - **MySQL client:** use the MySQL 8.4 client, not MariaDB's — MariaDB's client
   can't do `caching_sha2_password` against this server.
-- **git is not installed / not on PATH**, even though `.git/` exists here.
-  Install it (or add it to PATH) before expecting commits to work.
 - Table prefix is `wpzn_`, not `wp_`.
+
+## Git / GitHub
+
+This repo is connected to GitHub: `origin` → https://github.com/pribadi-school/pribadi-school
+(branch `main`, tracking `origin/main`). git works fine on PATH — commit and push
+normally.
+
+## Deployment
+
+Pushing to `main` is not enough by itself — deployment happens via **cPanel Git
+Version Control** ("Pull or Deploy") on the `new.pribadidepok.sch.id` cPanel
+account (user `pribadisch`), configured in [.cpanel.yml](.cpanel.yml). On deploy,
+cPanel copies only `wp-content/themes/oceanwp-child/` into that site's live theme
+directory — WP core, plugins, and the database are managed separately by the
+host, not by this repo. After pushing, trigger (or wait for) the cPanel pull to
+actually update `new.pribadidepok.sch.id`.
 
 ## What is NOT in this folder
 
