@@ -180,7 +180,7 @@
 	   the previous and next photos showing - a tease, not a second photo. */
 	--hn-w: min(1180px, 68vw);
 	--hn-gap: clamp(40px, 7vw, 110px);
-	--hn-ratio: 16 / 9;
+	--hn-ratio: 1.85 / 1;
 	/* Slower than the page's other motion on purpose: this is a large,
 	   slow-moving picture, not a control responding to a tap. The headline
 	   starts rising partway through the photo's move and takes its time. */
