@@ -1234,6 +1234,13 @@
 }
 
 #homepage-custom .hp-achieve-tile {
+	/* Now a real <a> to the achievement's Instagram post (see the template) -
+	   flex items are blockified per spec regardless of tag, so this still
+	   sizes exactly like the <div> it replaced. Only these two are needed to
+	   undo anchor defaults; everything else here already targeted the class,
+	   not the element. */
+	display: block;
+	text-decoration: none;
 	position: relative;
 	flex: 0 0 200px;
 	aspect-ratio: 3 / 4;

@@ -27,6 +27,14 @@
  * These started life as 1350x1800 PNGs averaging 2MB each, 16.5MB for the
  * set, which is what made the strip slow to fill in.
  *
+ * Each tile is a real link to that student's Instagram post/reel, opened in
+ * a new tab - source of truth is whoever asked for this (matched to entries
+ * by student name), not anything derivable from the photo or achievement
+ * itself. On touch, achievements-tile-tap.js's existing tap-to-reveal
+ * already does the right thing for a real href without any change: the
+ * first tap reveals the title card and suppresses navigation, a second tap
+ * (now that the tile is already active) navigates.
+ *
  * @package OceanWP_Child
  */
 
@@ -65,48 +73,56 @@ $hp_achievements = array(
 		'title'    => 'Medali Emas Olimpiade Internasional Kecerdasan Buatan (IOAI)',
 		'title_en' => 'Gold Medal, International Olympiad in Artificial Intelligence (IOAI)',
 		'name'     => 'Luvidi',
+		'link'     => 'https://www.instagram.com/reel/Db2zYFzNP0P/?stkn=MTFtZzZ5eHh3MzR6Mw==',
 	),
 	array(
 		'photo'    => 'aleksa-horse.webp',
 		'title'    => 'Prestasi Berkuda (Equestrian)',
 		'title_en' => 'Equestrian Achievement',
 		'name'     => 'Aleksa',
+		'link'     => 'https://www.instagram.com/p/DcvEAEjkYbp/?stkn=Y3ZhY2wwNmlqNHNk',
 	),
 	array(
 		'photo'    => 'biru-simso.webp',
 		'title'    => 'Medali Perunggu, SIMSO 2026',
 		'title_en' => 'Bronze Medal, SIMSO 2026',
 		'name'     => 'Biru',
+		'link'     => 'https://www.instagram.com/p/DcsoZE-kTTJ/?stkn=MTV4eTM4ZmliODVtMA==',
 	),
 	array(
 		'photo'    => 'fayha-sumbawa.webp',
 		'title'    => 'Memberikan Dampak Nyata di Sumbawa',
 		'title_en' => 'Making an Impact in Sumbawa',
 		'name'     => 'Fayha',
+		'link'     => 'https://www.instagram.com/p/Dbm_PwKEe6T/?stkn=MWthd3ZmZTFldXRsMA==',
 	),
 	array(
 		'photo'    => 'lala-fashion-week.webp',
 		'title'    => 'Desainer Muda di Indonesia Trend Fashion Week 2026 melalui Program Dream Fashion',
 		'title_en' => 'Young Designer, Indonesia Trend Fashion Week 2026 (Dream Fashion Program)',
 		'name'     => 'Lala',
+		'link'     => 'https://www.instagram.com/p/DbZpLopGHG4/?stkn=MWd3bDRhcjcxOTU0cg==',
 	),
 	array(
 		'photo'    => 'musa-jismo-silver-bronze.webp',
 		'title'    => 'Jismo Silver Bronze',
 		'title_en' => 'Jismo Silver Bronze',
 		'name'     => 'Musa',
+		'link'     => 'https://www.instagram.com/p/Dcuh6u0mGbn/?stkn=MXJjOHhicjZ0bHFycA==',
 	),
 	array(
 		'photo'    => 'tobias-bronze-science-jismo.webp',
 		'title'    => 'Bronze Science Jismo',
 		'title_en' => 'Bronze Science Jismo',
 		'name'     => 'Tobias',
+		'link'     => 'https://www.instagram.com/p/DcsoYUFkX5T/?stkn=MWx1czhrdGt5Z3V2Nw==',
 	),
 	array(
 		'photo'    => 'ayu-swimming-competition.webp',
 		'title'    => 'Swimming Competition',
 		'title_en' => 'Swimming Competition',
 		'name'     => 'Ayu',
+		'link'     => 'https://www.instagram.com/p/DcxZ30BkfY6/?stkn=MXB5YWdmaTBuaWo0Zw==',
 	),
 );
 
@@ -145,11 +161,14 @@ unset( $hp_key, $hp_entry );
 		<?php for ( $hp_pass = 0; $hp_pass < 2; $hp_pass++ ) : ?>
 			<?php foreach ( $hp_achievements as $hp_item_index => $hp_item ) : ?>
 				<?php $hp_is_first_pass = 0 === $hp_pass; ?>
-				<div
+				<a
+					href="<?php echo esc_url( $hp_item['link'] ); ?>"
+					target="_blank"
+					rel="noopener noreferrer"
 					class="hp-achieve-tile<?php echo $hp_is_first_pass ? ' hp-reveal' : ''; ?>"
 					<?php if ( $hp_is_first_pass ) : ?>
 						<?php // Capped at 6 steps: past ~8 staggered children the last ones read as lag, not sequence. ?>
-						style="animation-delay: <?php echo (int) ( ( $hp_item_index % 6 ) * 80 ); ?>ms;" tabindex="0"
+						style="animation-delay: <?php echo (int) ( ( $hp_item_index % 6 ) * 80 ); ?>ms;"
 					<?php else : ?>
 						aria-hidden="true" tabindex="-1"
 					<?php endif; ?>
@@ -170,7 +189,7 @@ unset( $hp_key, $hp_entry );
 						<span class="hp-achieve-tile-title"><?php echo esc_html( hp_t( $hp_item['title'], $hp_item['title_en'] ) ); ?></span>
 						<span class="hp-achieve-tile-name"><?php echo esc_html( $hp_item['name'] ); ?></span>
 					</div>
-				</div>
+				</a>
 			<?php endforeach; ?>
 		<?php endfor; ?>
 	</div>

@@ -40,9 +40,10 @@
 			closeAll( tile );
 			tile.classList.toggle( 'is-active', ! isActive );
 
-			// The tile itself has no link/action yet - suppress the
-			// default so a stray tap doesn't do something unexpected
-			// once these become real links to student/achievement pages.
+			// Each tile is a real link to the student's Instagram post now.
+			// First tap reveals the title card instead of navigating
+			// straight there; the tile is already active by the second tap,
+			// so this is skipped and the link is followed normally.
 			if ( ! isActive ) {
 				event.preventDefault();
 			}
