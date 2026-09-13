@@ -34,8 +34,8 @@ $hp_hot_news = array(
 	),
 	array(
 		'image'    => get_stylesheet_directory_uri() . '/assets/img/beasiswa-garuda.webp',
-		'title'    => '5 siswa-siswi Pribadi Depok meraih Beasiswa Garuda',
-		'title_en' => '5 Pribadi Depok students awarded the Garuda Scholarship',
+		'title'    => '5 siswa-siswi meraih Beasiswa Garuda',
+		'title_en' => '5 students awarded the Garuda Scholarship',
 	),
 );
 
