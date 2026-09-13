@@ -33,9 +33,9 @@ $hp_hot_news = array(
 		'title_en' => 'Pribadi Mengajar returns with native-speaker volunteers from Australia',
 	),
 	array(
-		'image'    => 'https://pribadidepok.sch.id/wp-content/uploads/2023/10/Character-Building-2.jpg',
-		'title'    => 'Biru membawa pulang medali perunggu dari SIMSO 2026',
-		'title_en' => 'Biru brings home a bronze medal from SIMSO 2026',
+		'image'    => get_stylesheet_directory_uri() . '/assets/img/beasiswa-garuda.webp',
+		'title'    => '5 siswa-siswi Pribadi Depok meraih Beasiswa Garuda',
+		'title_en' => '5 Pribadi Depok students awarded the Garuda Scholarship',
 	),
 );
 
