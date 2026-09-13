@@ -12,6 +12,32 @@ Text Domain: oceanwp-child
    Feature-specific styles live in assets/css/ and are enqueued from functions.php. */
 
 /* ---------------------------------------------------------------
+   Footer: undo "Hide On Mobile" on the link columns.
+
+   The footer (Elementor Theme Builder, post 69, shared by every page - see
+   CLAUDE.md) has its content row set up as 4 columns: logo, then three link
+   groups (About, Community, Programs). Three of those four carry Elementor's
+   own .elementor-hidden-mobile class - a per-column "Hide On Mobile" toggle
+   set inside the Elementor editor itself, nothing to do with this theme's
+   files - so mobile visitors got only the logo and nothing else.
+
+   Overridden here rather than by editing _elementor_data directly, for the
+   same reason the header gaps are (see language-switch.js / mobile-nav.js):
+   Elementor rewrites its stored document wholesale on every Update, which
+   has caused this project real data loss before. This is a pure CSS
+   override of Elementor's own responsive-visibility output, so there is
+   nothing in the database to touch. Matches Elementor's own hidden-mobile
+   breakpoint (max-width: 767px) and needs !important to beat its
+   !important. Elementor's own column-stacking rule (not ours) is what makes
+   each of these fill 100% width once visible, same as the logo column
+   already did. */
+@media only screen and (max-width: 767px) {
+	footer.elementor-location-footer .elementor-hidden-mobile {
+		display: flex !important;
+	}
+}
+
+/* ---------------------------------------------------------------
    Page canvas.
 
    body is the only thing painting a background on interior pages -
