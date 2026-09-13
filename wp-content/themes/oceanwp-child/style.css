@@ -35,6 +35,31 @@ Text Domain: oceanwp-child
 	footer.elementor-location-footer .elementor-hidden-mobile {
 		display: flex !important;
 	}
+
+	/* The three link columns are narrow at this width (they share the row
+	   with the logo column, unchanged from Elementor's own layout) - two
+	   follow-on problems from that, both from Elementor's own base styles:
+	   overflow-wrap: break-word mid-word-breaks "Community" into "Communit"
+	   / "y" once it doesn't fit, and the heading's default size is sized for
+	   a full-width column, not a ~110px one. Smaller text plus keep-all
+	   wrapping (break at the space in "Digital Classroom", never mid-word)
+	   fixes both without changing the 3-column layout itself. */
+	footer.elementor-location-footer .elementor-heading-title {
+		/* !important: Elementor generates a per-widget rule keyed to that
+		   widget's own element id (e.g. .elementor-element-72c9531b
+		   .elementor-heading-title), which outweighs a plain class selector
+		   here regardless of source order. */
+		font-size: 15px !important;
+		overflow-wrap: normal;
+		word-break: keep-all;
+	}
+
+	/* Logo column ran the full site logo (198px) at the same size as
+	   desktop, oversized next to the now-visible link columns beside it. */
+	footer.elementor-location-footer .elementor-widget-theme-site-logo img {
+		max-width: 140px;
+		height: auto;
+	}
 }
 
 /* ---------------------------------------------------------------
