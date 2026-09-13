@@ -180,7 +180,7 @@
 	   the previous and next photos showing - a tease, not a second photo. */
 	--hn-w: min(1180px, 68vw);
 	--hn-gap: clamp(40px, 7vw, 110px);
-	--hn-ratio: 21 / 9;
+	--hn-ratio: 16 / 9;
 	/* Slower than the page's other motion on purpose: this is a large,
 	   slow-moving picture, not a control responding to a tap. The headline
 	   starts rising partway through the photo's move and takes its time. */
@@ -426,9 +426,7 @@
 		--hn-gap: 18px;
 		--hn-drop: 18px;
 		--hn-text-rise: 40px;
-		/* A letterbox this narrow would be a strip; 16:9 is as wide as a
-		   phone frame can go and still show anyone's face. */
-		--hn-ratio: 16 / 9;
+		/* --hn-ratio is already 16/9 from the base rule - nothing to override here now. */
 	}
 
 	/* No room to hang the headline over the photo at this width, so it
