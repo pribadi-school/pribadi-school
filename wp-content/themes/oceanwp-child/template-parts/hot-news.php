@@ -28,11 +28,6 @@ $hp_hot_news = array(
 		'title_en' => 'Luvidi takes gold at the International Olympiad in Artificial Intelligence',
 	),
 	array(
-		'image'    => 'https://pribadidepok.sch.id/wp-content/uploads/2025/09/16.jpg',
-		'title'    => 'Pribadi Mengajar kembali hadir bersama relawan penutur asing dari Australia',
-		'title_en' => 'Pribadi Mengajar returns with native-speaker volunteers from Australia',
-	),
-	array(
 		'image'    => get_stylesheet_directory_uri() . '/assets/img/beasiswa-garuda.webp',
 		'title'    => '5 siswa-siswi meraih Beasiswa Garuda',
 		'title_en' => '5 students awarded the Garuda Scholarship',
