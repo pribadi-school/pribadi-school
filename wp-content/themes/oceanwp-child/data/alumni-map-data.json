@@ -1,8 +1,8 @@
 [
   {
     "country": "Indonesia",
-    "lat": -6.4,
-    "lng": 106.8,
+    "lat": -7.2575,
+    "lng": 112.7521,
     "totalStudents": 606,
     "institutions": [
       {"institution": "Universitas Indonesia", "students": 127},
