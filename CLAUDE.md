@@ -133,5 +133,33 @@ all page content, and menus live in MySQL. Copying `app/public/` alone will not
 carry the site — use LocalWP's own **Export** (right-click the site in Local) to
 get files *and* database together.
 
+### OceanWP's Customizer settings don't travel with the theme
+
+Learned the hard way promoting the redesign to production on 2026-09-14.
+Copying the `oceanwp-child` folder to a new install gets you the *code* but
+none of OceanWP's settings: page title bar on/off, top bar, header style,
+logo height, colours. Those are **theme mods**, stored in `wp_options` under
+`theme_mods_oceanwp-child` — per theme slug, per install. A freshly activated
+child theme starts with an empty set, so every OceanWP default switches back
+on, most visibly the grey page title bar on *every* page.
+
+Migrate them with the **Customizer Export/Import** plugin (export on the
+source site, import on the target, ticking "download and import image files"
+so logo/image settings don't stay pointed at the source site's attachment
+IDs). Don't try to fix the symptoms one at a time with CSS or PHP filters —
+`functions.php` does hide the page header for `page-homepage-custom.php` via
+`ocean_display_page_header`, but that is a guarantee for that one template,
+not a substitute for the settings.
+
+### PHP changes can lag behind file changes on the live host
+
+Production is LiteSpeed on Hostinger with OPcache. After a deploy, CSS,
+images and video update immediately while `functions.php` keeps running the
+old bytecode — so a PHP fix looks like it "didn't deploy" when the static
+assets from the same commit are plainly live. That asymmetry is the tell.
+Flush OPcache (hPanel's PHP/cache tool, or toggle the PHP version) before
+concluding a PHP change didn't land. LiteSpeed's page cache is worth purging
+at the same time.
+
 `.gitignore` deliberately excludes `*.sql` and `wp-content/uploads/`: database
 dumps contain real student/parent data and shouldn't go into a git remote.
