@@ -453,6 +453,11 @@ body {
 	justify-content: center;
 	/* Pushes the burger to the far edge of its column, opposite the logo. */
 	margin-left: auto;
+	/* Without this the button's own edge (not just its 24px bars) sat flush
+	   against the viewport, a 0px gutter on the right against the logo's
+	   10px gutter on the left - the two ends of the header read as
+	   unbalanced. Matches that 10px so both sides carry the same gutter. */
+	margin-right: 10px;
 	/* 44px: the WCAG 2.2 AA target-size minimum, met by the button box
 	   rather than by the 24px bars drawn inside it. */
 	width: 44px;
