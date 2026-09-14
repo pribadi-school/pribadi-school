@@ -228,5 +228,23 @@
     "institutions": [
       {"institution": "National Institute of Applied Sciences", "students": 1}
     ]
+  },
+  {
+    "country": "Nigeria",
+    "lat": 9.0820,
+    "lng": 8.6753,
+    "totalStudents": 1,
+    "institutions": [
+      {"institution": "Nile University of Nigeria", "students": 1}
+    ]
+  },
+  {
+    "country": "Moldova",
+    "lat": 47.4116,
+    "lng": 28.3699,
+    "totalStudents": 1,
+    "institutions": [
+      {"institution": "Moldova State University", "students": 1}
+    ]
   }
 ]

@@ -118,6 +118,8 @@ if ( ! function_exists( 'hp_alumni_country_name' ) ) {
 			'Rusia'           => 'Russia',
 			'Korea Selatan'   => 'South Korea',
 			'Prancis'         => 'France',
+			'Nigeria'         => 'Nigeria',
+			'Moldova'         => 'Moldova',
 		);
 
 		$en_name = isset( $names[ $id_name ] ) ? $names[ $id_name ] : $id_name;
