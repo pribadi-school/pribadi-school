@@ -60,7 +60,7 @@ get_header();
 				<span class="hp-quote-icon hp-reveal"><i class="fas fa-quote-left" aria-hidden="true"></i></span>
 				<p class="hp-intro-text hp-reveal" style="animation-delay: 80ms;"><?php echo hp_t(
 					'Sekolah Pribadi Depok berkomitmen mewujudkan <strong class="hp-mark">generasi emas</strong> yang <strong>berakhlak mulia, cerdas, dan berwawasan global</strong>. Guru-guru kami tak sekadar mengajar, tapi menginspirasi setiap siswa menjadi versi terbaik dari diri mereka.',
-					'Sekolah Pribadi Depok is committed to shaping a <strong class="hp-mark">golden generation</strong> &mdash; <strong>principled, sharp-minded, and globally aware</strong>. Our teachers don&#8217;t just teach; they inspire every student to become the best version of themselves.'
+					'Sekolah Pribadi Depok is committed to shaping a <strong class="hp-mark">golden generation</strong> that is <strong>principled, sharp-minded, and globally aware</strong>. Our teachers don&#8217;t just teach; they inspire every student to become the best version of themselves.'
 				); ?></p>
 				<span class="hp-intro-rule hp-reveal" style="animation-delay: 160ms;" aria-hidden="true"></span>
 			</div>
@@ -77,8 +77,8 @@ get_header();
 			<div class="hp-section-head hp-reveal">
 				<h2><?php echo hp_t( 'Tiga Pilar <span class="hp-heading-accent">Pendidikan</span> Kami', 'Our Three Pillars of <span class="hp-heading-accent">Education</span>' ); ?></h2>
 				<p><?php echo hp_t(
-					'Memadukan teknologi pembelajaran, perencanaan masa depan, dan pembentukan karakter &mdash; agar setiap siswa tumbuh utuh, tidak sekadar unggul secara akademik.',
-					'Bringing together learning technology, future planning, and character development &mdash; so every student grows as a whole person, not just an academic achiever.'
+					'Memadukan teknologi pembelajaran, perencanaan masa depan, dan pembentukan karakter agar setiap siswa tumbuh utuh, tidak sekadar unggul secara akademik.',
+					'Bringing together learning technology, future planning, and character development, so every student grows as a whole person, not just an academic achiever.'
 				); ?></p>
 			</div>
 
@@ -120,7 +120,7 @@ get_header();
 						<h3>Character Building</h3>
 						<p><?php echo hp_t(
 							'Pengembangan kebajikan dan nilai-nilai yang akan membimbing mereka sepanjang hidup mereka. Kebajikan dan nilai-nilai ini termasuk kejujuran, integritas, tanggung jawab, rasa hormat, dan disiplin diri.',
-							'Building the virtues and values that will guide students for life &mdash; honesty, integrity, responsibility, respect, and self-discipline among them.'
+							'Building the virtues and values that will guide students for life, including honesty, integrity, responsibility, respect, and self-discipline.'
 						); ?></p>
 						<a class="hp-btn" href="/programs/character-building/"><?php echo hp_t( 'Lebih lanjut', 'Learn more' ); ?> &raquo;</a>
 					</div>
@@ -137,8 +137,8 @@ get_header();
 			<div class="hp-section-head hp-reveal">
 				<h2><?php echo hp_t( 'Berbagi dan <span class="hp-heading-accent">Menginspirasi</span> Lebih Luas', 'Sharing and <span class="hp-heading-accent">Inspiring</span> Beyond the Classroom' ); ?></h2>
 				<p><?php echo hp_t(
-					'Dua inisiatif yang membawa semangat Pribadi Depok keluar dari ruang kelas &mdash; berbagi kebaikan dengan sesama, dan berbagi ilmu dengan komunitas.',
-					'Two initiatives that carry the Pribadi Depok spirit beyond the classroom &mdash; sharing kindness with others, and sharing knowledge with the community.'
+					'Dua inisiatif yang membawa semangat Pribadi Depok keluar dari ruang kelas: berbagi kebaikan dengan sesama, dan berbagi ilmu dengan komunitas.',
+					'Two initiatives that carry the Pribadi Depok spirit beyond the classroom: sharing kindness with others, and sharing knowledge with the community.'
 				); ?></p>
 			</div>
 
@@ -151,7 +151,7 @@ get_header();
 					<h3 class="screen-reader-text">Pribadi Berbagi</h3>
 					<p><?php echo hp_t(
 						'Pribadi Berbagi adalah semangat kebaikan dalam tindakan nyata di Sekolah Pribadi Depok. Program ini memberikan modal usaha kepada panti asuhan, bukan sekadar hadiah, tapi peluang untuk berkembang. Dana untuk program ini berasal dari orangtua siswa, partisipasi siswa melalui program market day, dan kolaborasi dengan berbagai pihak. Ini adalah bagian dari upaya komunitas sekolah kami untuk menciptakan dampak positif yang nyata dalam kehidupan yang kami dukung, membuktikan bahwa tindakan kebaikan, sekecil apapun, memiliki dampak besar dalam membangun masa depan yang lebih cerah dan bermakna.',
-						'Pribadi Berbagi turns kindness into real action at Sekolah Pribadi Depok. The program provides seed funding to orphanages &mdash; not a one-off gift, but a genuine opportunity to grow. Funding comes from parents, from students themselves through market day events, and from partnerships with other organizations. It&#8217;s part of our school community&#8217;s effort to make a real, positive difference in the lives we support, proving that even a small act of kindness can have a lasting impact on a brighter, more meaningful future.'
+						'Pribadi Berbagi turns kindness into real action at Sekolah Pribadi Depok. The program provides seed funding to orphanages, not a one-off gift, but a genuine opportunity to grow. Funding comes from parents, from students themselves through market day events, and from partnerships with other organizations. It&#8217;s part of our school community&#8217;s effort to make a real, positive difference in the lives we support, proving that even a small act of kindness can have a lasting impact on a brighter, more meaningful future.'
 					); ?></p>
 					<a class="hp-btn" href="/post/pribadi-berbagi-santunan-yatim-dan-dhuafa-2022/"><?php echo hp_t( 'Baca selengkapnya', 'Read more' ); ?> &raquo;</a>
 				</div>
