@@ -182,15 +182,17 @@ Text Domain: oceanwp-child
 		justify-content: center !important;
 		gap: 0 !important;
 	}
-	/* Making that box a flex container is also what needs the two rules on
-	   the mark itself. Elementor sizes it purely from font-size plus an em
-	   padding (15px + 0.6em each side = 33px square) and rounds it with
-	   border-radius:50%, so it is only a circle while it stays square. As a
-	   flex child it was being stretched to the line's full height, 33x45,
-	   which border-radius then drew as an oval - hence align-items:center to
-	   leave its height alone. flex:0 0 auto stops the opposite problem:
-	   default shrinking inside a zero-width container squeezes the width
-	   instead, an oval the other way round. */
+	/* Making that box a flex container is also what needs the rules on the
+	   mark itself. Elementor sizes it purely from font-size plus an em
+	   padding (0.6em each side), so font-size is the only dial here and the
+	   box stays square on its own - 11px gives 11 + 13.2 = ~24px across.
+	   Square matters because it is rounded with border-radius:50%, which
+	   only draws a circle while the box is square, and both flex defaults
+	   break that: as a flex child it was stretched to the line's full
+	   height (33x45, drawn as an oval), hence align-items:center to leave
+	   its height alone, while flex:0 0 auto stops the mirror-image problem
+	   of it shrinking inside its zero-width container and ovalling the
+	   other way. */
 	footer.elementor-location-footer .elementor-icon-box-icon {
 		width: 0 !important;
 		margin: 0 !important;
@@ -200,6 +202,7 @@ Text Domain: oceanwp-child
 	}
 	footer.elementor-location-footer .elementor-icon-box-icon > .elementor-icon {
 		flex: 0 0 auto !important;
+		font-size: 11px !important;
 		margin-right: 14px !important;
 	}
 	footer.elementor-location-footer .elementor-icon-box-content {
