@@ -1,5 +1,14 @@
 [
   {
+    "country": "Indonesia",
+    "lat": -0.7893,
+    "lng": 113.9213,
+    "totalStudents": 1,
+    "institutions": [
+      {"institution": "Universitas Indonesia", "students": 1}
+    ]
+  },
+  {
     "country": "Turki",
     "lat": 38.9637,
     "lng": 35.2433,

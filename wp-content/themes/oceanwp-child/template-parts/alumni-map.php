@@ -100,6 +100,7 @@ if ( ! function_exists( 'hp_alumni_country_name' ) ) {
 	 */
 	function hp_alumni_country_name( $id_name ) {
 		static $names = array(
+			'Indonesia'       => 'Indonesia',
 			'Turki'           => 'Turkey',
 			'Australia'       => 'Australia',
 			'Malaysia'        => 'Malaysia',
