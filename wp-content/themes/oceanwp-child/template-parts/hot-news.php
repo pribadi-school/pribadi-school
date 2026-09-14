@@ -23,7 +23,7 @@
 
 $hp_hot_news = array(
 	array(
-		'image'    => 'https://pribadidepok.sch.id/wp-content/uploads/2023/10/Digital-Classroom-6-1.jpg',
+		'image'    => get_stylesheet_directory_uri() . '/assets/img/luvidi-ioai-hotnews.webp',
 		'title'    => 'Luvidi meraih medali emas di Olimpiade Internasional Kecerdasan Buatan',
 		'title_en' => 'Luvidi takes gold at the International Olympiad in Artificial Intelligence',
 	),
