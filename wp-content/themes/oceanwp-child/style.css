@@ -94,9 +94,20 @@ Text Domain: oceanwp-child
 		margin-top: 0 !important;
 	}
 
-	/* Logo rows are flush against each other without this. */
+	/* Logo rows are flush against each other without a gap, and read as too
+	   large as a group on a phone screen even after the .elementor-inner-column
+	   rule above sizes them correctly relative to each other. Scaling the
+	   widget itself - rather than the <img> directly - shrinks every logo by
+	   the same factor without disturbing those relative proportions; setting
+	   width/max-width instead would force every logo into the same box and
+	   destroy the proportions again (see the long comment above). transform
+	   doesn't shrink the widget's own layout box, so margin-bottom is pulled
+	   negative to remove the blank space scaling down would otherwise leave
+	   beneath each row. */
 	footer.elementor-location-footer .elementor-widget-image {
-		margin-bottom: 16px;
+		transform: scale(0.7);
+		transform-origin: left top;
+		margin-bottom: -10px;
 	}
 
 	/* Bottom bar: the copyright is centred for the desktop layout, where it
