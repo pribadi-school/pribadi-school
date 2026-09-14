@@ -63,28 +63,28 @@ Text Domain: oceanwp-child
 	}
 
 	/* The "Our Partners" logos sit in two Elementor inner sections, each
-	   split into two 50% inner columns. Elementor stacks inner columns to
-	   100% below 768px, and its image widgets are sized as a percentage of
-	   their column - so each logo grew to the full 335px content width,
-	   scaled by its own aspect ratio. Wide wordmarks (British Council +
-	   IELTS, TEDx) went edge-to-edge at ~335px while STEAM rendered at
-	   ~127px, and the rows overlapped each other and the "Contact Us"
-	   heading below.
-
-	   Holding the inner columns at 50% is enough on its own: a mobile cell
-	   is ~168px against desktop's ~176px, so every logo lands within a few
-	   px of the size Elementor was configured to give it. Normalising them
-	   to a uniform box instead was worse - these PNGs are cropped
-	   differently (Cambridge carries a crest plus two lines of caption, SAT
-	   is a bare wordmark), so equal heights made SAT and Google tower over
-	   the rest. */
+	   split into two 50% inner columns - a 2-up grid on mobile. Forced to
+	   one logo per row instead (matches "About"/"Community" below, which
+	   are stacked rather than side by side for the same reason): a phone
+	   screen is narrow enough that two logos sharing a row read as cramped
+	   next to a single column of everything else in this footer. */
 	footer.elementor-location-footer .elementor-inner-column {
-		width: 50%;
+		width: 100% !important;
 	}
 
-	/* Side by side on desktop, these five columns stack here with nothing
-	   between them, so each heading butted against the list above it. */
+	/* About and Community are set up as a 50/50 row in Elementor even at
+	   its own "Mobile" breakpoint (a per-column width Elementor stores per
+	   element id, e.g. ".elementor-element-1be83b07 { width: 50% }" inside
+	   its own max-width:767px block) - every other column here is already
+	   full width. width:100% matches the rest of the footer and leaves
+	   nothing side by side on a phone screen; !important is needed to beat
+	   that per-id rule, which carries no !important of its own but wins on
+	   selector specificity otherwise. margin-bottom is unrelated: side by
+	   side on desktop, these five columns stack here with nothing between
+	   them, so each heading would otherwise butt against the list above
+	   it. */
 	footer.elementor-location-footer > .elementor-section > .elementor-container > .elementor-column {
+		width: 100% !important;
 		margin-bottom: 34px;
 	}
 
@@ -95,20 +95,24 @@ Text Domain: oceanwp-child
 		margin-top: 0 !important;
 	}
 
-	/* Logo rows are flush against each other without a gap, and read as too
-	   large as a group on a phone screen even after the .elementor-inner-column
-	   rule above sizes them correctly relative to each other. Scaling the
-	   widget itself - rather than the <img> directly - shrinks every logo by
-	   the same factor without disturbing those relative proportions; setting
-	   width/max-width instead would force every logo into the same box and
-	   destroy the proportions again (see the long comment above). transform
-	   doesn't shrink the widget's own layout box, so margin-bottom is pulled
-	   negative to remove the blank space scaling down would otherwise leave
-	   beneath each row. */
+	/* Logo rows are flush against each other without a gap. */
 	footer.elementor-location-footer .elementor-widget-image {
-		transform: scale(0.7);
-		transform-origin: left top;
-		margin-bottom: -10px;
+		margin-bottom: 20px;
+	}
+
+	/* Each logo now has the full ~335px column to itself (one per row, see
+	   the .elementor-inner-column rule above), which is wide enough that
+	   the large wordmarks - British Council + IELTS, TEDx - ran edge to
+	   edge. A max-width cap keeps every logo within a readable size while
+	   leaving width unset on the <img> itself, so smaller logos (Google,
+	   SAT, STEAM) render at their own natural size under the cap rather
+	   than being stretched up to it - forcing width:100% here was tried
+	   and rejected for the same reason a uniform box was rejected in the
+	   2-up grid: the PNGs are cropped differently, so a shared box made
+	   SAT and Google tower over Cambridge. */
+	footer.elementor-location-footer .elementor-widget-image img {
+		max-width: 190px;
+		height: auto;
 	}
 
 	/* Everything above is left-aligned by default (each column's heading,
@@ -139,21 +143,22 @@ Text Domain: oceanwp-child
 	/* Contact Us: each entry (Email / Call / Visit) is an Elementor icon-box
 	   set to "icon above content" for mobile in the Elementor editor itself
 	   (.elementor-mobile-position-block-start) - stacked vertically inside a
-	   column that's otherwise all centered text, that read as odd, and an
-	   icon sitting alone above left-aligned text wasn't symmetrical either.
-	   Forcing the row layout back on puts the icon beside its title/text, as
-	   on desktop, and centers the icon+text pair as a group within the full-
-	   width column - text inside stays left-aligned so the phone number and
-	   address don't each individually center under a one-word title. */
+	   column that's otherwise all centered text, that read as odd. Forcing
+	   the row layout back on puts the icon beside its title/text, as on
+	   desktop, and centers the icon+text pair as a group within the full-
+	   width column; the title and description are centered too so the
+	   whole entry matches the rest of this centered footer. */
 	footer.elementor-location-footer .elementor-icon-box-wrapper {
 		flex-direction: row !important;
 		align-items: center !important;
 		justify-content: center !important;
-		text-align: left !important;
 	}
 	footer.elementor-location-footer .elementor-icon-box-icon {
 		margin-bottom: 0 !important;
 		margin-right: 15px !important;
+	}
+	footer.elementor-location-footer .elementor-icon-box-content {
+		text-align: center !important;
 	}
 }
 
