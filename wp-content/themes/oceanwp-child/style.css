@@ -95,24 +95,43 @@ Text Domain: oceanwp-child
 		margin-top: 0 !important;
 	}
 
-	/* Logo rows are flush against each other without a gap. */
+	/* Logo rows are flush against each other without a gap. The fixed row
+	   height gives the stack an even rhythm regardless of how tall each
+	   logo ends up - without it the taller marks (Cambridge, Google) open
+	   much bigger gaps than the thin wordmarks below them. */
 	footer.elementor-location-footer .elementor-widget-image {
-		margin-bottom: 20px;
+		margin-bottom: 14px;
+	}
+	footer.elementor-location-footer .elementor-widget-image .elementor-widget-container {
+		height: 50px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 
-	/* Each logo now has the full ~335px column to itself (one per row, see
-	   the .elementor-inner-column rule above), which is wide enough that
-	   the large wordmarks - British Council + IELTS, TEDx - ran edge to
-	   edge. A max-width cap keeps every logo within a readable size while
-	   leaving width unset on the <img> itself, so smaller logos (Google,
-	   SAT, STEAM) render at their own natural size under the cap rather
-	   than being stretched up to it - forcing width:100% here was tried
-	   and rejected for the same reason a uniform box was rejected in the
-	   2-up grid: the PNGs are cropped differently, so a shared box made
-	   SAT and Google tower over Cambridge. */
+	/* Each logo has the full ~335px column to itself (one per row, see the
+	   .elementor-inner-column rule above), which is wide enough that the
+	   large wordmarks - British Council + IELTS, TEDx - ran edge to edge.
+	   The max-width cap holds those in; width is deliberately left unset so
+	   the smaller marks (Google, SAT, STEAM) keep their own natural size
+	   under the cap instead of being stretched up to it. Forcing width:100%
+	   was tried and rejected for the same reason a uniform box was: these
+	   PNGs are cropped differently, so a shared box made SAT and Google
+	   tower over Cambridge.
+
+	   scale() then shrinks the whole set to about a third of the column
+	   width. It has to be a transform rather than a smaller max-width,
+	   because lowering the cap far enough to matter clamps every logo to
+	   the cap and flattens exactly the size hierarchy the unset width
+	   preserves. zoom was tried instead - it collapses the layout box,
+	   which transform doesn't - but it scales the containing block too, so
+	   every logo gained room and hit the cap, with the same flattening. The
+	   leftover layout box transform leaves behind is absorbed by the fixed
+	   row height above. */
 	footer.elementor-location-footer .elementor-widget-image img {
 		max-width: 190px;
 		height: auto;
+		transform: scale(0.6);
 	}
 
 	/* Everything above is left-aligned by default (each column's heading,
@@ -136,28 +155,45 @@ Text Domain: oceanwp-child
 	footer.elementor-location-footer .elementor-icon-list-item > a {
 		justify-content: center !important;
 	}
-	footer.elementor-location-footer .elementor-widget-image .elementor-widget-container {
-		text-align: center;
-	}
 
 	/* Contact Us: each entry (Email / Call / Visit) is an Elementor icon-box
 	   set to "icon above content" for mobile in the Elementor editor itself
 	   (.elementor-mobile-position-block-start) - stacked vertically inside a
 	   column that's otherwise all centered text, that read as odd. Forcing
-	   the row layout back on puts the icon beside its title/text, as on
-	   desktop, and centers the icon+text pair as a group within the full-
-	   width column; the title and description are centered too so the
-	   whole entry matches the rest of this centered footer. */
+	   the row layout back on puts the icon beside its title, as on desktop.
+
+	   Centering the icon and text together as one group is not the same as
+	   centering the text: the icon's width pushes the text off-center by
+	   half of it. So the icon is taken out of the flex layout entirely -
+	   width:0, with its own contents overflowing leftwards out of that zero
+	   width (justify-content:flex-end in a zero-width box places the mark
+	   to the left of it). The text block is then the only thing the
+	   wrapper centers, so it lands exactly on the column's center line
+	   while the icon still sits immediately to its left. Elementor's own
+	   widget CSS sets flex-grow:1 and width:100% on the content, which
+	   would otherwise stretch it across the row and defeat the centering,
+	   and the wrapper's 12px gap has to go too - a gap counts as layout
+	   width and would shift the text by half of it, which is the same
+	   problem in miniature. That leaves the icon's own margin to do the
+	   spacing. */
 	footer.elementor-location-footer .elementor-icon-box-wrapper {
 		flex-direction: row !important;
 		align-items: center !important;
 		justify-content: center !important;
+		gap: 0 !important;
 	}
 	footer.elementor-location-footer .elementor-icon-box-icon {
-		margin-bottom: 0 !important;
-		margin-right: 15px !important;
+		width: 0 !important;
+		margin: 0 !important;
+		display: flex !important;
+		justify-content: flex-end !important;
+	}
+	footer.elementor-location-footer .elementor-icon-box-icon > .elementor-icon {
+		margin-right: 14px !important;
 	}
 	footer.elementor-location-footer .elementor-icon-box-content {
+		flex: 0 1 auto !important;
+		width: auto !important;
 		text-align: center !important;
 	}
 }
