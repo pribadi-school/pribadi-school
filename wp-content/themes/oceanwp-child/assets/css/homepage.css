@@ -305,12 +305,12 @@
 
 /* Top-left, starting out on the band's gradient and running on over the
    photo - the headline belongs to the section as much as to the picture.
-   The overhang is capped at 48px: enough to read as breaking out of the
+   The overhang is capped at 72px: enough to read as breaking out of the
    frame, without pushing the headline off towards the page edge. */
 #homepage-custom .hp-hotnews-copy {
 	position: absolute;
 	top: clamp(28px, 3.6vw, 56px);
-	left: calc(-1 * min(48px, var(--hn-gap) * 0.75));
+	left: calc(-1 * min(72px, var(--hn-gap) * 0.75));
 	/* Above the frame and its scrim. */
 	z-index: 1;
 	display: flex;
