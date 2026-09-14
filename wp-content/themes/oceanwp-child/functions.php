@@ -183,6 +183,23 @@ function oceanwp_child_enqueue_assets() {
 add_action( 'wp_enqueue_scripts', 'oceanwp_child_enqueue_assets', 20 );
 
 /**
+ * OceanWP's built-in page header ("Home" title above the content) has no
+ * business showing on the custom homepage template - the hero already
+ * carries its own heading. Hiding it here, in code, means it stays hidden
+ * regardless of the sitewide Customizer setting on whatever install this
+ * theme is running on (this was missed the first time the theme was moved
+ * to a new site, since the Customizer setting doesn't travel with it).
+ */
+function oceanwp_child_hide_page_header_on_homepage( $display ) {
+	if ( is_page_template( 'page-homepage-custom.php' ) ) {
+		return false;
+	}
+
+	return $display;
+}
+add_filter( 'ocean_display_page_header', 'oceanwp_child_hide_page_header_on_homepage' );
+
+/**
  * Enqueue styles for the custom (non-Elementor) homepage template.
  */
 function oceanwp_child_enqueue_homepage_template_assets() {
