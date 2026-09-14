@@ -7,10 +7,17 @@
 # directory on every deploy. Everything else (WP core, plugins, the
 # database) is managed separately by the host, not by this repo.
 #
-# DEPLOYPATH is new.pribadidepok.sch.id's theme directory, cPanel user
-# pribadisch (both confirmed via cPanel > Domains). If this site is ever
-# moved to a different cPanel account/user, update this path to match.
+# DEPLOYPATH is production's (pribadidepok.sch.id) theme directory, cPanel
+# user pribadisch (confirmed via cPanel > Domains: pribadidepok.sch.id's
+# document root is public_html itself, the account's primary domain). This
+# used to point at new.pribadidepok.sch.id while that was the staging site
+# for the redesign; the redesign is now live on production, so this repo's
+# git deploy was repointed here on 2026-09-14. new.pribadidepok.sch.id no
+# longer auto-updates - the git clone (oceanwp-child-git) is still there if
+# it's ever needed again as a staging target, but the .cpanel.yml for that
+# needs restoring first. If this site is ever moved to a different cPanel
+# account/user, update this path to match.
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/pribadisch/public_html/new.pribadidepok.sch.id/wp-content/themes/oceanwp-child/
+    - export DEPLOYPATH=/home/pribadisch/public_html/wp-content/themes/oceanwp-child/
     - /bin/cp -R wp-content/themes/oceanwp-child/. $DEPLOYPATH

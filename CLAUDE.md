@@ -1,8 +1,14 @@
 # Sekolah Pribadi Depok — project notes
 
 WordPress site for SD-SMP-SMA Pribadi Depok, running locally under **LocalWP**.
-Local domain: `http://sekolahpribadi.local/`. Deployed (staging/preview) at
-`new.pribadidepok.sch.id`; production domain is `pribadidepok.sch.id`.
+Local domain: `http://sekolahpribadi.local/`. Production is `pribadidepok.sch.id`.
+
+The redesign (this theme) was built and previewed on a separate staging
+subdomain, `new.pribadidepok.sch.id`, then promoted to production on
+2026-09-14 by copying the `oceanwp-child` theme folder over and switching the
+homepage's page template. `new.pribadidepok.sch.id` still exists as a
+leftover staging copy but no longer auto-deploys (see Deployment below) and
+isn't kept in sync with production going forward.
 
 ## The homepage is deliberately NOT Elementor
 
@@ -23,8 +29,19 @@ Reverting is just setting `_wp_page_template` back to default — nothing was
 deleted.
 
 The site **header and footer still come from Elementor Theme Builder**
-(header = post 1991, footer = post 69) and are shared with every other page.
-Those are untouched by the homepage template.
+(header = post 1991, footer = post 69 — those IDs are for the local dev site;
+production has its own separate Elementor header/footer posts, since Theme
+Builder content lives in the database, per-install, and doesn't travel with
+this repo) and are shared with every other page. Those are untouched by the
+homepage template.
+
+OceanWP's own built-in page header (the "Home"-style title bar above page
+content) is a *different* thing from Elementor's header, controlled by a
+sitewide Customizer setting rather than anything in this repo. Since that
+setting doesn't travel between WordPress installs either, `functions.php`
+explicitly hides it for `page-homepage-custom.php` via the
+`ocean_display_page_header` filter, so it stays hidden regardless of
+Customizer state on whatever site this theme runs on.
 
 ### If you ever do edit Elementor content directly in the DB
 
@@ -92,12 +109,22 @@ normally.
 ## Deployment
 
 Pushing to `main` is not enough by itself — deployment happens via **cPanel Git
-Version Control** ("Pull or Deploy") on the `new.pribadidepok.sch.id` cPanel
-account (user `pribadisch`), configured in [.cpanel.yml](.cpanel.yml). On deploy,
-cPanel copies only `wp-content/themes/oceanwp-child/` into that site's live theme
-directory — WP core, plugins, and the database are managed separately by the
-host, not by this repo. After pushing, trigger (or wait for) the cPanel pull to
-actually update `new.pribadidepok.sch.id`.
+Version Control** ("Pull or Deploy"), configured in [.cpanel.yml](.cpanel.yml).
+On deploy, cPanel copies only `wp-content/themes/oceanwp-child/` into
+production's live theme directory (`public_html/wp-content/themes/oceanwp-child/`
+— production's document root is `public_html` itself, the account's primary
+domain) — WP core, plugins, and the database are managed separately by the
+host, not by this repo. After pushing, go to cPanel → Git Version Control →
+Manage → **Update from Remote**, then **Deploy HEAD Commit** to actually update
+production. (There's reportedly a `~/deploy-pribadi.sh` script on the server
+that may wrap both steps — unconfirmed what it does exactly, check before
+relying on it.)
+
+The git clone itself lives at `public_html/new.pribadidepok.sch.id/wp-content/
+themes/oceanwp-child-git/` (a leftover from when that subdomain was the
+deploy target) — it's just the raw repo checkout, not something WordPress
+reads directly, and isn't a live site. Only the deploy task's copy destination
+(`DEPLOYPATH` in `.cpanel.yml`) determines what actually goes live.
 
 ## What is NOT in this folder
 
