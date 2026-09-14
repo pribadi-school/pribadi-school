@@ -458,6 +458,9 @@ body {
 	   10px gutter on the left - the two ends of the header read as
 	   unbalanced. Matches that 10px so both sides carry the same gutter. */
 	margin-right: 10px;
+	/* A few px past dead-center with the logo, by request - purely a taste
+	   call, not fixing a bug the way align-content above is. */
+	margin-top: 6px;
 	/* 44px: the WCAG 2.2 AA target-size minimum, met by the button box
 	   rather than by the 24px bars drawn inside it. */
 	width: 44px;
