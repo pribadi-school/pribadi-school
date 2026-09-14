@@ -60,6 +60,52 @@ Text Domain: oceanwp-child
 		max-width: 140px;
 		height: auto;
 	}
+
+	/* The "Our Partners" logos sit in two Elementor inner sections, each
+	   split into two 50% inner columns. Elementor stacks inner columns to
+	   100% below 768px, and its image widgets are sized as a percentage of
+	   their column - so each logo grew to the full 335px content width,
+	   scaled by its own aspect ratio. Wide wordmarks (British Council +
+	   IELTS, TEDx) went edge-to-edge at ~335px while STEAM rendered at
+	   ~127px, and the rows overlapped each other and the "Contact Us"
+	   heading below.
+
+	   Holding the inner columns at 50% is enough on its own: a mobile cell
+	   is ~168px against desktop's ~176px, so every logo lands within a few
+	   px of the size Elementor was configured to give it. Normalising them
+	   to a uniform box instead was worse - these PNGs are cropped
+	   differently (Cambridge carries a crest plus two lines of caption, SAT
+	   is a bare wordmark), so equal heights made SAT and Google tower over
+	   the rest. */
+	footer.elementor-location-footer .elementor-inner-column {
+		width: 50%;
+	}
+
+	/* Side by side on desktop, these five columns stack here with nothing
+	   between them, so each heading butted against the list above it. */
+	footer.elementor-location-footer > .elementor-section > .elementor-container > .elementor-column {
+		margin-bottom: 34px;
+	}
+
+	/* The About column alone carries a 10px top margin set in Elementor,
+	   which dropped its heading below "Community" beside it once the two
+	   shared a row. !important for the per-widget-id reason noted above. */
+	footer.elementor-location-footer > .elementor-section > .elementor-container > .elementor-column > .elementor-widget-wrap {
+		margin-top: 0 !important;
+	}
+
+	/* Logo rows are flush against each other without this. */
+	footer.elementor-location-footer .elementor-widget-image {
+		margin-bottom: 16px;
+	}
+
+	/* Bottom bar: the copyright is centred for the desktop layout, where it
+	   sits opposite a right-aligned social row. Stacked, it read as a
+	   centred line above a left-aligned one - and every other block in this
+	   footer is left-aligned. */
+	footer.elementor-location-footer > footer .elementor-heading-title {
+		text-align: left;
+	}
 }
 
 /* ---------------------------------------------------------------
