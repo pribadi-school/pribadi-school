@@ -52,6 +52,7 @@ Text Domain: oceanwp-child
 		font-size: 15px !important;
 		overflow-wrap: normal;
 		word-break: keep-all;
+		text-align: center !important;
 	}
 
 	/* Logo column ran the full site logo (198px) at the same size as
@@ -110,12 +111,49 @@ Text Domain: oceanwp-child
 		margin-bottom: -10px;
 	}
 
-	/* Bottom bar: the copyright is centred for the desktop layout, where it
-	   sits opposite a right-aligned social row. Stacked, it read as a
-	   centred line above a left-aligned one - and every other block in this
-	   footer is left-aligned. */
-	footer.elementor-location-footer > footer .elementor-heading-title {
-		text-align: left;
+	/* Everything above is left-aligned by default (each column's heading,
+	   link list, and logo row all start flush with the column's left edge),
+	   which reads ragged once every column drops to full width and stacks
+	   on top of the next. Centering each piece - headings above via
+	   text-align, and these three - gives every column the same visual
+	   center line instead of a mix of left- and center-aligned blocks. */
+	footer.elementor-location-footer > .elementor-section > .elementor-container > .elementor-column > .elementor-widget-wrap {
+		align-items: center;
+	}
+	footer.elementor-location-footer .elementor-icon-list-items,
+	footer.elementor-location-footer .elementor-icon-list-item {
+		text-align: center !important;
+		justify-content: center !important;
+	}
+	/* .elementor-list-item-link-full_width (set on the About/Community/
+	   Programs lists so the whole row is clickable) makes each link's own
+	   <a> a flex box left-justified inside its <li> - centering the <li>
+	   above isn't enough, the <a> needs its own override. */
+	footer.elementor-location-footer .elementor-icon-list-item > a {
+		justify-content: center !important;
+	}
+	footer.elementor-location-footer .elementor-widget-image .elementor-widget-container {
+		text-align: center;
+	}
+
+	/* Contact Us: each entry (Email / Call / Visit) is an Elementor icon-box
+	   set to "icon above content" for mobile in the Elementor editor itself
+	   (.elementor-mobile-position-block-start) - stacked vertically inside a
+	   column that's otherwise all centered text, that read as odd, and an
+	   icon sitting alone above left-aligned text wasn't symmetrical either.
+	   Forcing the row layout back on puts the icon beside its title/text, as
+	   on desktop, and centers the icon+text pair as a group within the full-
+	   width column - text inside stays left-aligned so the phone number and
+	   address don't each individually center under a one-word title. */
+	footer.elementor-location-footer .elementor-icon-box-wrapper {
+		flex-direction: row !important;
+		align-items: center !important;
+		justify-content: center !important;
+		text-align: left !important;
+	}
+	footer.elementor-location-footer .elementor-icon-box-icon {
+		margin-bottom: 0 !important;
+		margin-right: 15px !important;
 	}
 }
 
