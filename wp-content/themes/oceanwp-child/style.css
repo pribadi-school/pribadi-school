@@ -430,6 +430,23 @@ body {
 	position: relative;
 }
 
+/* The menu column's widget-wrap is an Elementor flex container with
+   flex-wrap:wrap, and Elementor's own base CSS sets align-content:
+   flex-start on it - with only one flex line (the toggle button is the
+   only widget in the column), that pins the line to the top of the
+   column instead of letting it fill the column's height, so align-items
+   or align-self centering on the button itself has nothing to center
+   within and is silently ineffective. align-content is the property
+   that actually controls it. Without this the 44px button sat flush
+   with the column's top edge while the logo beside it (taller, with its
+   own vertical centering working correctly) sat lower - the two didn't
+   share a baseline. .header-menu is this column's own class, set in the
+   Elementor editor rather than a generated element id, so it survives
+   template re-saves. */
+#site-header .header-menu .elementor-widget-wrap {
+	align-content: center;
+}
+
 #site-header .hp-mnav-toggle {
 	display: flex;
 	align-items: center;
