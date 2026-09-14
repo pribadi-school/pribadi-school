@@ -108,23 +108,48 @@ normally.
 
 ## Deployment
 
-Pushing to `main` is not enough by itself — deployment happens via **cPanel Git
-Version Control** ("Pull or Deploy"), configured in [.cpanel.yml](.cpanel.yml).
-On deploy, cPanel copies only `wp-content/themes/oceanwp-child/` into
-production's live theme directory (`public_html/wp-content/themes/oceanwp-child/`
-— production's document root is `public_html` itself, the account's primary
-domain) — WP core, plugins, and the database are managed separately by the
-host, not by this repo. After pushing, go to cPanel → Git Version Control →
-Manage → **Update from Remote**, then **Deploy HEAD Commit** to actually update
-production. (There's reportedly a `~/deploy-pribadi.sh` script on the server
-that may wrap both steps — unconfirmed what it does exactly, check before
-relying on it.)
+Pushing to `main` is not enough by itself — the live site only updates once
+the server-side git clone is pulled and its `.cpanel.yml` deploy task is run
+to copy `wp-content/themes/oceanwp-child/` into production's live theme
+directory. WP core, plugins, and the database are managed separately by the
+host, not by this repo.
 
-The git clone itself lives at `public_html/new.pribadidepok.sch.id/wp-content/
-themes/oceanwp-child-git/` (a leftover from when that subdomain was the
-deploy target) — it's just the raw repo checkout, not something WordPress
-reads directly, and isn't a live site. Only the deploy task's copy destination
-(`DEPLOYPATH` in `.cpanel.yml`) determines what actually goes live.
+**The cPanel → Git™ Version Control UI page has shown up empty** (no
+repositories listed) even though a real, working clone exists on disk and
+deploys fine from Terminal — don't trust that page as a sign nothing is
+connected. Deploy via Terminal instead, since it's what's actually been
+reliable (verified 2026-09-14):
+
+```bash
+cd ~/repositories/oceanwp-child
+git fetch origin
+git reset --hard origin/main
+export DEPLOYPATH=/home/pribadisch/public_html/wp-content/themes/oceanwp-child/
+cp -R wp-content/themes/oceanwp-child/. $DEPLOYPATH
+```
+
+The real repo clone is `~/repositories/oceanwp-child` — remote
+`github.com:pribadi-school/pribadi-school.git`, `.cpanel.yml` inside it
+controls `DEPLOYPATH`. (Earlier notes guessed the clone lived under
+`public_html/new.pribadidepok.sch.id/wp-content/themes/oceanwp-child-git/` —
+that path turned out to be wrong; ignore it if it comes up again.)
+
+There's a second folder, `~/repositories/pribadi-school-oceanwpchild`
+(confirmed 2026-09-14: completely empty, not a git repo, no `.cpanel.yml`) —
+an abandoned leftover from an earlier setup attempt. It isn't connected to
+anything and is safe to ignore.
+
+After a deploy, verify it actually landed before assuming it did — e.g.
+`grep -c "mdash" ~/public_html/wp-content/themes/oceanwp-child/page-homepage-custom.php`
+should read `0` once the em-dash-removal commit is live. If a PHP change
+doesn't seem to have taken effect but the deploy clearly ran, flush OPcache
+(`php -r "opcache_reset();"` if available) and purge LiteSpeed Cache — see
+the OPcache/caching gotcha above; it applies to every deploy, not just that
+first one.
+
+(There's reportedly a `~/deploy-pribadi.sh` script on the server that may
+wrap the fetch/reset/copy steps above — unconfirmed what it actually does,
+check its contents before relying on it.)
 
 ## What is NOT in this folder
 
