@@ -21,6 +21,9 @@ get_header();
 	<section class="hp-hero hero-video">
 		<video autoplay muted loop playsinline
 			poster="<?php echo esc_url( wp_get_upload_dir()['baseurl'] . '/2026/09/Untitled-design-1-scaled.png' ); ?>">
+			<?php // WebM (VP9) first - same 1080p quality at roughly half the MP4's size, so
+			// most browsers load the lighter file. MP4 is the fallback for the rest. ?>
+			<source src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/video/hero-section.webm' ); ?>" type="video/webm">
 			<source src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/video/hero-section.mp4' ); ?>" type="video/mp4">
 		</video>
 		<div class="hp-hero-overlay"></div>
