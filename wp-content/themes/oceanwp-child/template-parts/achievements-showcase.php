@@ -124,6 +124,13 @@ $hp_achievements = array(
 		'name'     => 'Ayu',
 		'link'     => 'https://www.instagram.com/p/DcxZ30BkfY6/?stkn=MXB5YWdmaTBuaWo0Zw==',
 	),
+	array(
+		'photo'    => 'omi-2026.webp',
+		'title'    => 'Lima Siswa Lolos ke Tingkat Provinsi OMI 2026',
+		'title_en' => 'Five Students Advance to the Provincial Level of OMI 2026',
+		'name'     => 'Viko, Maria, Harun, Badzil & Arfa',
+		'link'     => '',
+	),
 );
 
 /*
@@ -160,11 +167,19 @@ unset( $hp_key, $hp_entry );
 	<div class="hp-achieve-track">
 		<?php for ( $hp_pass = 0; $hp_pass < 2; $hp_pass++ ) : ?>
 			<?php foreach ( $hp_achievements as $hp_item_index => $hp_item ) : ?>
-				<?php $hp_is_first_pass = 0 === $hp_pass; ?>
-				<a
-					href="<?php echo esc_url( $hp_item['link'] ); ?>"
-					target="_blank"
-					rel="noopener noreferrer"
+				<?php
+				$hp_is_first_pass = 0 === $hp_pass;
+				// A handful of entries have no source link yet (e.g. a school-wide
+				// announcement with no single Instagram post to point to) - those
+				// render as a plain, non-interactive tile instead of a dead link.
+				$hp_tag = $hp_item['link'] ? 'a' : 'div';
+				?>
+				<<?php echo esc_attr( $hp_tag ); ?>
+					<?php if ( $hp_item['link'] ) : ?>
+						href="<?php echo esc_url( $hp_item['link'] ); ?>"
+						target="_blank"
+						rel="noopener noreferrer"
+					<?php endif; ?>
 					class="hp-achieve-tile<?php echo $hp_is_first_pass ? ' hp-reveal' : ''; ?>"
 					<?php if ( $hp_is_first_pass ) : ?>
 						<?php // Capped at 6 steps: past ~8 staggered children the last ones read as lag, not sequence. ?>
@@ -189,7 +204,7 @@ unset( $hp_key, $hp_entry );
 						<span class="hp-achieve-tile-title"><?php echo esc_html( hp_t( $hp_item['title'], $hp_item['title_en'] ) ); ?></span>
 						<span class="hp-achieve-tile-name"><?php echo esc_html( $hp_item['name'] ); ?></span>
 					</div>
-				</a>
+				</<?php echo esc_attr( $hp_tag ); ?>>
 			<?php endforeach; ?>
 		<?php endfor; ?>
 	</div>
