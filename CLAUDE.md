@@ -63,9 +63,18 @@ assets/css/homepage.css           homepage styles, only enqueued for that templa
 assets/css/transparent-header.css front-page-only floating header behaviour
 assets/js/                        scroll-reveal, transparent-header, hero-text-scroll,
                                   achievements-counter, achievements-tile-tap, nav-dropdown-tuning
+assets/css/preloader.css          intro loading screen (tuning knobs at the top)
+assets/js/preloader.js            ...its show/exit logic
 style.css                         site-wide overrides (applies to ALL pages)
 functions.php                     conditional enqueues
 ```
+
+The **intro preloader** is printed *inline* in `<head>` by `functions.php`
+(not enqueued) so it styles the very first paint and LiteSpeed can't defer it.
+Two consequences: its CSS/JS source must never contain a literal head, body
+or html tag, even in a comment - HTML optimisers regex-inject after the first
+match and would split the script (this happened in testing). And it only shows
+on the first page of a tab session; add `?preloader` to any URL to force it.
 
 Two rules worth knowing:
 

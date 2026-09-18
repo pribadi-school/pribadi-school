@@ -1,0 +1,166 @@
+/**
+ * Intro preloader - full-screen logo screen shown on the first page of a
+ * visit (once per browser tab session), then faded away to reveal the page.
+ *
+ * Printed inline in the document head by oceanwp_child_print_preloader_head() in
+ * functions.php rather than enqueued, so it applies on the very first paint
+ * and can't be deferred or combined away by a caching/optimisation plugin.
+ * Behaviour lives in assets/js/preloader.js.
+ *
+ * Every rule is gated on html.owpc-preload, which only preloader.js adds, so
+ * with JS off (or on a repeat navigation in the same session) none of this
+ * does anything and the page renders exactly as before.
+ */
+
+/* ---------------------------------------------------------------
+   Tuning knobs - the only values you should need to touch.
+   --------------------------------------------------------------- */
+:root {
+	/* Same colour as the site's page canvas (--color-surface-page in the
+	   design system, repeated as a literal in style.css's body rule), so the
+	   hand-off from loader to page reads as one continuous surface. */
+	--owpc-pl-bg: #f2f5f9;
+
+	/* Logo width; height follows from the image's own aspect ratio. */
+	--owpc-pl-logo-width: clamp(160px, 44vw, 240px);
+
+	/* One full breath (in and out). */
+	--owpc-pl-breath-duration: 1.6s;
+	/* Peak scale and lowest opacity of a breath. */
+	--owpc-pl-breath-scale: 1.04;
+	--owpc-pl-breath-opacity: 0.85;
+
+	/* Exit fade. preloader.js reads this same variable to time the cleanup,
+	   so it only has to be changed here. */
+	--owpc-pl-exit-duration: 600ms;
+
+	/* --ease-out-cubic from the design system. */
+	--owpc-pl-ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* ---------------------------------------------------------------
+   The screen
+   --------------------------------------------------------------- */
+.owpc-preloader {
+	position: fixed;
+	inset: 0;
+	/* Above the fixed header (999) and the WP admin bar (99999). */
+	z-index: 100000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: var(--owpc-pl-bg);
+	opacity: 1;
+	transition: opacity var(--owpc-pl-exit-duration) var(--owpc-pl-ease-out);
+	/* Last-resort guard: if the script stalled after mounting the screen,
+	   fade it out on its own so the page can never stay covered. */
+	animation: owpc-pl-failsafe 0.6s ease 6s forwards;
+}
+
+/* Handles the logo's first appearance (fade in once the image has
+   decoded, so it never pops in half-drawn) and the exit scale/blur. The
+   breathing lives on the <img> inside, so the two motions don't fight
+   over one transform. */
+.owpc-preloader__mark {
+	width: var(--owpc-pl-logo-width);
+	opacity: 0;
+	transition:
+		opacity 400ms ease,
+		transform var(--owpc-pl-exit-duration) var(--owpc-pl-ease-out),
+		filter var(--owpc-pl-exit-duration) var(--owpc-pl-ease-out);
+}
+
+.owpc-preloader.is-logo-ready .owpc-preloader__mark {
+	opacity: 1;
+}
+
+.owpc-preloader__logo {
+	display: block;
+	width: 100%;
+	height: auto;
+	opacity: var(--owpc-pl-breath-opacity);
+	animation: owpc-pl-breathe var(--owpc-pl-breath-duration) ease-in-out infinite;
+	will-change: transform, opacity;
+}
+
+@keyframes owpc-pl-breathe {
+	0%,
+	100% {
+		transform: scale(1);
+		opacity: var(--owpc-pl-breath-opacity);
+	}
+	50% {
+		transform: scale(var(--owpc-pl-breath-scale));
+		opacity: 1;
+	}
+}
+
+/* ---------------------------------------------------------------
+   Exit
+   --------------------------------------------------------------- */
+.owpc-preloader.is-exiting {
+	opacity: 0;
+	pointer-events: none;
+}
+
+.owpc-preloader.is-exiting .owpc-preloader__mark {
+	transform: scale(1.06);
+	filter: blur(4px);
+}
+
+@keyframes owpc-pl-failsafe {
+	to {
+		opacity: 0;
+		visibility: hidden;
+		pointer-events: none;
+	}
+}
+
+/* ---------------------------------------------------------------
+   Hero hand-off (homepage only - no-op elsewhere)
+   While the screen is up, the hero headline is held slightly low and
+   invisible; as the screen fades it rises into place, so the hero
+   arrives rather than being uncovered all at once. Excludes the
+   --hidden state hero-text-scroll.js sets once the visitor scrolls,
+   so this never un-hides a headline that should be tucked away.
+   --------------------------------------------------------------- */
+html.owpc-preload #homepage-custom .hp-hero-content:not(.hp-hero-content--hidden) {
+	opacity: 0;
+	transform: translateY(12px);
+}
+
+html.owpc-preload.owpc-preload-exit #homepage-custom .hp-hero-content:not(.hp-hero-content--hidden) {
+	opacity: 1;
+	transform: none;
+	transition:
+		opacity 900ms var(--owpc-pl-ease-out) 150ms,
+		transform 900ms var(--owpc-pl-ease-out) 150ms;
+}
+
+/* ---------------------------------------------------------------
+   Reduced motion: no breathing, no scale/blur, no rising headline -
+   just a short cross-fade.
+   --------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+	:root {
+		--owpc-pl-exit-duration: 250ms;
+	}
+
+	.owpc-preloader__logo {
+		animation: none;
+		opacity: 1;
+	}
+
+	.owpc-preloader.is-exiting .owpc-preloader__mark {
+		transform: none;
+		filter: none;
+	}
+
+	html.owpc-preload #homepage-custom .hp-hero-content:not(.hp-hero-content--hidden) {
+		transform: none;
+	}
+
+	html.owpc-preload.owpc-preload-exit #homepage-custom .hp-hero-content:not(.hp-hero-content--hidden) {
+		transition: opacity 250ms ease;
+	}
+}

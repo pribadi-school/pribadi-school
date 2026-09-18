@@ -293,3 +293,82 @@ function oceanwp_child_body_class( $classes ) {
 	return $classes;
 }
 add_filter( 'body_class', 'oceanwp_child_body_class' );
+
+/**
+ * Where the intro preloader may appear. It still only actually shows on the
+ * first page of a visit - assets/js/preloader.js decides that client-side,
+ * per browser-tab session - this just rules out views where it would get in
+ * the way: the Customizer, the Elementor editor's preview frame, feeds and
+ * embeds.
+ */
+function oceanwp_child_has_preloader() {
+	$enabled = ! is_customize_preview()
+		&& ! is_feed()
+		&& ! is_embed()
+		&& ! isset( $_GET['elementor-preview'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only check, no action taken.
+
+	if ( $enabled && class_exists( '\Elementor\Plugin' ) && isset( \Elementor\Plugin::$instance->preview ) ) {
+		$enabled = ! \Elementor\Plugin::$instance->preview->is_preview_mode();
+	}
+
+	/**
+	 * Filters whether the intro preloader can appear on this request.
+	 *
+	 * @param bool $enabled Whether the preloader is allowed here.
+	 */
+	return (bool) apply_filters( 'oceanwp_child_has_preloader', $enabled );
+}
+
+/**
+ * Preloader CSS + JS, printed inline at the very top of <head>.
+ *
+ * Inline rather than enqueued on purpose: the screen has to be styled on the
+ * first paint, and a caching/optimisation plugin (LiteSpeed on production)
+ * that defers or combines CSS/JS would otherwise let the page flash before
+ * the loader. The data-no-* attributes ask those plugins to leave these two
+ * tags alone. The source still lives in assets/css/preloader.css and
+ * assets/js/preloader.js, like every other asset in this theme.
+ */
+function oceanwp_child_print_preloader_head() {
+	if ( ! oceanwp_child_has_preloader() ) {
+		return;
+	}
+
+	$dir = get_stylesheet_directory();
+	$css = file_get_contents( $dir . '/assets/css/preloader.css' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- local theme file.
+	$js  = file_get_contents( $dir . '/assets/js/preloader.js' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- local theme file.
+
+	if ( false === $css || false === $js ) {
+		return;
+	}
+
+	$logo_rel  = '/assets/img/logo-red.png';
+	$logo_size = @getimagesize( $dir . $logo_rel ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- missing file just means no intrinsic size.
+
+	$config = array(
+		'logo'   => add_query_arg( 'ver', oceanwp_child_asset_version( $logo_rel ), get_stylesheet_directory_uri() . $logo_rel ),
+		'width'  => $logo_size ? (int) $logo_size[0] : 0,
+		'height' => $logo_size ? (int) $logo_size[1] : 0,
+	);
+
+	echo '<style id="owpc-preloader-css" data-no-optimize="1">' . $css . '</style>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static theme file.
+	echo '<script id="owpc-preloader-js" data-no-optimize="1" data-no-defer="1" data-cfasync="false">'
+		. 'window.owpcPreloaderConfig=' . wp_json_encode( $config ) . ';'
+		. $js // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static theme file.
+		. '</script>' . "\n";
+}
+add_action( 'wp_head', 'oceanwp_child_print_preloader_head', 1 );
+
+/**
+ * Mount the preloader screen as the first thing inside <body>, before any
+ * page content can paint. A no-op unless preloader.js decided, in <head>,
+ * that this page view gets it - so repeat navigations carry no extra markup.
+ */
+function oceanwp_child_mount_preloader() {
+	if ( ! oceanwp_child_has_preloader() ) {
+		return;
+	}
+
+	echo '<script data-no-optimize="1" data-no-defer="1" data-cfasync="false">window.owpcPreloader&&window.owpcPreloader.mount();</script>' . "\n";
+}
+add_action( 'wp_body_open', 'oceanwp_child_mount_preloader', 1 );
