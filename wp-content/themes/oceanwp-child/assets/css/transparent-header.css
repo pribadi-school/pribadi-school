@@ -29,6 +29,25 @@ body.owpc-transparent-header #transparent-header-wrap {
 	z-index: 999;
 }
 
+/* iOS Safari: OceanWP's parent stylesheet sets html { overflow-x: hidden },
+   and on WebKit/iOS that leaves position:fixed elements behind during
+   momentum scroll and toolbar collapse - the header ends up parked partway
+   down the screen over the content instead of pinned to the top. (Chromium
+   doesn't reproduce it.) The homepage has no horizontal overflow of its own
+   to hide - #homepage-custom already clips with overflow-x: clip - so drop
+   the html-level rule here and move the safety net onto #outer-wrap, using
+   clip rather than hidden: clip trims overflow without turning the element
+   into a scroll container, so it can't break fixed or sticky descendants
+   the way hidden does. Same reasoning as the #homepage-custom note in
+   homepage.css. */
+html:has(body.owpc-transparent-header) {
+	overflow-x: visible;
+}
+
+body.owpc-transparent-header #outer-wrap {
+	overflow-x: clip;
+}
+
 body.owpc-transparent-header #site-header {
 	position: fixed;
 	top: 0;
@@ -38,6 +57,14 @@ body.owpc-transparent-header #site-header {
 	z-index: 999;
 	background: transparent;
 	box-shadow: none;
+	/* Own compositing layer, so iOS repaints the fixed header in step with
+	   the scroll instead of lagging a frame behind it. Safe here: the only
+	   positioned child, the mobile nav panel, is position:absolute against
+	   this header already, so a transform (which makes this the containing
+	   block for fixed descendants) changes nothing for it. */
+	transform: translateZ(0);
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
 	transition: background-color var(--owpc-header-speed) ease,
 		box-shadow var(--owpc-header-speed) ease;
 }
