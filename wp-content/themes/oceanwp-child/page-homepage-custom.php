@@ -21,7 +21,7 @@ get_header();
 	<section class="hp-hero hero-video">
 		<video autoplay muted loop playsinline
 			poster="<?php echo esc_url( wp_get_upload_dir()['baseurl'] . '/2026/09/Untitled-design-1-scaled.png' ); ?>">
-			<source src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/video/hero-section.mp4' ); ?>" type="video/mp4">
+			<source src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/video/1080p-lowhero.mp4' ); ?>" type="video/mp4">
 		</video>
 		<div class="hp-hero-overlay"></div>
 		<div class="hp-hero-content">
