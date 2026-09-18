@@ -342,7 +342,7 @@ function oceanwp_child_print_preloader_head() {
 		return;
 	}
 
-	$logo_rel  = '/assets/img/logo-red.png';
+	$logo_rel  = '/assets/img/logo-red-preloader.webp';
 	$logo_size = @getimagesize( $dir . $logo_rel ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- missing file just means no intrinsic size.
 
 	$config = array(

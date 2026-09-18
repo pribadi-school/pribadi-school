@@ -22,7 +22,7 @@
 	--owpc-pl-bg: #f2f5f9;
 
 	/* Logo width; height follows from the image's own aspect ratio. */
-	--owpc-pl-logo-width: clamp(160px, 44vw, 240px);
+	--owpc-pl-logo-width: clamp(130px, 34vw, 180px);
 
 	/* One full breath (in and out). */
 	--owpc-pl-breath-duration: 1.6s;
