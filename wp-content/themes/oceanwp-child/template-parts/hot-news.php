@@ -23,6 +23,11 @@
 
 $hp_hot_news = array(
 	array(
+		'image'    => get_stylesheet_directory_uri() . '/assets/img/wisangluv-osn.webp',
+		'title'    => 'Wisanggeni dan Luvidi raih medali perunggu OSN 2026 di Astronomi dan Matematika',
+		'title_en' => 'Wisanggeni and Luvidi win bronze at OSN 2026 in Astronomy and Mathematics',
+	),
+	array(
 		'image'    => get_stylesheet_directory_uri() . '/assets/img/luvidi-ioai-hotnews.webp',
 		'title'    => 'Luvidi meraih medali emas di Olimpiade Internasional Kecerdasan Buatan',
 		'title_en' => 'Luvidi takes gold at the International Olympiad in Artificial Intelligence',
