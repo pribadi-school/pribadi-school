@@ -156,6 +156,25 @@ unset( $hp_key, $hp_entry );
 
 <?php
 /*
+ * Link through to the full achievements page (page-prestasi.php), the way
+ * rushd.sch.id's "Hall of Fame" button sits under its numbers. Resolved by
+ * slug so it follows the page if its ID differs between installs; falls
+ * back to the same /prestasi/ URL when the page hasn't been created yet on
+ * this install (create it in wp-admin with the "Prestasi (Custom)"
+ * template, slug "prestasi").
+ */
+$hp_prestasi_page = get_page_by_path( 'prestasi' );
+$hp_prestasi_url  = $hp_prestasi_page ? get_permalink( $hp_prestasi_page ) : home_url( '/prestasi/' );
+?>
+<div class="hp-achieve-cta hp-reveal">
+	<a class="hp-btn" href="<?php echo esc_url( $hp_prestasi_url ); ?>">
+		<?php echo esc_html( hp_t( 'Lihat Semua Prestasi', 'See All Achievements' ) ); ?>
+		<i class="fas fa-arrow-right" aria-hidden="true"></i>
+	</a>
+</div>
+
+<?php
+/*
  * The strip is a reveal target itself, not just a container: its tiles ride a
  * looping horizontal track inside this overflow:hidden box, so a tile sitting
  * past the clip edge when the strip scrolls into view would never intersect

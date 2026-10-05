@@ -1144,6 +1144,30 @@
 	text-align: center;
 }
 
+/* "See all achievements" button between the numbers and the photo strip.
+   Pulls up into the stats' bottom margin so the button reads as belonging
+   to the numbers rather than floating midway to the strip. Blue .hp-btn,
+   not the reference site's orange: MASTER.md keeps orange off button fills. */
+#homepage-custom .hp-achieve-cta {
+	margin: -16px 0 40px;
+	text-align: center;
+}
+
+#homepage-custom .hp-achieve-cta .hp-btn i {
+	transition: transform var(--motion-base) ease;
+}
+
+#homepage-custom .hp-achieve-cta .hp-btn:hover i,
+#homepage-custom .hp-achieve-cta .hp-btn:focus-visible i {
+	transform: translateX(3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	#homepage-custom .hp-achieve-cta .hp-btn i {
+		transition: none;
+	}
+}
+
 /* --color-gradient-start (#0172bb), not --color-primary (#18a8fa): the
    light brand blue was fine on the old dark backdrop but only reaches
    2.6:1 on white, which fails even the 3:1 large-text minimum. The deeper

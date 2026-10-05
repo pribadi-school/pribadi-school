@@ -191,7 +191,8 @@ add_action( 'wp_enqueue_scripts', 'oceanwp_child_enqueue_assets', 20 );
  * to a new site, since the Customizer setting doesn't travel with it).
  */
 function oceanwp_child_hide_page_header_on_homepage( $display ) {
-	if ( is_page_template( 'page-homepage-custom.php' ) ) {
+	// The Prestasi template opens with its own H1 too, so the same applies.
+	if ( is_page_template( array( 'page-homepage-custom.php', 'page-prestasi.php' ) ) ) {
 		return false;
 	}
 
@@ -274,6 +275,41 @@ function oceanwp_child_enqueue_homepage_template_assets() {
 	);
 }
 add_action( 'wp_enqueue_scripts', 'oceanwp_child_enqueue_homepage_template_assets', 20 );
+
+/**
+ * Enqueue styles and scripts for the Prestasi (achievements) page template.
+ * Reuses the homepage's generic scroll-reveal.js; everything else is its own.
+ */
+function oceanwp_child_enqueue_prestasi_template_assets() {
+	if ( ! is_page_template( 'page-prestasi.php' ) ) {
+		return;
+	}
+
+	wp_enqueue_style(
+		'oceanwp-child-prestasi',
+		get_stylesheet_directory_uri() . '/assets/css/prestasi.css',
+		array( 'oceanwp-child' ),
+		oceanwp_child_asset_version( '/assets/css/prestasi.css' )
+	);
+
+	wp_enqueue_script(
+		'oceanwp-child-scroll-reveal',
+		get_stylesheet_directory_uri() . '/assets/js/scroll-reveal.js',
+		array(),
+		oceanwp_child_asset_version( '/assets/js/scroll-reveal.js' ),
+		true
+	);
+
+	// After the language switch so oceanwpChildLang exists for its status text.
+	wp_enqueue_script(
+		'oceanwp-child-prestasi-filter',
+		get_stylesheet_directory_uri() . '/assets/js/prestasi-filter.js',
+		array( 'oceanwp-child-language-switch' ),
+		oceanwp_child_asset_version( '/assets/js/prestasi-filter.js' ),
+		true
+	);
+}
+add_action( 'wp_enqueue_scripts', 'oceanwp_child_enqueue_prestasi_template_assets', 20 );
 
 /**
  * Body class the stylesheet keys off, so the effect can never leak onto other pages.
