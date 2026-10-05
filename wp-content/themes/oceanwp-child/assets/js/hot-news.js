@@ -2,8 +2,8 @@
  * Kabar Terkini / Latest News carousel (see template-parts/hot-news.php).
  *
  * A centred slide with its neighbours peeking in at either side, advancing
- * on a timer and steerable by hand - the progress bar, swipe, the mouse
- * wheel, clicking a peeking photo, or the left/right keys once the carousel
+ * on a timer and steerable by hand - the progress bar, swipe, a sideways
+ * trackpad scroll, clicking a peeking photo, or the left/right keys once the carousel
  * has focus. Positioning is
  * by slot (the --k custom property, see homepage.css); this script only
  * decides which slide is in which slot.
@@ -269,55 +269,37 @@
 		/*
 		 * Mouse wheel / trackpad.
 		 *
-		 * Sideways scrolling (trackpad swipes, Shift+wheel) always moves the
-		 * carousel. The ordinary vertical wheel is the page's own scroll, so
-		 * it is borrowed carefully: only while the carousel is fully on
-		 * screen. Scrolling past the last item wraps back to the first (and
-		 * vice versa), by direction - matching autoplay/dots/swipe, which
-		 * already loop.
+		 * Only sideways scrolling (trackpad swipes, Shift+wheel) moves the
+		 * carousel. The ordinary vertical wheel is always left to the page,
+		 * by direction: a visitor scrolling down should carry on to the next
+		 * section, not get stuck stepping through slides.
 		 *
-		 * One step per gesture: a wheel spin or trackpad fling fires dozens
-		 * of events, so after a step the rest of that gesture is swallowed
-		 * until the wheel has been still for WHEEL_QUIET_MS (and at least
-		 * WHEEL_MIN_GAP_MS has passed, so a long inertial tail can't fire a
-		 * second step on its own).
+		 * One step per gesture: a trackpad fling fires dozens of events, so
+		 * after a step the rest of that gesture is swallowed until it has
+		 * been still for WHEEL_QUIET_MS (and at least WHEEL_MIN_GAP_MS has
+		 * passed, so a long inertial tail can't fire a second step on its own).
 		 */
 		var WHEEL_QUIET_MS = 180;
 		var WHEEL_MIN_GAP_MS = 700;
 		var wheelLockedUntil = 0;
-		var viewport = root.querySelector( '.hp-hotnews-viewport' );
-
-		function fullyInView() {
-			var rect = ( viewport || root ).getBoundingClientRect();
-			return rect.top >= 0 && rect.bottom <= window.innerHeight;
-		}
 
 		root.addEventListener( 'wheel', function ( event ) {
-			var horizontal = Math.abs( event.deltaX ) > Math.abs( event.deltaY );
-			var delta = horizontal ? event.deltaX : event.deltaY;
-			var now = Date.now();
-
-			if ( ! delta || ( event.ctrlKey && ! horizontal ) ) {
-				// ctrl+wheel is browser zoom (and trackpad pinch); leave it be.
+			if ( Math.abs( event.deltaX ) <= Math.abs( event.deltaY ) || event.ctrlKey ) {
 				return;
 			}
 
+			var now = Date.now();
+
+			event.preventDefault();
+
 			if ( now < wheelLockedUntil ) {
 				// Still the gesture that just caused a step.
-				event.preventDefault();
 				wheelLockedUntil = Math.max( wheelLockedUntil, now + WHEEL_QUIET_MS );
 				return;
 			}
 
-			var direction = delta > 0 ? 1 : -1;
-
-			if ( ! horizontal && ! fullyInView() ) {
-				return;
-			}
-
-			event.preventDefault();
 			wheelLockedUntil = now + WHEEL_MIN_GAP_MS;
-			takeControl( direction );
+			takeControl( event.deltaX > 0 ? 1 : -1 );
 		}, { passive: false } );
 
 		// Hovering or focusing holds the current slide; leaving resumes, but
