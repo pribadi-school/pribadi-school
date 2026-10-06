@@ -33,4 +33,7 @@ desktop.ini
 .idea/
 node_modules/
 vendor/
+# ...except the theme's own checked-in copy of Google's model-viewer: the live
+# site is deployed from git, so the script has to be in the repo.
+!wp-content/themes/oceanwp-child/assets/js/vendor/
 package-lock.json
