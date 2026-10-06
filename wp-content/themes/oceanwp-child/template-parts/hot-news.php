@@ -23,6 +23,11 @@
 
 $hp_hot_news = array(
 	array(
+		'image'    => get_stylesheet_directory_uri() . '/assets/img/ratoh-jaroe.webp',
+		'title'    => 'Tim Ratoh Jaroe Pribadi Depok raih Juara 3 Lomba Tari Ratoh Jaroe',
+		'title_en' => 'Pribadi Depok’s Ratoh Jaroe team wins 3rd place',
+	),
+	array(
 		'image'    => get_stylesheet_directory_uri() . '/assets/img/wisangluv-osn.webp',
 		'title'    => 'Wisanggeni dan Luvidi raih medali perunggu OSN 2026 di Astronomi dan Matematika',
 		'title_en' => 'Wisanggeni and Luvidi win bronze at OSN 2026 in Astronomy and Mathematics',
