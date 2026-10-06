@@ -2,7 +2,9 @@
 /**
  * Data for the Prestasi (achievements) page - page-prestasi.php.
  *
- * Returns array( 'categories' => ..., 'stories' => ... ). Plain PHP data on
+ * Returns array( 'page' => ..., 'categories' => ..., 'stories' => ... ),
+ * rendered by template-parts/story-page.php ('page' is documented there).
+ * Plain PHP data on
  * purpose, the same way the homepage's achievement strip and news carousel
  * keep theirs: it travels with the theme through git and the cPanel deploy,
  * instead of living in a database that has to be re-entered on every
@@ -18,8 +20,8 @@
  *
  * Fields per story:
  *   photo       File in assets/img/ (relative to it). Any aspect works -
- *               the card crops with object-fit - but put the subject near
- *               the centre, or set 'focus' (CSS object-position).
+ *               the card shows the whole photo uncropped, with a blurred
+ *               copy of it filling the rest of the landscape frame.
  *   categories  One or more keys from 'categories'. A story with two keys
  *               shows under both filter buttons.
  *   title/_en   Headline. Hand-written English, not a literal translation.
@@ -29,6 +31,10 @@
  *   summary/_en One or two sentences, always shown.
  *   story/_en   Optional long-form copy, see above.
  *   link        Optional source post (Instagram), opens in a new tab.
+ *   fill        Optional. 'plain' drops the blurred-photo fill behind the
+ *               image - for cut-out shots on a transparent background.
+ *   name, date and story are all optional; a card without them just
+ *   leaves those lines out.
  *
  * A filter button only appears for categories that have at least one
  * story, so adding a category here without any stories is harmless.
@@ -37,6 +43,23 @@
  */
 
 return array(
+	'page'       => array(
+		'icon'               => 'fas fa-medal',
+		'title'              => 'Kisah <span class="pr-heading-accent">Prestasi</span> Siswa Pribadi',
+		'title_en'           => 'Stories of Pribadi <span class="pr-heading-accent">Achievers</span>',
+		'lede'               => 'Di Sekolah Pribadi Depok, setiap pencapaian siswa layak dirayakan - besar maupun kecil, di olimpiade sains, teknologi, olahraga, seni, hingga kegiatan sosial. Lewat halaman ini kami merangkum perjalanan mereka: tantangan yang dihadapi, tonggak yang diraih, dan pelajaran di baliknya. Bukan hanya hasilnya yang kami hargai, tetapi juga usaha dan pertumbuhan di balik setiap keberhasilan.',
+		'lede_en'            => 'At Sekolah Pribadi Depok, every student achievement is worth celebrating - big or small, in science olympiads, technology, sports, the arts and community work. This page gathers their journeys: the challenges they took on, the milestones they reached and what they learned along the way. We honour not just the results, but the effort and growth behind every success.',
+		'banner'             => 'prestasi-banner.webp',
+		'banner_width'       => 2000,
+		'banner_height'      => 1125,
+		'banner_alt'         => 'Lemari medali Sekolah Pribadi Depok',
+		'banner_alt_en'      => 'The Sekolah Pribadi Depok medal cabinet',
+		'stories_heading'    => 'Cerita di Balik <span class="pr-heading-accent">Setiap Pencapaian</span>',
+		'stories_heading_en' => 'The Stories Behind <span class="pr-heading-accent">Every Achievement</span>',
+		'filter_label'       => 'Saring berdasarkan bidang',
+		'filter_label_en'    => 'Filter by field',
+	),
+
 	'categories' => array(
 		'olimpiade' => array(
 			'label'    => 'Olimpiade Sains & Matematika',

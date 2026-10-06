@@ -1,17 +1,18 @@
 /**
- * Prestasi (achievements) page styles.
- * Only enqueued when page-prestasi.php is the active template
- * (see oceanwp_child_enqueue_prestasi_template_assets() in functions.php).
+ * Story page styles (template-parts/story-page.php) - the layout shared by
+ * the Prestasi and Digital Classroom pages. Named for the Prestasi page,
+ * which came first. Only enqueued for the templates listed in
+ * oceanwp_child_story_page_templates() in functions.php.
  */
 
 /* ---------------------------------------------------------------
    Design tokens - see design-system/sekolah-pribadi-depok/MASTER.md.
-   Scoped to #prestasi-custom for the same reason homepage.css scopes
+   Scoped to #story-page for the same reason homepage.css scopes
    its copy to #homepage-custom: nothing here may leak into
    Elementor-rendered pages. The values are the same tokens; if one
    changes in MASTER.md, change it in both files.
    --------------------------------------------------------------- */
-#prestasi-custom {
+#story-page {
 	--color-primary: #18a8fa;
 	--color-primary-dark: #0d8fdb;
 	--color-gradient-start: #0172bb;
@@ -50,17 +51,23 @@
 	-webkit-font-smoothing: antialiased;
 }
 
-#prestasi-custom .pr-container {
+/* The .hp-* names alongside are the homepage's own classes, used by the
+   shared magazine section (template-parts/magazine.php) - same values as
+   homepage.css, so that section renders identically on both pages. */
+#story-page .pr-container,
+#story-page .hp-container {
 	width: 1200px;
 	max-width: 90%;
 	margin: 0 auto;
 }
 
-#prestasi-custom .pr-section {
+#story-page .pr-section,
+#story-page .hp-section {
 	padding: 90px 0;
 }
 
-#prestasi-custom .pr-heading-accent {
+#story-page .pr-heading-accent,
+#story-page .hp-heading-accent {
 	background-image: linear-gradient(90deg, var(--color-gradient-start), var(--color-gradient-end));
 	-webkit-background-clip: text;
 	background-clip: text;
@@ -71,17 +78,17 @@
    Same motion as the homepage (.hp-reveal in homepage.css) and driven by
    the same assets/js/scroll-reveal.js, which only flips .is-visible. The
    CSS is repeated here because homepage.css isn't loaded on this page. */
-#prestasi-custom .hp-reveal {
+#story-page .hp-reveal {
 	opacity: 0;
 	translate: 0 -24px;
 }
 
-#prestasi-custom .hp-reveal.is-visible {
+#story-page .hp-reveal.is-visible {
 	animation: pr-fade var(--motion-reveal) var(--ease-fade) both,
 		pr-settle var(--motion-reveal) var(--ease-out-cubic) both;
 }
 
-#prestasi-custom .hp-reveal.hp-reveal--up {
+#story-page .hp-reveal.hp-reveal--up {
 	translate: 0 56px;
 }
 
@@ -97,20 +104,26 @@
 /* ---------------------------------------------------------------
    Intro
    --------------------------------------------------------------- */
-#prestasi-custom .pr-intro {
+#story-page .pr-intro {
 	padding-bottom: 0;
 	background:
 		radial-gradient(ellipse 900px 420px at 50% 0%, rgba(24, 168, 250, 0.10), transparent 70%),
 		var(--color-surface-page);
 }
 
-#prestasi-custom .pr-intro-head {
+#story-page .pr-intro-head {
 	max-width: 760px;
 	margin: 0 auto 48px;
 	text-align: center;
 }
 
-#prestasi-custom .pr-intro-badge {
+/* No banner below it (Digital Classroom): the stories section's own top
+   padding is spacing enough. */
+#story-page .pr-intro-head:last-child {
+	margin-bottom: 0;
+}
+
+#story-page .pr-intro-badge {
 	display: inline-grid;
 	place-items: center;
 	width: 56px;
@@ -123,7 +136,7 @@
 	box-shadow: var(--elevation-2);
 }
 
-#prestasi-custom .pr-intro-title {
+#story-page .pr-intro-title {
 	margin: 0 0 18px;
 	font-family: 'Inter', sans-serif;
 	font-size: 2.9em;
@@ -133,14 +146,14 @@
 	color: var(--color-foreground);
 }
 
-#prestasi-custom .pr-intro-lede {
+#story-page .pr-intro-lede {
 	margin: 0;
 	font-size: 1.02em;
 	line-height: 1.75;
 	color: var(--color-muted-foreground);
 }
 
-#prestasi-custom .pr-intro-banner {
+#story-page .pr-intro-banner {
 	margin: 0;
 	border-radius: var(--radius-lg);
 	overflow: hidden;
@@ -148,7 +161,7 @@
 	aspect-ratio: 21 / 9;
 }
 
-#prestasi-custom .pr-intro-banner img {
+#story-page .pr-intro-banner img {
 	display: block;
 	width: 100%;
 	height: 100%;
@@ -158,13 +171,13 @@
 /* ---------------------------------------------------------------
    Stories
    --------------------------------------------------------------- */
-#prestasi-custom .pr-section-head {
+#story-page .pr-section-head {
 	max-width: 700px;
 	margin: 0 auto 32px;
 	text-align: center;
 }
 
-#prestasi-custom .pr-section-head h2 {
+#story-page .pr-section-head h2 {
 	margin: 0;
 	font-family: 'Inter', sans-serif;
 	font-size: 2.1em;
@@ -174,7 +187,7 @@
 }
 
 /* ---- Filter chips ---- */
-#prestasi-custom .pr-filters {
+#story-page .pr-filters {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
@@ -182,11 +195,11 @@
 	margin: 0 auto 56px;
 }
 
-#prestasi-custom .pr-filters[hidden] {
+#story-page .pr-filters[hidden] {
 	display: none;
 }
 
-#prestasi-custom .pr-filter {
+#story-page .pr-filter {
 	padding: 11px 20px;
 	border: 1px solid var(--color-border);
 	border-radius: var(--radius-full);
@@ -204,89 +217,196 @@
 		transform var(--motion-base) ease;
 }
 
-#prestasi-custom .pr-filter:hover {
+#story-page .pr-filter:hover {
 	color: var(--color-primary-dark);
 	transform: translateY(-1px);
 	box-shadow: var(--elevation-2);
 }
 
-#prestasi-custom .pr-filter:focus-visible {
+#story-page .pr-filter:focus-visible {
 	outline: 2px solid var(--color-primary);
 	outline-offset: 3px;
 }
 
-#prestasi-custom .pr-filter.is-active {
+#story-page .pr-filter.is-active {
 	border-color: transparent;
 	background: var(--color-primary);
 	color: var(--color-on-primary);
 	box-shadow: var(--elevation-2);
 }
 
-/* ---- Story cards ----
-   Wide landscape photo on top, write-up underneath, by direction (it was
-   photo and text side by side). The list is capped narrower than the
-   1200px container so a 16:9 photo stays a sensible height on desktop
-   instead of filling the whole screen. Most student photos are portrait,
-   so the crop leans towards the top of the frame, where faces usually are;
-   a story that needs something else sets 'focus' in the data file. */
-#prestasi-custom .pr-story-list {
-	display: grid;
-	gap: 40px;
-	max-width: 960px;
-	margin: 0 auto;
+/* ---- Story carousel ----
+   The rushd.sch.id achievements format, by direction: one story at a time,
+   photo on the left half and the write-up on the right, with round arrow
+   buttons on the card's sides to step to the next/previous story in the
+   active category (assets/js/prestasi-filter.js). On phones the photo
+   stacks above the text and the arrows move below the card. Without JS
+   the arrows stay hidden and the stories simply stack. */
+#story-page .pr-carousel {
+	position: relative;
 }
 
-#prestasi-custom .pr-story {
-	display: flex;
-	flex-direction: column;
+#story-page .pr-story-list {
+	display: grid;
+	gap: 32px;
+}
+
+#story-page .pr-story {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	min-height: 480px;
 	border-radius: var(--radius-lg);
 	overflow: hidden;
 	background: var(--color-surface);
 	box-shadow: var(--elevation-2);
-	transition: box-shadow var(--motion-base) ease, transform var(--motion-base) ease;
 }
 
-#prestasi-custom .pr-story[hidden] {
+#story-page .pr-story[hidden] {
 	display: none;
 }
 
-#prestasi-custom .pr-story:hover {
-	box-shadow: var(--elevation-3);
-	transform: translateY(-3px);
-}
-
-#prestasi-custom .pr-story-media {
+#story-page .pr-story-media {
 	position: relative;
-	aspect-ratio: 16 / 9;
+	min-height: 360px;
 	overflow: hidden;
 	background: var(--color-surface-muted);
 }
 
-#prestasi-custom .pr-story-media img {
+/* Arrow buttons: brand-blue circles (MASTER.md keeps orange off button
+   fills, unlike the reference), straddling the card's left/right edges at
+   its vertical centre. */
+#story-page .pr-nav {
+	position: absolute;
+	top: 50%;
+	z-index: 2;
+	display: grid;
+	place-items: center;
+	width: 52px;
+	height: 52px;
+	padding: 0;
+	border: 3px solid var(--color-surface-page);
+	border-radius: var(--radius-full);
+	background: var(--color-primary);
+	color: var(--color-on-primary);
+	font-size: 1.05em;
+	cursor: pointer;
+	box-shadow: var(--elevation-3);
+	translate: 0 -50%;
+	transition: background-color var(--motion-base) ease, transform var(--motion-base) ease;
+}
+
+#story-page .pr-nav[hidden] {
+	display: none;
+}
+
+#story-page .pr-nav--prev {
+	left: -26px;
+}
+
+#story-page .pr-nav--next {
+	right: -26px;
+}
+
+#story-page .pr-nav:hover {
+	background: var(--color-primary-dark);
+	transform: scale(1.06);
+}
+
+#story-page .pr-nav:focus-visible {
+	outline: 2px solid var(--color-primary);
+	outline-offset: 3px;
+}
+
+/* The whole photo is shown (contain), not cropped to fill the frame:
+   cropping portrait photos into a landscape frame read as far too zoomed
+   in. The space either side is filled by a blurred, enlarged copy of the
+   same photo (::before, fed by --pr-photo from the template) so the frame
+   never shows flat empty bars. No hover zoom, for the same reason. */
+#story-page .pr-story-media::before {
+	content: '';
+	position: absolute;
+	inset: -24px;
+	background-image: var(--pr-photo);
+	background-position: center;
+	background-size: cover;
+	filter: blur(18px) saturate(1.1);
+	opacity: 0.55;
+}
+
+#story-page .pr-story-media img {
 	position: absolute;
 	inset: 0;
 	width: 100%;
 	height: 100%;
-	object-fit: cover;
-	object-position: center 25%;
-	transition: transform 600ms var(--ease-out-cubic);
+	object-fit: contain;
 }
 
-#prestasi-custom .pr-story:hover .pr-story-media img {
-	transform: scale(1.03);
+/* Interactive 3D model (a story with 'model' in the data): fills the picture
+   area, transparent so the card shows through. Horizontal drags rotate it;
+   vertical ones are left to the page so it never traps scrolling on a phone. */
+#story-page .pr-story-model {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	background: transparent;
+	--poster-color: transparent;
+	--progress-bar-color: var(--color-primary);
+	cursor: grab;
+}
+
+#story-page .pr-story-model > img {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+}
+
+/* The fallback picture is for when <model-viewer> never starts. Once it is
+   defined the element renders its own canvas, and this light-DOM child would
+   otherwise sit on top of it: a still image that swallows every drag. */
+#story-page .pr-story-model:defined > img {
+	display: none;
+}
+
+#story-page .pr-story-model:active {
+	cursor: grabbing;
+}
+
+#story-page .pr-story-model:focus-visible {
+	outline: 2px solid var(--color-primary);
+	outline-offset: -4px;
+	border-radius: var(--radius-md);
+}
+
+/* 'fill' => 'plain' in the data: cut-out product/portrait shots on white or
+   transparent backgrounds. A plain white frame instead of the blurred fill,
+   and some inset so the object doesn't touch the card edges. */
+#story-page .pr-story-media--plain {
+	background: var(--color-surface);
+}
+
+#story-page .pr-story-media--plain::before {
+	content: none;
+}
+
+#story-page .pr-story-media--plain img {
+	inset: 24px;
+	width: calc(100% - 48px);
+	height: calc(100% - 48px);
 }
 
 /* The write-up panel carries a faint brand-blue wash that fades down from
    the photo - the same idea as the reference's tinted text panel, kept to
    the site's blue rather than a second warm colour. */
-#prestasi-custom .pr-story-body {
+#story-page .pr-story-body {
 	display: flex;
 	flex-direction: column;
-	padding: 36px 44px 40px;
-	background: linear-gradient(180deg, rgba(24, 168, 250, 0.08), transparent 60%), var(--color-surface);
+	justify-content: center;
+	padding: 48px 64px 48px 52px;
+	background: linear-gradient(90deg, transparent 40%, rgba(24, 168, 250, 0.08)), var(--color-surface);
 }
 
-#prestasi-custom .pr-story-tags {
+#story-page .pr-story-tags {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 6px;
@@ -295,7 +415,7 @@
 	list-style: none;
 }
 
-#prestasi-custom .pr-story-tags li {
+#story-page .pr-story-tags li {
 	padding: 5px 12px;
 	border-radius: var(--radius-full);
 	background: var(--color-surface-muted);
@@ -305,17 +425,17 @@
 	letter-spacing: 0.2px;
 }
 
-#prestasi-custom .pr-story-title {
+#story-page .pr-story-title {
 	margin: 0 0 10px;
 	font-family: 'Inter', sans-serif;
-	font-size: 1.55em;
+	font-size: 1.5em;
 	font-weight: 700;
 	line-height: 1.3;
 	letter-spacing: -0.3px;
 	color: var(--color-foreground);
 }
 
-#prestasi-custom .pr-story-meta {
+#story-page .pr-story-meta {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: baseline;
@@ -324,31 +444,58 @@
 }
 
 /* Names get the warm accent - MASTER.md reserves orange for exactly this. */
-#prestasi-custom .pr-story-name {
+#story-page .pr-story-name {
 	font-size: 1em;
 	font-weight: 700;
 	color: var(--color-accent);
 }
 
-#prestasi-custom .pr-story-date {
+#story-page .pr-story-date {
 	font-size: 0.82em;
 	font-style: italic;
 	font-weight: 500;
 	color: var(--color-muted-foreground);
 }
 
-#prestasi-custom .pr-story-text p {
+#story-page .pr-story-text p {
 	margin: 0 0 14px;
 	font-size: 1em;
 	line-height: 1.75;
 	color: var(--color-foreground-alt);
 }
 
-#prestasi-custom .pr-story-text p:last-child {
+/* 'compact' => true in a page's data (Digital Classroom): its pictures are
+   small product shots / 3D models on white, which left a lot of empty space
+   beside the text in the half-and-half card. Text gets ~60% of the width and
+   the card is shorter; the picture area stays tall enough for the models. */
+@media (min-width: 768px) {
+	#story-page.pr-compact .pr-story {
+		grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+		min-height: 0;
+	}
+
+	#story-page.pr-compact .pr-story-media {
+		min-height: 340px;
+	}
+
+	#story-page.pr-compact .pr-story-body {
+		padding: 36px 48px 36px 36px;
+	}
+}
+
+/* 'text_align' => 'justify' in a page's data (Digital Classroom). Hyphenation
+   keeps the word gaps from stretching in the narrow text column. */
+#story-page.pr-justify .pr-story-text p {
+	text-align: justify;
+	-webkit-hyphens: auto;
+	hyphens: auto;
+}
+
+#story-page .pr-story-text p:last-child {
 	margin-bottom: 0;
 }
 
-#prestasi-custom .pr-story-link {
+#story-page .pr-story-link {
 	display: inline-flex;
 	align-items: center;
 	gap: 8px;
@@ -361,191 +508,61 @@
 	transition: color var(--motion-base) ease, gap var(--motion-base) ease;
 }
 
-#prestasi-custom .pr-story-link:hover,
-#prestasi-custom .pr-story-link:focus-visible {
+#story-page .pr-story-link:hover,
+#story-page .pr-story-link:focus-visible {
 	gap: 12px;
 	color: var(--color-gradient-start);
 }
 
-#prestasi-custom .pr-story-link:focus-visible {
+#story-page .pr-story-link:focus-visible {
 	outline: 2px solid var(--color-primary);
 	outline-offset: 4px;
 	border-radius: 4px;
 }
 
-#prestasi-custom .pr-story-link i {
+#story-page .pr-story-link i {
 	font-size: 1.15em;
-}
-
-/* ---------------------------------------------------------------
-   Magazine CTA
-   --------------------------------------------------------------- */
-#prestasi-custom .pr-magazine {
-	padding-top: 0;
-}
-
-#prestasi-custom .pr-magazine-card {
-	position: relative;
-	display: grid;
-	grid-template-columns: 220px 1fr;
-	align-items: center;
-	gap: 48px;
-	padding: 48px 56px;
-	border-radius: var(--radius-lg);
-	overflow: hidden;
-	isolation: isolate;
-	background: linear-gradient(115deg, var(--color-gradient-start), var(--color-gradient-end));
-	color: var(--color-on-primary);
-	box-shadow: var(--elevation-3);
-}
-
-/* Same masked dot-grid texture the homepage's coloured band uses. */
-#prestasi-custom .pr-magazine-card::after {
-	content: '';
-	position: absolute;
-	inset: 0;
-	z-index: -1;
-	pointer-events: none;
-	background-image: radial-gradient(rgba(255, 255, 255, 0.24) 1px, transparent 1px);
-	background-size: 24px 24px;
-	-webkit-mask-image: linear-gradient(90deg, transparent 30%, #000);
-	mask-image: linear-gradient(90deg, transparent 30%, #000);
-}
-
-#prestasi-custom .pr-magazine-cover {
-	display: block;
-	border-radius: var(--radius-sm);
-	overflow: hidden;
-	box-shadow: var(--elevation-4), inset 0 1px 0 rgba(255, 255, 255, 0.5);
-	transform: rotate(-3deg);
-	transition: transform var(--motion-base) ease;
-}
-
-#prestasi-custom .pr-magazine-cover:hover,
-#prestasi-custom .pr-magazine-cover:focus-visible {
-	transform: rotate(0deg) translateY(-4px);
-}
-
-#prestasi-custom .pr-magazine-cover img {
-	display: block;
-	width: 100%;
-	height: auto;
-}
-
-#prestasi-custom .pr-magazine-copy h2 {
-	margin: 0 0 12px;
-	font-family: 'Inter', sans-serif;
-	font-size: 2em;
-	font-weight: 700;
-	letter-spacing: -0.4px;
-	color: var(--color-on-primary);
-}
-
-#prestasi-custom .pr-magazine-accent {
-	font-weight: 800;
-	letter-spacing: 1px;
-}
-
-#prestasi-custom .pr-magazine-copy p {
-	max-width: 560px;
-	margin: 0 0 28px;
-	line-height: 1.7;
-	color: var(--color-on-primary);
-	opacity: 0.92;
-}
-
-#prestasi-custom .pr-magazine-actions {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 12px;
-}
-
-/* Buttons per MASTER.md "Button Style". On the gradient card the solid
-   button is white-on-blue inverted, so it doesn't vanish into the fill. */
-#prestasi-custom .pr-btn {
-	display: inline-flex;
-	align-items: center;
-	padding: 13px 26px;
-	border: 2px solid var(--color-on-primary);
-	border-radius: 30px;
-	background: var(--color-on-primary);
-	color: var(--color-gradient-start);
-	font-size: 0.88em;
-	font-weight: 600;
-	text-decoration: none;
-	box-shadow: var(--elevation-2);
-	transition: background-color var(--motion-base) ease,
-		color var(--motion-base) ease,
-		transform var(--motion-base) ease,
-		box-shadow var(--motion-base) ease;
-}
-
-#prestasi-custom .pr-btn:hover,
-#prestasi-custom .pr-btn:focus-visible {
-	color: var(--color-gradient-start);
-	transform: translateY(-2px);
-	box-shadow: var(--elevation-3);
-}
-
-#prestasi-custom .pr-btn-outline {
-	background: transparent;
-	color: var(--color-on-primary);
-	box-shadow: none;
-}
-
-#prestasi-custom .pr-btn-outline:hover,
-#prestasi-custom .pr-btn-outline:focus-visible {
-	background: var(--color-on-primary);
-	color: var(--color-gradient-start);
-}
-
-#prestasi-custom .pr-btn:focus-visible {
-	outline: 2px solid var(--color-on-primary);
-	outline-offset: 3px;
 }
 
 /* ---------------------------------------------------------------
    Responsive
    --------------------------------------------------------------- */
 @media (max-width: 1024px) {
-	#prestasi-custom .pr-intro-title {
+	#story-page .pr-intro-title {
 		font-size: 2.4em;
 	}
 }
 
 /* Phones. */
 @media (max-width: 767px) {
-	#prestasi-custom .pr-section {
+	#story-page .pr-section,
+	#story-page .hp-section {
 		padding: 56px 0;
 	}
 
-	#prestasi-custom .pr-intro {
+	#story-page .pr-intro {
 		padding-bottom: 0;
 	}
 
-	#prestasi-custom .pr-magazine {
-		padding-top: 0;
-	}
-
-	#prestasi-custom .pr-intro-title {
+	#story-page .pr-intro-title {
 		font-size: 1.9em;
 	}
 
-	#prestasi-custom .pr-intro-lede {
+	#story-page .pr-intro-lede {
 		font-size: 0.96em;
 	}
 
-	#prestasi-custom .pr-intro-banner {
+	#story-page .pr-intro-banner {
 		aspect-ratio: 4 / 3;
 	}
 
-	#prestasi-custom .pr-section-head h2 {
+	#story-page .pr-section-head h2 {
 		font-size: 1.6em;
 	}
 
 	/* One scrollable row of chips instead of a tall wrapped block that
 	   pushes the first story below the fold. */
-	#prestasi-custom .pr-filters {
+	#story-page .pr-filters {
 		flex-wrap: nowrap;
 		justify-content: flex-start;
 		overflow-x: auto;
@@ -554,84 +571,82 @@
 		scrollbar-width: none;
 	}
 
-	#prestasi-custom .pr-filters::-webkit-scrollbar {
+	#story-page .pr-filters::-webkit-scrollbar {
 		display: none;
 	}
 
-	#prestasi-custom .pr-filter {
+	#story-page .pr-filter {
 		flex: 0 0 auto;
 	}
 
-	#prestasi-custom .pr-story-list {
+	#story-page .pr-story-list {
 		gap: 28px;
 	}
 
-	/* Still landscape, but less extreme than 16:9: at phone width a 16:9
-	   frame is only ~190px tall, which crops portrait photos to a strip. */
-	#prestasi-custom .pr-story-media {
+	/* Stacked: photo above the write-up. */
+	#story-page .pr-story {
+		grid-template-columns: minmax(0, 1fr);
+		min-height: 0;
+	}
+
+	#story-page .pr-story-media {
 		aspect-ratio: 4 / 3;
+		min-height: 0;
 	}
 
-	#prestasi-custom .pr-story-body {
+	#story-page .pr-story-body {
 		padding: 26px 22px 30px;
+		background: linear-gradient(180deg, rgba(24, 168, 250, 0.08), transparent 45%), var(--color-surface);
 	}
 
-	#prestasi-custom .pr-story-title {
-		font-size: 1.3em;
+	/* No room at the card's sides on a phone: the arrows sit in a row under
+	   the card instead, room for a thumb, with the list leaving space. */
+	#story-page .pr-carousel.has-nav {
+		padding-bottom: 76px;
 	}
 
-	#prestasi-custom .pr-story-text p {
+	#story-page .pr-nav {
+		top: auto;
+		bottom: 0;
+		translate: none;
+	}
+
+	#story-page .pr-nav--prev {
+		left: calc(50% - 64px);
+	}
+
+	#story-page .pr-nav--next {
+		right: calc(50% - 64px);
+	}
+
+	#story-page .pr-story-title {
+		font-size: 1.2em;
+	}
+
+	#story-page .pr-story-text p {
 		font-size: 0.96em;
-	}
-
-	#prestasi-custom .pr-magazine-card {
-		grid-template-columns: 1fr;
-		gap: 32px;
-		padding: 36px 24px;
-		text-align: center;
-	}
-
-	#prestasi-custom .pr-magazine-cover {
-		width: 170px;
-		margin: 0 auto;
-	}
-
-	#prestasi-custom .pr-magazine-copy h2 {
-		font-size: 1.6em;
-	}
-
-	#prestasi-custom .pr-magazine-copy p {
-		margin-left: auto;
-		margin-right: auto;
-	}
-
-	#prestasi-custom .pr-magazine-actions {
-		justify-content: center;
 	}
 }
 
 @media (prefers-reduced-motion: reduce) {
-	#prestasi-custom .hp-reveal,
-	#prestasi-custom .hp-reveal.hp-reveal--up {
+	#story-page .hp-reveal,
+	#story-page .hp-reveal.hp-reveal--up {
 		opacity: 1;
 		translate: none;
 	}
 
-	#prestasi-custom .hp-reveal.is-visible {
+	#story-page .hp-reveal.is-visible {
 		animation: none;
 	}
 
-	#prestasi-custom .pr-filter,
-	#prestasi-custom .pr-story,
-	#prestasi-custom .pr-story-media img,
-	#prestasi-custom .pr-story-link,
-	#prestasi-custom .pr-magazine-cover,
-	#prestasi-custom .pr-btn {
+	#story-page .pr-filter,
+	#story-page .pr-story,
+	#story-page .pr-story-link,
+	#story-page .pr-nav {
 		transition: none;
 	}
 
-	#prestasi-custom .pr-story:hover,
-	#prestasi-custom .pr-story:hover .pr-story-media img {
+	#story-page .pr-nav:hover {
 		transform: none;
 	}
 }

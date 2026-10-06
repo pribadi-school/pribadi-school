@@ -207,49 +207,8 @@ get_header();
 		</div>
 	</section>
 
-	<!-- Pribadi Magazine -->
-	<section class="hp-section hp-magazine">
-		<div class="hp-container">
-			<h2 class="hp-reveal">Pribadi Magazine <span class="hp-heading-accent">INSPIRE</span></h2>
-			<p class="hp-reveal" style="animation-delay: 80ms;"><?php echo hp_t(
-				'<strong>Jangan lewatkan edisi terbaru <em>Pribadi Magazine Inspire</em>!</strong> Temukan highlight seru dari berbagai kegiatan sekolah, berita informatif terkini, hingga deretan prestasi membanggakan siswa kami. Semua kisah inspiratif dan pencapaian luar biasa terangkum di sini, siap memberikan wawasan dan motivasi untuk Anda. Klik dan baca sekarang untuk merasakan semangat dan kebanggaan menjadi bagian dari komunitas Pribadi!',
-				'<strong>Don&#8217;t miss the latest issue of <em>Pribadi Magazine Inspire</em>!</strong> Discover the highlights from our school activities, the latest news, and a lineup of achievements we&#8217;re proud of. All our inspiring stories and outstanding accomplishments are gathered here, ready to inform and motivate you. Click through and read now to feel the pride and spirit of being part of the Pribadi community!'
-			); ?></p>
-
-			<?php
-			/*
-			 * Cover and its download button live in the same grid cell on
-			 * purpose. They used to be two separate 3-column grids that only
-			 * lined up by position, which broke as soon as the grid went
-			 * full-bleed (the buttons stretched to ~580px each).
-			 */
-			?>
-			<div class="hp-magazine-grid">
-
-				<article class="hp-magazine-item hp-reveal">
-					<a class="hp-magazine-cover" href="https://heyzine.com/flip-book/679f8cf2ce.html" target="_blank" rel="noopener">
-						<img src="https://pribadidepok.sch.id/wp-content/uploads/2025/01/Inspire-Pribadi-Magazine.png" alt="Pribadi Magazine Inspire Edisi 1">
-					</a>
-					<a class="hp-btn hp-magazine-download" href="https://drive.google.com/file/d/1mqHglr9u5mccZ6WNLoSHHhTSiSn3_WuJ/view?usp=sharing" target="_blank" rel="noopener"><?php echo hp_t( 'Unduh Edisi 1', 'Download Issue 1' ); ?></a>
-				</article>
-
-				<article class="hp-magazine-item hp-reveal" style="animation-delay: 80ms;">
-					<a class="hp-magazine-cover" href="https://heyzine.com/flip-book/abfbd761f0.html" target="_blank" rel="noopener">
-						<img src="https://pribadidepok.sch.id/wp-content/uploads/2025/01/Inspire-Pribadi-Magazine-Edisi-2-20242025.png" alt="Pribadi Magazine Inspire Edisi 2">
-					</a>
-					<a class="hp-btn hp-magazine-download" href="https://drive.google.com/file/d/1SreW7ERCFK6r9OovgD90wmb2F20t54qq/view?usp=sharing" target="_blank" rel="noopener"><?php echo hp_t( 'Unduh Edisi 2', 'Download Issue 2' ); ?></a>
-				</article>
-
-				<article class="hp-magazine-item hp-reveal" style="animation-delay: 160ms;">
-					<a class="hp-magazine-cover" href="https://heyzine.com/flip-book/7346a6ab6a.html" target="_blank" rel="noopener">
-						<img src="https://pribadidepok.sch.id/wp-content/uploads/2025/08/Inspire-Pribadi-Magazine-Edisi-3-20242025.png" alt="Pribadi Magazine Inspire Edisi 3">
-					</a>
-					<a class="hp-btn hp-magazine-download" href="https://drive.google.com/file/d/1mzMAHMVhHEUqQSm6NkdAXzxEea3JSk0D/view?usp=drive_link" target="_blank" rel="noopener"><?php echo hp_t( 'Unduh Edisi 3', 'Download Issue 3' ); ?></a>
-				</article>
-
-			</div>
-		</div>
-	</section>
+	<!-- Pribadi Magazine (shared with the Prestasi and Digital Classroom pages) -->
+	<?php get_template_part( 'template-parts/magazine' ); ?>
 
 	</div><!-- .hp-below-hero -->
 

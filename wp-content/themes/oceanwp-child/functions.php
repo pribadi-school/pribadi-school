@@ -191,14 +191,29 @@ add_action( 'wp_enqueue_scripts', 'oceanwp_child_enqueue_assets', 20 );
  * to a new site, since the Customizer setting doesn't travel with it).
  */
 function oceanwp_child_hide_page_header_on_homepage( $display ) {
-	// The Prestasi template opens with its own H1 too, so the same applies.
-	if ( is_page_template( array( 'page-homepage-custom.php', 'page-prestasi.php' ) ) ) {
+	// The story-page templates open with their own H1 too, so the same applies.
+	if ( is_page_template( array_merge( array( 'page-homepage-custom.php' ), oceanwp_child_story_page_templates() ) ) ) {
 		return false;
 	}
 
 	return $display;
 }
 add_filter( 'ocean_display_page_header', 'oceanwp_child_hide_page_header_on_homepage' );
+
+/**
+ * Styles for the shared Pribadi Magazine section (template-parts/magazine.php),
+ * used by the homepage and the story pages (Prestasi, Digital Classroom).
+ *
+ * @param string $page_style Handle of the page stylesheet it should load after.
+ */
+function oceanwp_child_enqueue_magazine_style( $page_style ) {
+	wp_enqueue_style(
+		'oceanwp-child-magazine',
+		get_stylesheet_directory_uri() . '/assets/css/magazine.css',
+		array( $page_style ),
+		oceanwp_child_asset_version( '/assets/css/magazine.css' )
+	);
+}
 
 /**
  * Enqueue styles for the custom (non-Elementor) homepage template.
@@ -214,6 +229,8 @@ function oceanwp_child_enqueue_homepage_template_assets() {
 		array( 'oceanwp-child' ),
 		oceanwp_child_asset_version( '/assets/css/homepage.css' )
 	);
+
+	oceanwp_child_enqueue_magazine_style( 'oceanwp-child-homepage' );
 
 	wp_enqueue_script(
 		'oceanwp-child-hero-text-scroll',
@@ -277,11 +294,59 @@ function oceanwp_child_enqueue_homepage_template_assets() {
 add_action( 'wp_enqueue_scripts', 'oceanwp_child_enqueue_homepage_template_assets', 20 );
 
 /**
- * Enqueue styles and scripts for the Prestasi (achievements) page template.
- * Reuses the homepage's generic scroll-reveal.js; everything else is its own.
+ * Page templates built on the shared story-page layout
+ * (template-parts/story-page.php). Add a template here and it gets the
+ * layout's CSS/JS and the hidden OceanWP title bar.
+ *
+ * @return string[]
+ */
+function oceanwp_child_story_page_templates() {
+	return array( 'page-prestasi.php', 'page-digital-classroom.php' );
+}
+
+/**
+ * Load Google's <model-viewer> web component (v4.0.0, Apache-2.0), for
+ * stories that carry a 3D model (template-parts/story-page.php calls this
+ * while rendering one, so pages without a model never download it). Served
+ * from the theme (assets/js/vendor/) rather than a CDN, so ad blockers,
+ * network filters or an offline dev machine can't leave the viewer showing
+ * only its still poster. It's an ES module; the footer is early enough
+ * because enqueues made during the template are still printed by
+ * wp_footer().
+ */
+function oceanwp_child_enqueue_model_viewer() {
+	wp_enqueue_script(
+		'google-model-viewer',
+		get_stylesheet_directory_uri() . '/assets/js/vendor/model-viewer.min.js',
+		array(),
+		oceanwp_child_asset_version( '/assets/js/vendor/model-viewer.min.js' ),
+		true
+	);
+}
+
+/**
+ * <model-viewer> is an ES module, so its script tag needs type="module".
+ *
+ * @param string $tag    Script tag.
+ * @param string $handle Script handle.
+ * @return string
+ */
+function oceanwp_child_model_viewer_script_type( $tag, $handle ) {
+	if ( 'google-model-viewer' === $handle ) {
+		$tag = str_replace( '<script ', '<script type="module" ', $tag );
+	}
+
+	return $tag;
+}
+add_filter( 'script_loader_tag', 'oceanwp_child_model_viewer_script_type', 10, 2 );
+
+/**
+ * Enqueue styles and scripts for the story-page templates (Prestasi,
+ * Digital Classroom). Reuses the homepage's generic scroll-reveal.js;
+ * everything else is its own.
  */
 function oceanwp_child_enqueue_prestasi_template_assets() {
-	if ( ! is_page_template( 'page-prestasi.php' ) ) {
+	if ( ! is_page_template( oceanwp_child_story_page_templates() ) ) {
 		return;
 	}
 
@@ -291,6 +356,8 @@ function oceanwp_child_enqueue_prestasi_template_assets() {
 		array( 'oceanwp-child' ),
 		oceanwp_child_asset_version( '/assets/css/prestasi.css' )
 	);
+
+	oceanwp_child_enqueue_magazine_style( 'oceanwp-child-prestasi' );
 
 	wp_enqueue_script(
 		'oceanwp-child-scroll-reveal',

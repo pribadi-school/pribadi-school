@@ -1,0 +1,147 @@
+/**
+ * Pribadi Magazine INSPIRE section (template-parts/magazine.php).
+ *
+ * Shared by the homepage and the story pages (Prestasi, Digital
+ * Classroom), so every rule is scoped to
+ * both page roots with :is() - same ID-level specificity as the rest of
+ * each page's stylesheet, and still nothing leaks onto Elementor pages.
+ * Colour/elevation/motion tokens come from whichever page root it sits in
+ * (homepage.css and prestasi.css define the same set).
+ *
+ * The download button is self-contained here rather than leaning on the
+ * homepage's .hp-btn base, which isn't loaded on the story pages.
+ */
+
+/* Deliberately a different texture from the intro and achievement bands,
+   which both use a masked dot grid: this one is a fine crosshatch, which
+   suits a print/magazine section and keeps the three "quiet" light
+   sections from looking like the same background repeated three times.
+   Washes sit in opposite corners rather than centred, for the same reason. */
+:is(#homepage-custom, #story-page) .hp-magazine {
+	position: relative;
+	isolation: isolate;
+	text-align: center;
+	background:
+		radial-gradient(ellipse 760px 420px at 8% 6%, rgba(24, 168, 250, 0.12), transparent 62%),
+		radial-gradient(ellipse 760px 420px at 92% 94%, rgba(1, 166, 161, 0.10), transparent 62%),
+		var(--color-surface-muted);
+}
+
+:is(#homepage-custom, #story-page) .hp-magazine::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	pointer-events: none;
+	background-image:
+		repeating-linear-gradient(0deg, rgba(18, 35, 60, 0.05) 0 1px, transparent 1px 46px),
+		repeating-linear-gradient(90deg, rgba(18, 35, 60, 0.05) 0 1px, transparent 1px 46px);
+	-webkit-mask-image: radial-gradient(ellipse 820px 300px at 50% 16%, transparent 42%, #000 100%);
+	mask-image: radial-gradient(ellipse 820px 300px at 50% 16%, transparent 42%, #000 100%);
+	-webkit-mask-repeat: no-repeat;
+	mask-repeat: no-repeat;
+}
+
+:is(#homepage-custom, #story-page) .hp-magazine h2 {
+	font-family: 'Inter', sans-serif;
+	font-weight: 700;
+	font-size: 2.1em;
+	letter-spacing: -0.4px;
+	color: var(--color-foreground);
+	margin: 0 0 18px;
+}
+
+:is(#homepage-custom, #story-page) .hp-magazine > .hp-container > p {
+	font-family: 'Montserrat', sans-serif;
+	max-width: 760px;
+	margin: 0 auto 50px;
+	line-height: 1.75;
+	color: var(--color-muted-foreground);
+}
+
+/* Reverted from full-bleed: at 1920px an uncapped grid gave ~580px-wide
+   portrait covers, each running ~810px tall, and the whole section dwarfed
+   every other section on the page. Back to the shared .hp-container
+   (1200px / 90vw) that everything else on the homepage uses, so this
+   section reads as part of the same page rather than an oversized outlier. */
+:is(#homepage-custom, #story-page) .hp-magazine-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: clamp(24px, 2.2vw, 40px);
+	align-items: start;
+}
+
+/* Cover + its own download button, as one unit. */
+:is(#homepage-custom, #story-page) .hp-magazine-item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 24px;
+}
+
+:is(#homepage-custom, #story-page) .hp-magazine-cover {
+	display: block;
+	width: 100%;
+	border-radius: var(--radius-md);
+	overflow: hidden;
+	box-shadow: var(--elevation-2);
+	transition: transform var(--motion-base) ease, box-shadow var(--motion-base) ease;
+}
+
+:is(#homepage-custom, #story-page) .hp-magazine-cover:hover {
+	transform: translateY(-6px);
+	box-shadow: var(--elevation-4);
+}
+
+:is(#homepage-custom, #story-page) .hp-magazine-cover img {
+	width: 100%;
+	height: auto;
+	display: block;
+}
+
+/* Outline treatment keeps these visually subordinate to the primary CTAs
+   elsewhere on the page. Auto width, not 100% - stretched across a
+   full-bleed column a solid bar would read as a banner, not a button.
+   Button metrics repeat .hp-btn's (homepage.css) so it looks identical on
+   both pages. */
+:is(#homepage-custom, #story-page) .hp-magazine-download {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	align-self: center;
+	padding: 13px 26px;
+	border: 2px solid var(--color-primary);
+	border-radius: 30px;
+	background: var(--color-surface);
+	color: var(--color-primary);
+	font-family: 'Inter', sans-serif;
+	font-size: 0.86em;
+	font-weight: 600;
+	text-decoration: none;
+	box-shadow: none;
+	transition: background-color var(--motion-base) ease,
+		color var(--motion-base) ease,
+		transform var(--motion-base) ease,
+		box-shadow var(--motion-base) ease;
+}
+
+:is(#homepage-custom, #story-page) .hp-magazine-download:hover,
+:is(#homepage-custom, #story-page) .hp-magazine-download:focus {
+	background: var(--color-primary);
+	color: var(--color-on-primary);
+	transform: translateY(-2px);
+	box-shadow: 0 8px 18px rgba(24, 168, 250, 0.28);
+}
+
+@media only screen and (max-width: 767px) {
+	:is(#homepage-custom, #story-page) .hp-magazine-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	:is(#homepage-custom, #story-page) .hp-magazine-cover,
+	:is(#homepage-custom, #story-page) .hp-magazine-download {
+		transition: none;
+	}
+}

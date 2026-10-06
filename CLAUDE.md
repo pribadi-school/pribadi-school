@@ -59,7 +59,20 @@ Everything custom lives in `wp-content/themes/oceanwp-child/`:
 ```
 page-homepage-custom.php          homepage template ("Homepage (Custom)")
 template-parts/achievements-showcase.php
+template-parts/magazine.php       Pribadi Magazine section, shared by homepage + story pages
+template-parts/story-page.php     shared "story page" layout (intro, filtered one-at-a-time
+                                  story carousel with arrows, magazine)
+page-prestasi.php                 "Prestasi (Custom)" story page, data in
+                                  template-parts/data/achievement-stories.php
+page-digital-classroom.php        "Digital Classroom (Custom)" story page, data in
+                                  template-parts/data/digital-classroom.php
+assets/models/                    3D models (.glb) shown with Google's <model-viewer> on story
+                                  pages - a story with 'model' in its data file gets one
+                                  (see oceanwp_child_enqueue_model_viewer() in functions.php)
 assets/css/homepage.css           homepage styles, only enqueued for that template
+assets/css/prestasi.css           story-page styles (both story pages; see
+                                  oceanwp_child_story_page_templates())
+assets/css/magazine.css           shared magazine section, enqueued for all of the above
 assets/css/transparent-header.css front-page-only floating header behaviour
 assets/js/                        scroll-reveal, transparent-header, hero-text-scroll,
                                   achievements-counter, achievements-tile-tap, nav-dropdown-tuning
