@@ -68,7 +68,7 @@ return array(
 			// 'photo' is the still shown while the model loads, and the fallback.
 			'photo'        => 'digital-classroom/chromebook-poster.webp',
 			'model'        => 'models/chromebook.glb',
-			'model_orbit'  => '-20deg 75deg auto',
+			'model_orbit'  => '-20deg 75deg 100%',
 			'model_pause_at' => 2.0, // the lid is fully open here; the animation would close it again
 			'model_alt'    => 'Model 3D Chromebook yang dapat diputar',
 			'model_alt_en' => 'Rotatable 3D model of a Chromebook',

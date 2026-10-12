@@ -45,6 +45,7 @@
 return array(
 	'page'       => array(
 		'icon'               => 'fas fa-medal',
+		'one_at_a_time'      => false,
 		'title'              => 'Kisah <span class="pr-heading-accent">Prestasi</span> Siswa Pribadi',
 		'title_en'           => 'Stories of Pribadi <span class="pr-heading-accent">Achievers</span>',
 		'lede'               => 'Di Sekolah Pribadi Depok, setiap pencapaian siswa layak dirayakan - besar maupun kecil, di olimpiade sains, teknologi, olahraga, seni, hingga kegiatan sosial. Lewat halaman ini kami merangkum perjalanan mereka: tantangan yang dihadapi, tonggak yang diraih, dan pelajaran di baliknya. Bukan hanya hasilnya yang kami hargai, tetapi juga usaha dan pertumbuhan di balik setiap keberhasilan.',

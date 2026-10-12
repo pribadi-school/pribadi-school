@@ -527,6 +527,30 @@
 /* ---------------------------------------------------------------
    Responsive
    --------------------------------------------------------------- */
+/* List mode (one_at_a_time => false, Prestasi): all of a category's stories
+   at once, two cards per row, each with its photo above the write-up. */
+@media (min-width: 768px) {
+	#story-page .pr-carousel[data-pr-list] .pr-story-list {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		align-items: stretch;
+	}
+
+	#story-page .pr-carousel[data-pr-list] .pr-story {
+		grid-template-columns: minmax(0, 1fr);
+		grid-template-rows: auto 1fr;
+		min-height: 0;
+	}
+
+	#story-page .pr-carousel[data-pr-list] .pr-story-media {
+		aspect-ratio: 4 / 3;
+		min-height: 0;
+	}
+
+	#story-page .pr-carousel[data-pr-list] .pr-story-body {
+		padding: 28px 28px 32px;
+	}
+}
+
 @media (max-width: 1024px) {
 	#story-page .pr-intro-title {
 		font-size: 2.4em;

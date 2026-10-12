@@ -94,7 +94,7 @@ get_header();
 							'Suatu sistem pembelajaran berbasis penggunaan media digital. Para siswa dibekali dengan sebuah perangkat <em>Chromebook</em> yang menggantikan fungsi buku-buku pelajarannya.',
 							'A learning system built around digital media, where every student is equipped with a <em>Chromebook</em> that takes the place of traditional textbooks.'
 						); ?></p>
-						<a class="hp-btn" href="https://pribadidepok.sch.id/digital-classroom/"><?php echo hp_t( 'Lebih lanjut', 'Learn more' ); ?> &raquo;</a>
+						<a class="hp-btn" href="<?php echo esc_url( home_url( '/digital-classroom/' ) ); ?>"><?php echo hp_t( 'Lebih lanjut', 'Learn more' ); ?> &raquo;</a>
 					</div>
 				</article>
 

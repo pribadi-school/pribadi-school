@@ -24,6 +24,9 @@
  *               pages whose pictures are small product shots),
  *               text_align (optional; 'justify' justifies the story
  *               paragraphs, otherwise they stay left-aligned),
+ *               one_at_a_time (optional, default true; false lists every
+ *               story of the active category stacked, two columns each,
+ *               with no arrow buttons),
  *               show_tags (optional, default true; false hides the
  *               category label above each story's title),
  *               stories_heading/_en (HTML allowed), filter_label/_en
@@ -140,13 +143,16 @@ if ( ! empty( $sp_page['compact'] ) ) {
 			 * JS the arrows stay hidden and every story simply stacks.
 			 */
 			?>
-			<div class="pr-carousel" data-pr-carousel>
+			<?php $sp_stepped = ! isset( $sp_page['one_at_a_time'] ) || $sp_page['one_at_a_time']; ?>
+			<div class="pr-carousel" data-pr-carousel<?php echo $sp_stepped ? '' : ' data-pr-list'; ?>>
+			<?php if ( $sp_stepped ) : ?>
 			<button type="button" class="pr-nav pr-nav--prev" data-pr-nav="-1" aria-label="<?php echo esc_attr( hp_t( 'Cerita sebelumnya', 'Previous story' ) ); ?>" hidden>
 				<i class="fas fa-arrow-left" aria-hidden="true"></i>
 			</button>
 			<button type="button" class="pr-nav pr-nav--next" data-pr-nav="1" aria-label="<?php echo esc_attr( hp_t( 'Cerita berikutnya', 'Next story' ) ); ?>" hidden>
 				<i class="fas fa-arrow-right" aria-hidden="true"></i>
 			</button>
+			<?php endif; ?>
 
 			<div class="pr-story-list">
 				<?php foreach ( $sp_stories as $sp_index => $sp_story ) : ?>

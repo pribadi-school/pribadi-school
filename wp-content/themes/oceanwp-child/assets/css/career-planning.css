@@ -1,0 +1,186 @@
+/**
+ * Career Planning page (page-career-planning.php): the hero's two columns -
+ * copy and pill buttons on the left, photo collage on the right. Loaded on
+ * top of prestasi.css, which supplies the #story-page tokens, container and
+ * .pr-heading-accent. Colours are those tokens only.
+ */
+
+#story-page .cp-hero {
+	padding: 72px 0 96px;
+}
+
+#story-page .cp-hero-grid {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+	gap: 56px;
+	align-items: stretch;
+}
+
+#story-page .cp-hero-copy {
+	display: flex;
+	flex-direction: column;
+	min-height: 520px;
+}
+
+#story-page .cp-title {
+	margin: 0 0 24px;
+	font-family: 'Inter', sans-serif;
+	font-size: 2.9em;
+	font-weight: 700;
+	line-height: 1.15;
+	letter-spacing: -0.8px;
+	color: var(--color-foreground);
+}
+
+#story-page .cp-lede,
+#story-page .cp-text {
+	margin: 0 0 16px;
+	font-size: 1.02em;
+	line-height: 1.75;
+	color: var(--color-muted-foreground);
+}
+
+#story-page .cp-text {
+	font-weight: 500;
+	color: var(--color-foreground);
+}
+
+#story-page .cp-text[hidden],
+#story-page .cp-pills[hidden],
+#story-page .cp-photos[hidden] {
+	display: none;
+}
+
+/* Pills sit at the bottom of the column, level with the collage's bottom edge. */
+#story-page .cp-pills {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-top: auto;
+	padding-top: 32px;
+}
+
+#story-page .cp-pill {
+	padding: 12px 22px;
+	border: 1.5px solid var(--color-foreground);
+	border-radius: var(--radius-full);
+	background: transparent;
+	color: var(--color-foreground);
+	font-family: 'Inter', sans-serif;
+	font-size: 0.92em;
+	font-weight: 600;
+	line-height: 1.2;
+	cursor: pointer;
+	transition: background-color var(--motion-base) ease, color var(--motion-base) ease, border-color var(--motion-base) ease;
+}
+
+#story-page .cp-pill:hover {
+	border-color: var(--color-primary);
+	color: var(--color-primary-dark);
+}
+
+#story-page .cp-pill.is-active {
+	border-color: var(--color-primary);
+	background: var(--color-primary);
+	color: var(--color-on-primary);
+}
+
+#story-page .cp-pill:focus-visible {
+	outline: 2px solid var(--color-primary);
+	outline-offset: 3px;
+}
+
+/* Collage: one tall photo on the left, three stacked on the right. */
+#story-page .cp-collage {
+	min-width: 0;
+}
+
+#story-page .cp-photos {
+	display: grid;
+	grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+	grid-template-rows: repeat(3, minmax(0, 1fr));
+	gap: 14px;
+	height: 100%;
+	min-height: 520px;
+	animation: cp-fade var(--motion-reveal) var(--ease-fade);
+}
+
+#story-page .cp-photo {
+	margin: 0;
+	border-radius: var(--radius-lg);
+	overflow: hidden;
+	background: var(--color-surface-muted);
+	box-shadow: var(--elevation-2);
+}
+
+/* Brand-colour wash over every photo, 30% at the top deepening to 50% at the
+   bottom - the same translucent tint rushd.sch.id puts over its portraits
+   (there orange 0.3 to 0.5), here running from the site's blue (#0172bb) at
+   the top to its teal (#01a6a1) at the bottom. */
+#story-page .cp-photo {
+	position: relative;
+}
+
+#story-page .cp-photo::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(
+		color-mix(in srgb, var(--color-gradient-start) 30%, transparent) 0%,
+		color-mix(in srgb, var(--color-gradient-end) 50%, transparent) 100%
+	);
+	pointer-events: none;
+	transition: opacity var(--motion-reveal) var(--ease-fade);
+}
+
+/* Hovering a photo lets the wash fade away to show it in full colour. */
+#story-page .cp-photo:hover::after {
+	opacity: 0;
+}
+
+#story-page .cp-photo--0 {
+	grid-row: 1 / span 3;
+}
+
+#story-page .cp-photo img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+@keyframes cp-fade {
+	from { opacity: 0; }
+	to { opacity: 1; }
+}
+
+@media (max-width: 900px) {
+	#story-page .cp-hero {
+		padding: 48px 0 72px;
+	}
+
+	#story-page .cp-hero-grid {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 36px;
+	}
+
+	#story-page .cp-hero-copy {
+		min-height: 0;
+	}
+
+	#story-page .cp-title {
+		font-size: 2.2em;
+	}
+
+	#story-page .cp-photos {
+		min-height: 0;
+		height: auto;
+		aspect-ratio: 4 / 3;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	#story-page .cp-photos {
+		animation: none;
+	}
+}

@@ -38,6 +38,8 @@
 
 	var defaultKey = buttons[ 0 ].getAttribute( 'data-pr-filter' );
 	var stories = Array.prototype.slice.call( carousel.querySelectorAll( '[data-pr-categories]' ) );
+	// List mode (data-pr-list): every story of the active category is shown, no arrows.
+	var listMode = carousel.hasAttribute( 'data-pr-list' );
 	var prev = carousel.querySelector( '[data-pr-nav="-1"]' );
 	var next = carousel.querySelector( '[data-pr-nav="1"]' );
 	var status = document.querySelector( '[data-pr-status]' );
@@ -66,7 +68,7 @@
 		} );
 
 		stories.forEach( function ( story ) {
-			var show = story === active;
+			var show = listMode ? -1 !== matching.indexOf( story ) : story === active;
 			var wasHidden = story.hidden;
 
 			story.hidden = ! show;
@@ -93,11 +95,15 @@
 			} );
 		}
 
-		prev.hidden = currentIndex <= 0;
-		next.hidden = currentIndex >= matching.length - 1;
-		carousel.classList.toggle( 'has-nav', matching.length > 1 );
+		if ( ! listMode ) {
+			prev.hidden = currentIndex <= 0;
+			next.hidden = currentIndex >= matching.length - 1;
+			carousel.classList.toggle( 'has-nav', matching.length > 1 );
+		}
 
-		if ( announce && status && active ) {
+		if ( announce && status && listMode ) {
+			status.textContent = matching.length + ( isId ? ' cerita' : ' stories' );
+		} else if ( announce && status && active ) {
 			var title = active.querySelector( '.pr-story-title' );
 
 			status.textContent = ( currentIndex + 1 ) + ' / ' + matching.length + ( isId ? ' - ' : ': ' ) + ( title ? title.textContent : '' );
@@ -130,7 +136,7 @@
 		}
 	} );
 
-	[ prev, next ].forEach( function ( arrow ) {
+	[ prev, next ].filter( Boolean ).forEach( function ( arrow ) {
 		arrow.addEventListener( 'click', function () {
 			var count = storiesFor( currentKey ).length;
 
@@ -150,25 +156,24 @@
 } )();
 
 /*
- * 3D models with a built-in animation worth showing once (the Chromebook's
- * lid opening): a <model-viewer data-pause-at="2"> plays its animation the
- * first time it scrolls into view and holds it at that many seconds, so the
- * laptop ends up open instead of looping open-and-shut. Under
- * prefers-reduced-motion it starts at that pose with no animation.
+ * 3D models whose built-in animation is only wanted as a pose (the
+ * Chromebook's lid opening): a <model-viewer data-pause-at="2"> is held at
+ * that many seconds from the moment it loads, so the laptop is open from the
+ * start instead of opening and closing.
  * Separate from the filter above so it still runs on a page without one.
  */
 ( function () {
 	'use strict';
 
-	var reduceMotion = window.matchMedia && window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches;
 
 	Array.prototype.forEach.call( document.querySelectorAll( 'model-viewer[data-pause-at]' ), function ( viewer ) {
 		var pauseAt = parseFloat( viewer.getAttribute( 'data-pause-at' ) );
-		var played = false;
 
 		function hold() {
-			viewer.pause();
+			// currentTime only sticks once the animation has been started.
+			viewer.play();
 			viewer.currentTime = pauseAt;
+			viewer.pause();
 
 			// The viewer framed the shot for the model as first loaded (lid
 			// shut), so an opened lid would poke out of the top of the picture.
@@ -176,28 +181,42 @@
 			if ( viewer.updateFraming ) {
 				viewer.updateFraming();
 			}
-		}
 
-		if ( reduceMotion ) {
-			viewer.addEventListener( 'load', hold );
-			return;
-		}
+			// Then aim the camera at the middle of the opened model, so it sits
+			// centred in the frame instead of high with empty space under it.
+			if ( viewer.getBoundingBoxCenter ) {
+				var centre = viewer.getBoundingBoxCenter();
 
-		viewer.addEventListener( 'model-visibility', function ( event ) {
-			if ( played || ! event.detail.visible ) {
-				return;
-			}
+				var size = viewer.getDimensions ? viewer.getDimensions() : { y: 0 };
 
-			played = true;
-			viewer.play();
+				// Aiming a little above the middle drops the model in the frame;
+				// the camera looks down on it, so dead-centre still reads as high.
+				viewer.cameraTarget = centre.x + 'm ' + ( centre.y + size.y * 0.12 ) + 'm ' + centre.z + 'm';
 
-			( function watch() {
-				if ( viewer.currentTime >= pauseAt ) {
-					hold();
-				} else {
-					window.requestAnimationFrame( watch );
+				if ( viewer.jumpCameraToGoal ) {
+					viewer.jumpCameraToGoal();
 				}
-			}() );
+			}
+		}
+
+		// Open from the first frame: no opening animation, the model simply
+		// appears in its final pose as soon as it has loaded.
+		// The viewer resets the model's time once it finishes setting up right
+		// after 'load', so the pose is applied again a moment later.
+		function holdSoon() {
+			hold();
+			window.setTimeout( hold, 150 );
+			window.setTimeout( hold, 600 );
+		}
+
+		viewer.addEventListener( 'load', holdSoon );
+
+		// 'load' may already have fired by the time this runs; `loaded` only
+		// exists once the element has been upgraded, hence whenDefined.
+		window.customElements.whenDefined( 'model-viewer' ).then( function () {
+			if ( viewer.loaded ) {
+				holdSoon();
+			}
 		} );
 	} );
 } )();

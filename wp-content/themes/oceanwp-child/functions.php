@@ -301,7 +301,7 @@ add_action( 'wp_enqueue_scripts', 'oceanwp_child_enqueue_homepage_template_asset
  * @return string[]
  */
 function oceanwp_child_story_page_templates() {
-	return array( 'page-prestasi.php', 'page-digital-classroom.php' );
+	return array( 'page-prestasi.php', 'page-digital-classroom.php', 'page-career-planning.php', 'page-character-building.php' );
 }
 
 /**
@@ -377,6 +377,49 @@ function oceanwp_child_enqueue_prestasi_template_assets() {
 	);
 }
 add_action( 'wp_enqueue_scripts', 'oceanwp_child_enqueue_prestasi_template_assets', 20 );
+
+/**
+ * Career Planning page: its own hero (pills + photo collage) on top of the
+ * story-page styles enqueued above.
+ */
+function oceanwp_child_enqueue_career_planning_assets() {
+	if ( ! is_page_template( 'page-career-planning.php' ) ) {
+		return;
+	}
+
+	wp_enqueue_style(
+		'oceanwp-child-career-planning',
+		get_stylesheet_directory_uri() . '/assets/css/career-planning.css',
+		array( 'oceanwp-child-prestasi' ),
+		oceanwp_child_asset_version( '/assets/css/career-planning.css' )
+	);
+
+	wp_enqueue_script(
+		'oceanwp-child-career-planning',
+		get_stylesheet_directory_uri() . '/assets/js/career-planning.js',
+		array(),
+		oceanwp_child_asset_version( '/assets/js/career-planning.js' ),
+		true
+	);
+}
+add_action( 'wp_enqueue_scripts', 'oceanwp_child_enqueue_career_planning_assets', 21 );
+
+/**
+ * Character Building page: its card grid on top of the story-page styles.
+ */
+function oceanwp_child_enqueue_character_building_assets() {
+	if ( ! is_page_template( 'page-character-building.php' ) ) {
+		return;
+	}
+
+	wp_enqueue_style(
+		'oceanwp-child-character-building',
+		get_stylesheet_directory_uri() . '/assets/css/character-building.css',
+		array( 'oceanwp-child-prestasi' ),
+		oceanwp_child_asset_version( '/assets/css/character-building.css' )
+	);
+}
+add_action( 'wp_enqueue_scripts', 'oceanwp_child_enqueue_character_building_assets', 21 );
 
 /**
  * Body class the stylesheet keys off, so the effect can never leak onto other pages.
