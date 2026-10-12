@@ -1,0 +1,460 @@
+/**
+ * About Us page (page-about-us.php). Loaded on top of prestasi.css, which
+ * supplies the #story-page tokens, .pr-container and .pr-heading-accent.
+ * Colours are those tokens only. The Vision / Mission band follows the layout
+ * of rushd.sch.id/what-is-rushd: tinted band, vision and photo left, mission
+ * checklist with round tick icons right.
+ */
+
+/* ---- Shared bits ---- */
+#story-page .au-btn {
+	display: inline-block;
+	padding: 14px 28px;
+	border-radius: var(--radius-full);
+	background: var(--color-primary);
+	color: var(--color-on-primary);
+	font-weight: 600;
+	text-decoration: none;
+	box-shadow: var(--elevation-2);
+	transition: background-color var(--motion-base) ease, transform var(--motion-base) ease;
+}
+
+#story-page .au-btn:hover {
+	background: var(--color-primary-dark);
+	color: var(--color-on-primary);
+	transform: translateY(-2px);
+}
+
+#story-page .au-btn--light {
+	background: var(--color-surface);
+	color: var(--color-gradient-start);
+}
+
+#story-page .au-btn--light:hover {
+	background: var(--color-surface);
+	color: var(--color-primary-dark);
+}
+
+#story-page .au-section {
+	padding: 72px 0;
+}
+
+#story-page .au-section--tint {
+	background: color-mix(in srgb, var(--color-primary) 8%, var(--color-surface-page));
+}
+
+#story-page .au-head {
+	max-width: 700px;
+	margin: 0 auto 40px;
+	text-align: center;
+}
+
+#story-page .au-head h2 {
+	margin: 0 0 12px;
+	font-family: 'Inter', sans-serif;
+	font-size: 2.1em;
+	font-weight: 700;
+	letter-spacing: -0.4px;
+	color: var(--color-foreground);
+}
+
+#story-page .au-head p {
+	margin: 0;
+	line-height: 1.7;
+}
+
+/* ---- Hero ---- */
+#story-page .au-hero {
+	padding: 72px 0 56px;
+}
+
+#story-page .au-hero-grid {
+	display: grid;
+	grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+	gap: 48px;
+	align-items: center;
+}
+
+#story-page .au-eyebrow {
+	margin: 0 0 14px;
+	font-size: 0.85em;
+	font-weight: 700;
+	letter-spacing: 2px;
+	color: var(--color-primary-dark);
+}
+
+#story-page .au-title {
+	margin: 0 0 20px;
+	font-family: 'Inter', sans-serif;
+	font-size: 3em;
+	font-weight: 700;
+	line-height: 1.12;
+	letter-spacing: -0.8px;
+	color: var(--color-foreground);
+}
+
+#story-page .au-lede {
+	margin: 0 0 28px;
+	font-size: 1.05em;
+	line-height: 1.75;
+}
+
+#story-page .au-hero-art {
+	margin: 0;
+	padding: 32px 32px 0;
+	border-radius: var(--radius-lg);
+	background: linear-gradient(135deg, var(--color-gradient-start), var(--color-gradient-end));
+	box-shadow: var(--elevation-3);
+	overflow: hidden;
+}
+
+#story-page .au-hero-art img {
+	display: block;
+	width: 100%;
+	max-height: 420px;
+	object-fit: contain;
+	object-position: bottom;
+}
+
+/* ---- Vision & Mission ---- */
+#story-page .au-vm {
+	padding: 80px 0;
+	background: color-mix(in srgb, var(--color-primary) 14%, var(--color-surface-page));
+}
+
+#story-page .au-vm-grid {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	gap: 64px;
+	align-items: start;
+}
+
+#story-page .au-vm-title {
+	margin: 0 0 20px;
+	font-family: 'Inter', sans-serif;
+	font-size: 2.6em;
+	font-weight: 700;
+	line-height: 1.1;
+	letter-spacing: -0.8px;
+	color: var(--color-foreground);
+}
+
+#story-page .au-vision-text {
+	margin: 0 0 28px;
+	font-size: 1.45em;
+	line-height: 1.5;
+	color: var(--color-foreground);
+}
+
+#story-page .au-vision-photo {
+	margin: 0;
+	border-radius: var(--radius-lg);
+	overflow: hidden;
+	aspect-ratio: 4 / 3;
+	box-shadow: var(--elevation-3);
+}
+
+#story-page .au-vision-photo img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+#story-page .au-checklist {
+	display: grid;
+	gap: 22px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+#story-page .au-checklist li {
+	display: flex;
+	align-items: flex-start;
+	gap: 16px;
+	font-size: 1.12em;
+	line-height: 1.55;
+	color: var(--color-foreground);
+}
+
+#story-page .au-check {
+	display: grid;
+	flex: 0 0 auto;
+	place-items: center;
+	width: 28px;
+	height: 28px;
+	margin-top: 2px;
+	border-radius: var(--radius-full);
+	background: var(--color-primary);
+	color: var(--color-on-primary);
+	font-size: 0.7em;
+}
+
+/* ---- Testimonial-style cards ---- */
+#story-page .au-principles {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 24px;
+}
+
+#story-page .au-testimonial {
+	display: flex;
+	flex-direction: column;
+	margin: 0;
+	padding: 36px;
+	border-radius: var(--radius-lg);
+	background: linear-gradient(160deg, color-mix(in srgb, var(--color-primary) 12%, var(--color-surface)), var(--color-surface) 70%);
+	box-shadow: var(--elevation-2);
+}
+
+#story-page .au-quote-mark {
+	margin-bottom: 18px;
+	font-size: 2em;
+	color: var(--color-primary);
+}
+
+#story-page .au-testimonial blockquote {
+	flex: 1 1 auto;
+	margin: 0 0 28px;
+	padding: 0;
+	border: 0;
+	font-size: 1.15em;
+	line-height: 1.7;
+	color: var(--color-foreground);
+}
+
+/* Large photo down the card's left, quote mark / quote / label stacked on the right. */
+#story-page .au-testimonial {
+	display: grid;
+	grid-template-columns: 200px minmax(0, 1fr);
+	grid-template-rows: auto 1fr auto;
+	column-gap: 28px;
+	padding: 28px;
+}
+
+#story-page .au-testimonial figcaption {
+	display: contents;
+}
+
+#story-page .au-testimonial-photo {
+	grid-column: 1;
+	grid-row: 1 / -1;
+	width: 100%;
+	height: 100%;
+	min-height: 240px;
+	border-radius: var(--radius-md);
+	box-shadow: var(--elevation-2);
+	object-fit: cover;
+	object-position: top;
+}
+
+#story-page .au-quote-mark {
+	grid-column: 2;
+	grid-row: 1;
+}
+
+#story-page .au-testimonial blockquote {
+	grid-column: 2;
+	grid-row: 2;
+}
+
+#story-page .au-testimonial-who {
+	grid-column: 2;
+	grid-row: 3;
+	font-weight: 700;
+	color: var(--color-primary-dark);
+}
+
+/* ---- Curriculum ---- */
+#story-page .au-curricula {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 24px;
+}
+
+#story-page .au-curriculum {
+	padding: 32px;
+	border-radius: var(--radius-lg);
+	background: var(--color-surface);
+	box-shadow: var(--elevation-2);
+}
+
+#story-page .au-curriculum-logo {
+	display: block;
+	height: 56px;
+	width: auto;
+	max-width: 100%;
+	margin-bottom: 20px;
+	object-fit: contain;
+	object-position: left;
+}
+
+#story-page .au-curriculum h3 {
+	margin: 0 0 12px;
+	font-family: 'Inter', sans-serif;
+	font-size: 1.4em;
+	font-weight: 700;
+	color: var(--color-foreground);
+}
+
+#story-page .au-curriculum p {
+	margin: 0 0 12px;
+	line-height: 1.7;
+}
+
+#story-page .au-curriculum .au-levels {
+	margin: 18px 0 0;
+	font-weight: 600;
+	color: var(--color-primary-dark);
+}
+
+/* ---- Learning method ---- */
+#story-page .au-feature {
+	display: grid;
+	grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+	gap: 48px;
+	align-items: center;
+	padding: 40px;
+	border-radius: var(--radius-lg);
+	background: linear-gradient(160deg, color-mix(in srgb, var(--color-primary) 12%, var(--color-surface)), var(--color-surface) 70%);
+	box-shadow: var(--elevation-2);
+}
+
+#story-page .au-feature h3 {
+	margin: 0 0 14px;
+	font-family: 'Inter', sans-serif;
+	font-size: 1.6em;
+	font-weight: 700;
+	color: var(--color-foreground);
+}
+
+#story-page .au-feature p {
+	margin: 0 0 14px;
+	line-height: 1.75;
+}
+
+#story-page .au-feature .au-btn {
+	margin-top: 8px;
+}
+
+#story-page .au-feature-photo {
+	margin: 0;
+	border-radius: var(--radius-md);
+	overflow: hidden;
+	aspect-ratio: 4 / 3;
+}
+
+#story-page .au-feature-photo img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+/* ---- Career planning ---- */
+#story-page .au-career {
+	display: grid;
+	grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+	gap: 32px;
+	align-items: end;
+	padding: 48px 48px 0;
+	border-radius: var(--radius-lg);
+	background: linear-gradient(115deg, var(--color-gradient-start), var(--color-gradient-end));
+	color: var(--color-on-primary);
+	box-shadow: var(--elevation-3);
+	overflow: hidden;
+}
+
+#story-page .au-career-copy {
+	padding-bottom: 48px;
+}
+
+#story-page .au-career h2 {
+	margin: 0 0 16px;
+	font-family: 'Inter', sans-serif;
+	font-size: 2.2em;
+	font-weight: 700;
+	color: var(--color-on-primary);
+}
+
+#story-page .au-career p {
+	margin: 0 0 24px;
+	line-height: 1.75;
+	color: var(--color-on-primary);
+}
+
+#story-page .au-career-art {
+	display: block;
+	width: 100%;
+	max-height: 340px;
+	object-fit: contain;
+	object-position: bottom;
+}
+
+@media (max-width: 900px) {
+	#story-page .au-hero {
+		padding: 48px 0 32px;
+	}
+
+	#story-page .au-hero-grid,
+	#story-page .au-vm-grid,
+	#story-page .au-principles,
+	#story-page .au-curricula,
+	#story-page .au-feature,
+	#story-page .au-career {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	#story-page .au-vm-grid {
+		gap: 40px;
+	}
+
+	#story-page .au-vm,
+	#story-page .au-section {
+		padding: 56px 0;
+	}
+
+	#story-page .au-title {
+		font-size: 2.2em;
+	}
+
+	#story-page .au-vm-title {
+		font-size: 2em;
+	}
+
+	#story-page .au-testimonial {
+		grid-template-columns: minmax(0, 1fr);
+		grid-template-rows: auto;
+		padding: 24px;
+	}
+
+	/* Single column: photo first, then quote mark, quote and label. */
+	#story-page .au-testimonial-photo,
+	#story-page .au-quote-mark,
+	#story-page .au-testimonial blockquote,
+	#story-page .au-testimonial-who {
+		grid-column: 1;
+		grid-row: auto;
+	}
+
+	#story-page .au-testimonial-photo {
+		order: -1;
+		min-height: 0;
+		aspect-ratio: 4 / 3;
+		margin-bottom: 20px;
+	}
+
+	#story-page .au-feature,
+	#story-page .au-career {
+		padding: 28px 24px 0;
+	}
+
+	#story-page .au-feature {
+		padding-bottom: 28px;
+	}
+
+	#story-page .au-career-copy {
+		padding-bottom: 8px;
+	}
+}

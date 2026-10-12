@@ -301,7 +301,7 @@ add_action( 'wp_enqueue_scripts', 'oceanwp_child_enqueue_homepage_template_asset
  * @return string[]
  */
 function oceanwp_child_story_page_templates() {
-	return array( 'page-prestasi.php', 'page-digital-classroom.php', 'page-career-planning.php', 'page-character-building.php' );
+	return array( 'page-prestasi.php', 'page-digital-classroom.php', 'page-career-planning.php', 'page-character-building.php', 'page-about-us.php' );
 }
 
 /**
@@ -420,6 +420,23 @@ function oceanwp_child_enqueue_character_building_assets() {
 	);
 }
 add_action( 'wp_enqueue_scripts', 'oceanwp_child_enqueue_character_building_assets', 21 );
+
+/**
+ * About Us page: its sections on top of the story-page styles.
+ */
+function oceanwp_child_enqueue_about_us_assets() {
+	if ( ! is_page_template( 'page-about-us.php' ) ) {
+		return;
+	}
+
+	wp_enqueue_style(
+		'oceanwp-child-about-us',
+		get_stylesheet_directory_uri() . '/assets/css/about-us.css',
+		array( 'oceanwp-child-prestasi' ),
+		oceanwp_child_asset_version( '/assets/css/about-us.css' )
+	);
+}
+add_action( 'wp_enqueue_scripts', 'oceanwp_child_enqueue_about_us_assets', 21 );
 
 /**
  * Body class the stylesheet keys off, so the effect can never leak onto other pages.
