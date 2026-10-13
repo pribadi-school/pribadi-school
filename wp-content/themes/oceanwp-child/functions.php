@@ -301,7 +301,7 @@ add_action( 'wp_enqueue_scripts', 'oceanwp_child_enqueue_homepage_template_asset
  * @return string[]
  */
 function oceanwp_child_story_page_templates() {
-	return array( 'page-prestasi.php', 'page-digital-classroom.php', 'page-career-planning.php', 'page-character-building.php', 'page-about-us.php' );
+	return array( 'page-prestasi.php', 'page-digital-classroom.php', 'page-career-planning.php', 'page-character-building.php', 'page-about-us.php', 'page-school.php', 'page-parents-club.php' );
 }
 
 /**
@@ -425,7 +425,7 @@ add_action( 'wp_enqueue_scripts', 'oceanwp_child_enqueue_character_building_asse
  * About Us page: its sections on top of the story-page styles.
  */
 function oceanwp_child_enqueue_about_us_assets() {
-	if ( ! is_page_template( 'page-about-us.php' ) ) {
+	if ( ! is_page_template( array( 'page-about-us.php', 'page-school.php', 'page-parents-club.php' ) ) ) {
 		return;
 	}
 

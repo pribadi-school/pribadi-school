@@ -458,3 +458,162 @@
 		padding-bottom: 8px;
 	}
 }
+
+/* ---- School pages (page-school.php) ---- */
+#story-page .au-hero-art--photo {
+	padding: 0;
+	background: none;
+}
+
+#story-page .au-hero-art--photo img {
+	max-height: none;
+	aspect-ratio: 4 / 5;
+	max-width: 440px;
+	margin: 0 auto;
+	object-fit: cover;
+	object-position: center 15%;
+	border-radius: var(--radius-lg);
+}
+
+/* Portrait poster (Parents Club): show it whole, not cropped to 4:5 */
+#story-page .au-hero-art--poster {
+	box-shadow: none;
+}
+
+#story-page .au-hero-art--poster img {
+	aspect-ratio: auto;
+	width: auto;
+	max-width: 100%;
+	max-height: 520px;
+	object-fit: contain;
+}
+
+/* Parents Club cards: photo bleeds to the card edges */
+#story-page .au-club {
+	overflow: hidden;
+}
+
+#story-page .au-club-photo {
+	margin: -32px -32px 24px;
+	aspect-ratio: 3 / 2;
+}
+
+#story-page .au-club-photo img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center 25%;
+}
+
+/* Plain ">" list (Parents Club activities) */
+#story-page .au-arrowlist {
+	display: grid;
+	gap: 10px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+#story-page .au-arrowlist li {
+	display: flex;
+	gap: 10px;
+	line-height: 1.55;
+	color: var(--color-foreground);
+}
+
+#story-page .au-arrowlist li::before {
+	content: '>';
+	flex: 0 0 auto;
+	font-weight: 700;
+	color: var(--color-primary-dark);
+}
+
+#story-page .au-curricula--3 {
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+#story-page .au-levels a {
+	color: inherit;
+	text-decoration: none;
+}
+
+#story-page .au-levels a:hover {
+	text-decoration: underline;
+}
+
+#story-page .au-tiles {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 20px;
+	margin-bottom: 40px;
+}
+
+#story-page .au-tile {
+	padding: 28px 20px;
+	border-radius: var(--radius-lg);
+	background: linear-gradient(135deg, var(--color-gradient-start), var(--color-gradient-end));
+	box-shadow: var(--elevation-2);
+	color: var(--color-on-primary);
+	font-family: 'Inter', sans-serif;
+	font-size: 1.15em;
+	font-weight: 700;
+	text-align: center;
+}
+
+#story-page .au-head--after {
+	margin: 0 auto;
+}
+
+#story-page .au-head--after p + p {
+	margin-top: 14px;
+}
+
+#story-page .au-bullets {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 8px 20px;
+	margin: 0 0 18px;
+	padding-left: 20px;
+}
+
+#story-page .au-feature--flip .au-feature-photo {
+	order: -1;
+}
+
+#story-page .au-feature-photo--contain {
+	aspect-ratio: auto;
+	background: color-mix(in srgb, var(--color-primary) 10%, var(--color-surface));
+}
+
+#story-page .au-feature-photo--contain img {
+	height: auto;
+	max-height: 420px;
+	object-fit: contain;
+}
+
+#story-page .au-career--text {
+	padding-bottom: 0;
+	text-align: center;
+	grid-template-columns: minmax(0, 1fr);
+}
+
+@media (max-width: 900px) {
+	#story-page .au-curricula--3,
+	#story-page .au-bullets {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	#story-page .au-tiles {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	#story-page .au-feature--flip .au-feature-photo {
+		order: 0;
+	}
+}
+/* Portrait photos: keep heads in frame when cropping to the landscape boxes. */
+#story-page .au-vision-photo img,
+#story-page .au-feature-photo img {
+	object-position: center 20%;
+}
