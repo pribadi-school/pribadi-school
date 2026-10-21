@@ -128,7 +128,12 @@ return array(
 			'Inilah saatnya siswa menemukan minat, hubungan pertemanan yang beragam, mempunyai pelajaran kesukaan serta berinteraksi lebih lanjut tentang masa depan.',
 			'This is the time for students to find their interests, build varied friendships, discover favourite subjects and start thinking about the future.',
 		),
-		'hero'    => array( '2023/02/Dinda.jpg', array( 'Siswa SMP Pribadi Depok', 'A Pribadi Junior High student' ) ),
+		// Several slides crossfade; paths starting with 'assets/' are theme files.
+		'hero'    => array(
+			array( 'assets/img/junior-high/student-maths.webp', array( 'Siswa SMP Pribadi Depok', 'A Pribadi Junior High student' ) ),
+			array( 'assets/img/junior-high/teacher-1.webp', array( 'Guru SMP Pribadi Depok', 'A Pribadi Junior High teacher' ) ),
+			array( 'assets/img/junior-high/teacher-2.webp', array( 'Guru SMP Pribadi Depok', 'A Pribadi Junior High teacher' ) ),
+		),
 		'vm'      => array(
 			'vision'  => array(
 				'Menjadi sekolah mandiri bagi terwujudnya generasi emas berakhlak mulia, cerdas, berwawasan global dan berbudaya.',

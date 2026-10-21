@@ -475,6 +475,34 @@
 	border-radius: var(--radius-lg);
 }
 
+/* Several hero photos (Junior High): stacked, crossfading 5s each */
+#story-page .au-hero-art--slides {
+	display: grid;
+}
+
+#story-page .au-hero-art--slides img {
+	grid-area: 1 / 1;
+	width: 100%;
+	opacity: 0;
+	animation: au-hero-fade calc(var(--au-slides) * 5s) infinite;
+}
+
+#story-page .au-hero-art--slides img:first-child {
+	opacity: 1;
+}
+
+@keyframes au-hero-fade {
+	0%, 100% { opacity: 0; }
+	5%, 30% { opacity: 1; }
+	35% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	#story-page .au-hero-art--slides img {
+		animation: none;
+	}
+}
+
 /* Portrait poster (Parents Club): show it whole, not cropped to 4:5 */
 #story-page .au-hero-art--poster {
 	box-shadow: none;

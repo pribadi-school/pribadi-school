@@ -41,8 +41,16 @@ get_header();
 					<p class="au-lede hp-reveal" style="animation-delay: 160ms;"><?php echo $sp_pair( $sp['lede'] ); ?></p>
 					<a class="au-btn hp-reveal" style="animation-delay: 240ms;" href="#<?php echo esc_attr( $sp_first ); ?>"><?php echo esc_html( hp_t( 'Jelajahi', 'Explore' ) ); ?></a>
 				</div>
-				<figure class="au-hero-art au-hero-art--photo hp-reveal hp-reveal--up">
-					<img src="<?php echo esc_url( $sp_up . $sp['hero'][0] ); ?>" alt="<?php echo esc_attr( $sp_pair( $sp['hero'][1] ) ); ?>" fetchpriority="high">
+				<?php
+				// 'hero' is one [src, alt] pair, or a list of them for a crossfading slideshow.
+				$sp_slides = is_array( $sp['hero'][0] ) ? $sp['hero'] : array( $sp['hero'] );
+				$sp_multi  = count( $sp_slides ) > 1;
+				?>
+				<figure class="au-hero-art au-hero-art--photo<?php echo $sp_multi ? ' au-hero-art--slides' : ''; ?> hp-reveal hp-reveal--up"<?php echo $sp_multi ? ' style="--au-slides: ' . count( $sp_slides ) . ';"' : ''; ?>>
+					<?php foreach ( $sp_slides as $sp_i => $sp_slide ) : ?>
+						<?php $sp_src = 0 === strpos( $sp_slide[0], 'assets/' ) ? get_stylesheet_directory_uri() . '/' . $sp_slide[0] : $sp_up . $sp_slide[0]; ?>
+						<img src="<?php echo esc_url( $sp_src ); ?>" alt="<?php echo esc_attr( $sp_pair( $sp_slide[1] ) ); ?>"<?php echo 0 === $sp_i ? ' fetchpriority="high"' : ' loading="lazy" style="animation-delay: ' . ( $sp_i * 5 ) . 's;"'; ?>>
+					<?php endforeach; ?>
 				</figure>
 			</div>
 		</div>
