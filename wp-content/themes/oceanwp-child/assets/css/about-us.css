@@ -475,6 +475,26 @@
 	border-radius: var(--radius-lg);
 }
 
+/* Hero as the scrolling photo strip (assets/css/photo-strip.css, the same one
+   as the homepage's achievements). Lives in the hero's right column, so the
+   tiles run a little larger than on the homepage - two to three are in view -
+   and the strip needs room above for the hover lift. min-width keeps the
+   max-content track from stretching the grid column. */
+#story-page .au-hero-strip {
+	min-width: 0;
+	padding-top: 24px;
+}
+
+#story-page .au-hero-strip .hp-achieve-tile {
+	flex-basis: 220px;
+}
+
+@media only screen and (max-width: 767px) {
+	#story-page .au-hero-strip .hp-achieve-tile {
+		flex-basis: 160px;
+	}
+}
+
 /* Several hero photos (Junior High): stacked, crossfading 5s each */
 #story-page .au-hero-art--slides {
 	display: grid;

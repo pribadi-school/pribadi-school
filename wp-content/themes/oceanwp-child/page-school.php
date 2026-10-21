@@ -41,17 +41,61 @@ get_header();
 					<p class="au-lede hp-reveal" style="animation-delay: 160ms;"><?php echo $sp_pair( $sp['lede'] ); ?></p>
 					<a class="au-btn hp-reveal" style="animation-delay: 240ms;" href="#<?php echo esc_attr( $sp_first ); ?>"><?php echo esc_html( hp_t( 'Jelajahi', 'Explore' ) ); ?></a>
 				</div>
-				<?php
-				// 'hero' is one [src, alt] pair, or a list of them for a crossfading slideshow.
-				$sp_slides = is_array( $sp['hero'][0] ) ? $sp['hero'] : array( $sp['hero'] );
-				$sp_multi  = count( $sp_slides ) > 1;
-				?>
-				<figure class="au-hero-art au-hero-art--photo<?php echo $sp_multi ? ' au-hero-art--slides' : ''; ?> hp-reveal hp-reveal--up"<?php echo $sp_multi ? ' style="--au-slides: ' . count( $sp_slides ) . ';"' : ''; ?>>
-					<?php foreach ( $sp_slides as $sp_i => $sp_slide ) : ?>
-						<?php $sp_src = 0 === strpos( $sp_slide[0], 'assets/' ) ? get_stylesheet_directory_uri() . '/' . $sp_slide[0] : $sp_up . $sp_slide[0]; ?>
-						<img src="<?php echo esc_url( $sp_src ); ?>" alt="<?php echo esc_attr( $sp_pair( $sp_slide[1] ) ); ?>"<?php echo 0 === $sp_i ? ' fetchpriority="high"' : ' loading="lazy" style="animation-delay: ' . ( $sp_i * 5 ) . 's;"'; ?>>
-					<?php endforeach; ?>
-				</figure>
+				<?php if ( ! empty( $sp['strip'] ) ) : ?>
+					<?php
+					/*
+					 * Hero picture as the scrolling photo strip - the same markup, styles and
+					 * scripts as the homepage's achievements (template-parts/achievements-
+					 * showcase.php, assets/css/photo-strip.css): the tile list is printed twice
+					 * so the CSS/JS loop can wrap at -50%, only the first pass is real, and each
+					 * tile lifts and reveals its caption on hover or tap. Seconds per pass scale
+					 * with the number of tiles so the speed matches the homepage's.
+					 */
+					$sp_strip_n = count( $sp['strip'] );
+					?>
+					<div class="au-hero-strip hp-achieve-strip hp-reveal hp-reveal--up" style="--hp-achieve-duration: <?php echo (int) ( $sp_strip_n * 6 ); ?>s;" role="group" aria-label="<?php echo esc_attr( $sp_pair( $sp['eyebrow'] ) ); ?>">
+						<div class="hp-achieve-track">
+							<?php for ( $sp_pass = 0; $sp_pass < 2; $sp_pass++ ) : ?>
+								<?php foreach ( $sp['strip'] as $sp_i => $sp_tile ) : ?>
+									<?php
+									$sp_real = 0 === $sp_pass;
+									$sp_src   = 0 === strpos( $sp_tile[0], 'assets/' ) ? get_stylesheet_directory_uri() . '/' . $sp_tile[0] : $sp_up . $sp_tile[0];
+									$sp_cap   = $sp_pair( $sp_tile[1] );
+									?>
+									<div class="hp-achieve-tile<?php echo $sp_real ? ' hp-reveal' : ''; ?>"<?php echo $sp_real ? ' style="animation-delay: ' . (int) ( ( $sp_i % 6 ) * 80 ) . 'ms;"' : ' aria-hidden="true"'; ?>>
+										<img
+											class="hp-achieve-tile-photo"
+											src="<?php echo esc_url( $sp_src ); ?>"
+											alt="<?php echo $sp_real ? esc_attr( $sp_cap ) : ''; ?>"
+											<?php echo ( $sp_real && 0 === $sp_i ) ? 'fetchpriority="high"' : 'loading="lazy"'; ?>
+											<?php if ( ! empty( $sp_tile[2] ) ) : ?>
+												style="object-position: <?php echo esc_attr( $sp_tile[2] ); ?>;"
+											<?php endif; ?>
+										>
+										<div class="hp-achieve-tile-reveal">
+											<span class="hp-achieve-tile-title"><?php echo esc_html( $sp_cap ); ?></span>
+											<?php if ( ! empty( $sp['strip_label'] ) ) : ?>
+												<span class="hp-achieve-tile-name"><?php echo esc_html( $sp_pair( $sp['strip_label'] ) ); ?></span>
+											<?php endif; ?>
+										</div>
+									</div>
+								<?php endforeach; ?>
+							<?php endfor; ?>
+						</div>
+					</div>
+				<?php else : ?>
+					<?php
+					// 'hero' is one [src, alt] pair, or a list of them for a crossfading slideshow.
+					$sp_slides = is_array( $sp['hero'][0] ) ? $sp['hero'] : array( $sp['hero'] );
+					$sp_multi  = count( $sp_slides ) > 1;
+					?>
+					<figure class="au-hero-art au-hero-art--photo<?php echo $sp_multi ? ' au-hero-art--slides' : ''; ?> hp-reveal hp-reveal--up"<?php echo $sp_multi ? ' style="--au-slides: ' . count( $sp_slides ) . ';"' : ''; ?>>
+						<?php foreach ( $sp_slides as $sp_i => $sp_slide ) : ?>
+							<?php $sp_src = 0 === strpos( $sp_slide[0], 'assets/' ) ? get_stylesheet_directory_uri() . '/' . $sp_slide[0] : $sp_up . $sp_slide[0]; ?>
+							<img src="<?php echo esc_url( $sp_src ); ?>" alt="<?php echo esc_attr( $sp_pair( $sp_slide[1] ) ); ?>"<?php echo 0 === $sp_i ? ' fetchpriority="high"' : ' loading="lazy" style="animation-delay: ' . ( $sp_i * 5 ) . 's;"'; ?>>
+						<?php endforeach; ?>
+					</figure>
+				<?php endif; ?>
 			</div>
 		</div>
 	</section>

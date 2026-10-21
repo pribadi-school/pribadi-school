@@ -73,6 +73,10 @@ assets/css/homepage.css           homepage styles, only enqueued for that templa
 assets/css/prestasi.css           story-page styles (both story pages; see
                                   oceanwp_child_story_page_templates())
 assets/css/magazine.css           shared magazine section, enqueued for all of the above
+assets/css/photo-strip.css        the scrolling photo strip (loops, drag, hover caption) shared by
+                                  the homepage achievements and the school pages' hero
+                                  (page-school.php 'strip' in template-parts/data/schools.php);
+                                  driven by assets/js/achievements-marquee.js + -tile-tap.js
 assets/css/transparent-header.css front-page-only floating header behaviour
 assets/js/                        scroll-reveal, transparent-header, hero-text-scroll,
                                   achievements-counter, achievements-tile-tap, nav-dropdown-tuning

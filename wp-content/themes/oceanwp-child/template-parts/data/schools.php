@@ -5,6 +5,12 @@
  * hand-written from the former Elementor pages. Image paths are relative to
  * https://pribadidepok.sch.id/wp-content/uploads/.
  *
+ * Hero picture: 'strip' is a list of [image, [caption id, caption en], focus?]
+ * shown as the scrolling photo strip (same tiles as the homepage's
+ * achievements; 'strip_label' is the gradient line under each caption on
+ * hover). Without 'strip' the page falls back to the single 'hero' photo or
+ * the crossfading slideshow.
+ *
  * Section types rendered by page-school.php:
  *   feature  heading, paras[], list[], photo, alt, button => [label, url]
  *   cards    heading, lede, cols (2|3), items[] => [title, text, button?]
@@ -29,6 +35,14 @@ return array(
 			'This is the time for students to find their interests, build varied friendships, discover favourite subjects and start thinking about the future.',
 		),
 		'hero'    => array( '2023/01/Portrait-Elementary-2-min.jpg', array( 'Siswa SD Pribadi Depok', 'Pribadi Elementary students' ) ),
+		// Hero strip (same scrolling tiles as the homepage's achievements).
+		'strip_label' => array( 'SD Pribadi Depok', 'Pribadi Elementary' ),
+		'strip'   => array(
+			array( '2023/01/Portrait-Elementary-2-min.jpg', array( 'Siswa SD Pribadi Depok', 'A Pribadi Elementary student' ), 'center 20%' ),
+			array( '2023/01/Portrait-Puncak-Pekan-Bahasa-1-min1.jpg', array( 'Puncak Pekan Bahasa', 'Language Week finale' ), 'center 20%' ),
+			array( '2023/01/Protrait-Mr-Tommy-2-min.jpg', array( 'Guru SD Pribadi Depok', 'A Pribadi Elementary teacher' ), 'center 20%' ),
+			array( '2023/02/Open-House-SD-TK-2023-1.jpg', array( 'Open House SD-TK 2023', 'SD-TK Open House 2023' ), 'center' ),
+		),
 		'vm'      => array(
 			'vision'  => array(
 				'Terwujudnya generasi yang berakhlak, berprestasi, bersaing, dan berwawasan global berlandaskan budaya Indonesia.',
@@ -134,6 +148,14 @@ return array(
 			array( 'assets/img/junior-high/teacher-1.webp', array( 'Guru SMP Pribadi Depok', 'A Pribadi Junior High teacher' ) ),
 			array( 'assets/img/junior-high/teacher-2.webp', array( 'Guru SMP Pribadi Depok', 'A Pribadi Junior High teacher' ) ),
 		),
+		// Hero strip: the three photos above plus the Reading Camp one.
+		'strip_label' => array( 'SMP Pribadi Depok', 'Pribadi Junior High' ),
+		'strip'   => array(
+			array( 'assets/img/junior-high/student-maths.webp', array( 'Siswa SMP Pribadi Depok', 'A Pribadi Junior High student' ), 'center 25%' ),
+			array( 'assets/img/junior-high/teacher-1.webp', array( 'Guru SMP Pribadi Depok', 'A Pribadi Junior High teacher' ), 'center 25%' ),
+			array( 'assets/img/junior-high/teacher-2.webp', array( 'Guru SMP Pribadi Depok', 'A Pribadi Junior High teacher' ), 'center 25%' ),
+			array( '2022/11/Reading-Camp-Malang-scaled.jpg', array( 'Reading Camp siswa SMP', 'Junior high Reading Camp' ), 'center' ),
+		),
 		'vm'      => array(
 			'vision'  => array(
 				'Menjadi sekolah mandiri bagi terwujudnya generasi emas berakhlak mulia, cerdas, berwawasan global dan berbudaya.',
@@ -180,6 +202,14 @@ return array(
 			'<strong>SMA Pribadi Depok</strong> has a long history dating back to 1995 and has produced hundreds of outstanding alumni who compete nationally and internationally.',
 		),
 		'hero'    => array( '2023/08/Mr-Maksat-Box.jpg', array( 'Guru SMA Pribadi Depok', 'A Pribadi Senior High teacher' ) ),
+		// Hero strip: the page's own photos (hero, then one per feature section).
+		'strip_label' => array( 'SMA Pribadi Depok', 'Pribadi Senior High' ),
+		'strip'   => array(
+			array( '2023/08/Mr-Maksat-Box.jpg', array( 'Guru SMA Pribadi Depok', 'A Pribadi Senior High teacher' ), 'center' ),
+			array( '2023/08/Box-student-with-chromebook-1.jpg', array( 'Siswa SMA dengan Chromebook', 'Senior high student with a Chromebook' ), 'center' ),
+			array( '2023/10/Digital-Classroom-4.jpg', array( 'Digital Classroom SMA Pribadi', 'Senior high Digital Classroom' ), 'center' ),
+			array( '2023/10/Character-Building-1.jpg', array( 'Pendidikan karakter SMA Pribadi', 'Senior high character education' ), 'center' ),
+		),
 		'sections' => array(
 			array(
 				'type'    => 'feature',

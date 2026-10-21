@@ -216,6 +216,23 @@ function oceanwp_child_enqueue_magazine_style( $page_style ) {
 }
 
 /**
+ * Styles for the scrolling photo strip (assets/css/photo-strip.css), shared by
+ * the homepage's achievements section and the school pages' hero. Its scripts
+ * (achievements-marquee.js, achievements-tile-tap.js) are enqueued by each
+ * template's own function, since the homepage already loads them.
+ *
+ * @param string $page_style Handle of the page stylesheet it should load after.
+ */
+function oceanwp_child_enqueue_photo_strip_style( $page_style ) {
+	wp_enqueue_style(
+		'oceanwp-child-photo-strip',
+		get_stylesheet_directory_uri() . '/assets/css/photo-strip.css',
+		array( $page_style ),
+		oceanwp_child_asset_version( '/assets/css/photo-strip.css' )
+	);
+}
+
+/**
  * Enqueue styles for the custom (non-Elementor) homepage template.
  */
 function oceanwp_child_enqueue_homepage_template_assets() {
@@ -231,6 +248,7 @@ function oceanwp_child_enqueue_homepage_template_assets() {
 	);
 
 	oceanwp_child_enqueue_magazine_style( 'oceanwp-child-homepage' );
+	oceanwp_child_enqueue_photo_strip_style( 'oceanwp-child-homepage' );
 
 	wp_enqueue_script(
 		'oceanwp-child-hero-text-scroll',
@@ -429,10 +447,36 @@ function oceanwp_child_enqueue_about_us_assets() {
 		return;
 	}
 
+	$about_deps = array( 'oceanwp-child-prestasi' );
+
+	// The school pages' hero is the scrolling photo strip (same one as the
+	// homepage's achievements), so they load its styles and scripts too. The
+	// strip styles go before about-us.css so its hero tweaks can override them.
+	if ( is_page_template( 'page-school.php' ) ) {
+		oceanwp_child_enqueue_photo_strip_style( 'oceanwp-child-prestasi' );
+		$about_deps[] = 'oceanwp-child-photo-strip';
+
+		wp_enqueue_script(
+			'oceanwp-child-achievements-tile-tap',
+			get_stylesheet_directory_uri() . '/assets/js/achievements-tile-tap.js',
+			array(),
+			oceanwp_child_asset_version( '/assets/js/achievements-tile-tap.js' ),
+			true
+		);
+
+		wp_enqueue_script(
+			'oceanwp-child-achievements-marquee',
+			get_stylesheet_directory_uri() . '/assets/js/achievements-marquee.js',
+			array(),
+			oceanwp_child_asset_version( '/assets/js/achievements-marquee.js' ),
+			true
+		);
+	}
+
 	wp_enqueue_style(
 		'oceanwp-child-about-us',
 		get_stylesheet_directory_uri() . '/assets/css/about-us.css',
-		array( 'oceanwp-child-prestasi' ),
+		$about_deps,
 		oceanwp_child_asset_version( '/assets/css/about-us.css' )
 	);
 }

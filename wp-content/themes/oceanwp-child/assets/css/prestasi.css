@@ -17,6 +17,10 @@
 	--color-primary-dark: #0d8fdb;
 	--color-gradient-start: #0172bb;
 	--color-gradient-end: #01a6a1;
+	/* On-dark variants of the gradient, for text over the photo strip's dark
+	   caption scrim (photo-strip.css); same values as homepage.css. */
+	--color-gradient-start-on-dark: #2bb6ff;
+	--color-gradient-end-on-dark: #4fe0da;
 	--color-accent: #f26522;
 	--color-on-primary: #ffffff;
 	--color-foreground: #12233c;
@@ -39,6 +43,7 @@
 
 	--motion-fast: 200ms;
 	--motion-base: 250ms;
+	--motion-slow: 300ms;
 	--motion-reveal: 600ms;
 	--ease-out-cubic: cubic-bezier(0.22, 0.61, 0.36, 1);
 	--ease-fade: cubic-bezier(0.4, 0, 0.2, 1);
