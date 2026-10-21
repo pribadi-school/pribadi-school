@@ -124,13 +124,12 @@ $hp_achievements = array(
 		'name'     => 'Ayu',
 		'link'     => 'https://www.instagram.com/p/DcxZ30BkfY6/?stkn=MXB5YWdmaTBuaWo0Zw==',
 	),
-	array(
-		'photo'    => 'omi-2026.webp',
-		'title'    => 'Lima Siswa Lolos ke Tingkat Provinsi OMI 2026',
-		'title_en' => 'Five Students Advance to the Provincial Level of OMI 2026',
-		'name'     => 'Viko, Maria, Harun, Badzil & Arfa',
-		'link'     => '',
-	),
+	/*
+	 * Every tile in this strip links to an Instagram post, by direction. The
+	 * OMI 2026 tile ('omi-2026.webp', five students advancing to the provincial
+	 * round) was taken out because it had no post to link to; it is still on
+	 * the Prestasi page. Add it back here once it has a link.
+	 */
 );
 
 /*
