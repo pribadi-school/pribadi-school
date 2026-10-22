@@ -1,56 +1,202 @@
 /**
- * Alumni map pin tooltips.
+ * Alumni section: country picker + detail card, tied to the map's pins
+ * (template-parts/alumni-map.php).
  *
- * Three ways in, deliberately: hover (pointer), click/tap (touch), and
- * focus (keyboard). Hover alone would strand touch users, and a tooltip
- * that only opens on hover is unreachable by keyboard - so focus reveals
- * exactly what hover reveals, and Escape closes.
+ * The chips are a real radio group, so the keyboard (arrow keys), screen
+ * readers and form semantics all come from the browser. This script only
+ * does three things:
  *
- * Only one tooltip is open at a time; on a crowded map (Europe especially)
- * several open at once overlap into an unreadable pile.
+ * - shows the card of the selected country and hides the rest;
+ * - marks the matching map pin and the route line from the school to it as
+ *   selected (`.is-selected`);
+ * - makes a pin click select its country in the picker - the pins are a
+ *   shortcut into the picker, not a second place to read the lists.
+ *
+ * Without JS the first country's card simply stays visible.
  */
 ( function () {
 	'use strict';
 
-	var points = document.querySelectorAll( '.hp-map-point' );
+	var root = document.querySelector( '[data-hp-alumni]' );
 
-	if ( ! points.length ) {
+	if ( ! root ) {
 		return;
 	}
 
-	var open = null;
+	var radios = root.querySelectorAll( '.hp-alumni-chip input[type="radio"]' );
+	var cards = root.querySelectorAll( '.hp-alumni-card' );
+	var points = root.querySelectorAll( '.hp-map-point' );
+	var arcs = root.querySelectorAll( '.hp-map-arc' );
+	var panel = root.querySelector( '.hp-alumni-panel' );
 
-	// Escape closes the tooltip and returns focus to its pin - but the pin's
-	// focus handler reopens whatever is focused, so without this guard the
-	// two cancel out and Escape does nothing at all.
-	var suppressFocusShow = false;
+	if ( ! radios.length ) {
+		return;
+	}
 
-	function close( point ) {
-		if ( ! point ) {
-			return;
-		}
+	var reduceMotion = window.matchMedia && window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches;
 
-		point.classList.remove( 'is-open' );
-		point.querySelector( '.hp-map-pin' ).setAttribute( 'aria-expanded', 'false' );
-		point.querySelector( '.hp-map-tip' ).hidden = true;
+	function select( index ) {
+		var key = String( index );
 
-		if ( open === point ) {
-			open = null;
+		cards.forEach( function ( card ) {
+			var match = card.getAttribute( 'data-country' ) === key;
+
+			card.hidden = ! match;
+
+			// A card revealed from a long list opens at the top, not wherever the
+			// previous country's list happened to be scrolled to.
+			if ( match ) {
+				var list = card.querySelector( '.hp-alumni-unis' );
+
+				if ( list ) {
+					list.scrollTop = 0;
+				}
+			}
+		} );
+
+		points.forEach( function ( point ) {
+			point.classList.toggle( 'is-selected', point.getAttribute( 'data-country' ) === key );
+		} );
+
+		// The selected country's route lights up and is moved to the end of its
+		// group, because SVG paints in document order - otherwise the other
+		// routes would cross over it.
+		arcs.forEach( function ( arc ) {
+			var match = arc.getAttribute( 'data-country' ) === key;
+
+			arc.classList.toggle( 'is-selected', match );
+
+			if ( match ) {
+				arc.parentNode.appendChild( arc );
+			}
+		} );
+	}
+
+	/**
+	 * The university card may never be taller than the country list beside it
+	 * (or above it, when stacked). CSS can't read a sibling's height, so this
+	 * writes the list's height - label and chips - to a custom property the card
+	 * caps itself at (--hp-alumni-index-h, homepage.css); inside the card the
+	 * university list is what scrolls. Kept current as the layout changes.
+	 */
+	var index = root.querySelector( '.hp-alumni-index' );
+
+	function syncCardHeight() {
+		if ( index && index.offsetHeight ) {
+			root.style.setProperty( '--hp-alumni-index-h', index.offsetHeight + 'px' );
 		}
 	}
 
-	function show( point ) {
-		if ( open === point ) {
+	syncCardHeight();
+
+	if ( window.ResizeObserver && index ) {
+		new window.ResizeObserver( syncCardHeight ).observe( index );
+	} else {
+		window.addEventListener( 'resize', syncCardHeight );
+	}
+
+	/**
+	 * Hovering (or keyboard-focusing) a country - its chip or its pin - lights
+	 * its route up in red as well, the same as selecting it, and puts it on top
+	 * of the other routes. Letting go puts the selected country's route back on
+	 * top. Pointers that can't hover (touch) skip the hover half: a tap selects
+	 * anyway, and a hover that never ends would leave a route stuck lit.
+	 */
+	var canHover = window.matchMedia && window.matchMedia( '(hover: hover)' ).matches;
+
+	function keyFor( node ) {
+		if ( ! node || ! node.closest ) {
+			return null;
+		}
+
+		var chip = node.closest( '.hp-alumni-chip' );
+
+		if ( chip ) {
+			var radio = chip.querySelector( 'input' );
+
+			return radio ? radio.value : null;
+		}
+
+		var point = node.closest( '.hp-map-point' );
+
+		return point ? point.getAttribute( 'data-country' ) : null;
+	}
+
+	function setHover( key ) {
+		arcs.forEach( function ( arc ) {
+			var match = null !== key && arc.getAttribute( 'data-country' ) === key;
+
+			arc.classList.toggle( 'is-hover', match );
+
+			if ( match ) {
+				arc.parentNode.appendChild( arc );
+			}
+		} );
+
+		if ( null === key ) {
+			var selected = root.querySelector( '.hp-map-arc.is-selected' );
+
+			if ( selected ) {
+				selected.parentNode.appendChild( selected );
+			}
+		}
+	}
+
+	function watch( inEvent, outEvent, needsHover ) {
+		root.addEventListener( inEvent, function ( event ) {
+			var key = keyFor( event.target );
+
+			if ( null !== key && ( ! needsHover || canHover ) ) {
+				setHover( key );
+			}
+		} );
+
+		root.addEventListener( outEvent, function ( event ) {
+			if ( needsHover && ! canHover ) {
+				return;
+			}
+
+			var from = keyFor( event.target );
+
+			// Moving between two parts of the same country (chip flag -> chip
+			// name) is not leaving it.
+			if ( null === from || from === keyFor( event.relatedTarget ) ) {
+				return;
+			}
+
+			setHover( keyFor( event.relatedTarget ) );
+		} );
+	}
+
+	watch( 'mouseover', 'mouseout', true );
+	watch( 'focusin', 'focusout', false );
+
+	/**
+	 * Stacked layout (phones, tablets): the card sits below the chips - or, for
+	 * a pin, below the whole map - so after a choice it can be well out of view.
+	 * Bring it up if it is; on desktop it is already beside the picker and
+	 * nothing moves. Only for user-initiated choices, never on first paint.
+	 */
+	function revealCard() {
+		if ( ! panel || ! window.matchMedia || ! window.matchMedia( '(max-width: 900px)' ).matches ) {
 			return;
 		}
 
-		close( open );
+		var box = panel.getBoundingClientRect();
 
-		point.classList.add( 'is-open' );
-		point.querySelector( '.hp-map-pin' ).setAttribute( 'aria-expanded', 'true' );
-		point.querySelector( '.hp-map-tip' ).hidden = false;
-		open = point;
+		if ( box.top > window.innerHeight * 0.8 || box.bottom < 0 ) {
+			panel.scrollIntoView( { behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' } );
+		}
 	}
+
+	radios.forEach( function ( radio ) {
+		radio.addEventListener( 'change', function () {
+			if ( radio.checked ) {
+				select( radio.value );
+				revealCard();
+			}
+		} );
+	} );
 
 	points.forEach( function ( point ) {
 		var pin = point.querySelector( '.hp-map-pin' );
@@ -59,63 +205,21 @@
 			return;
 		}
 
-		pin.addEventListener( 'click', function ( event ) {
-			event.stopPropagation();
+		pin.addEventListener( 'click', function () {
+			var key = point.getAttribute( 'data-country' );
 
-			if ( open === point ) {
-				close( point );
-			} else {
-				show( point );
-			}
-		} );
-
-		// Keyboard parity with hover: tabbing to a pin reveals its tooltip.
-		pin.addEventListener( 'focus', function () {
-			if ( suppressFocusShow ) {
-				return;
-			}
-
-			show( point );
-		} );
-
-		// Pointer hover, but only where hovering is actually a thing. On
-		// touch, a tap fires a synthetic mouseenter too, which would open
-		// the tooltip and immediately have the click handler close it again.
-		if ( window.matchMedia && window.matchMedia( '(hover: hover)' ).matches ) {
-			point.addEventListener( 'mouseenter', function () {
-				show( point );
+			radios.forEach( function ( radio ) {
+				radio.checked = radio.value === key;
 			} );
 
-			point.addEventListener( 'mouseleave', function () {
-				// Leave it open if focus is still inside, or keyboard users
-				// lose the tooltip the moment the mouse drifts past.
-				if ( ! point.contains( document.activeElement ) ) {
-					close( point );
-				}
-			} );
-		}
+			select( key );
+			revealCard();
+		} );
 	} );
 
-	document.addEventListener( 'keydown', function ( event ) {
-		if ( 'Escape' === event.key && open ) {
-			var pin = open.querySelector( '.hp-map-pin' );
-			close( open );
+	select( ( function () {
+		var checked = root.querySelector( '.hp-alumni-chip input:checked' );
 
-			if ( pin ) {
-				// focus() fires its handler synchronously, so the flag only
-				// needs to span this one call.
-				suppressFocusShow = true;
-				pin.focus();
-				suppressFocusShow = false;
-			}
-		}
-	} );
-
-	// Tapping anywhere else dismisses - without this there is no way to
-	// close a tooltip on touch except finding the same pin again.
-	document.addEventListener( 'click', function ( event ) {
-		if ( open && ! open.contains( event.target ) ) {
-			close( open );
-		}
-	} );
+		return checked ? checked.value : 0;
+	}() ) );
 } )();

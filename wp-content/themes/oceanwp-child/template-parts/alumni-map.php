@@ -1,11 +1,20 @@
 <?php
 /**
- * Alumni world map - stylised SVG map with interactive location pins.
+ * Alumni world map - stylised SVG map with location pins, plus a country
+ * picker and detail card beneath it (the layout of semesta.sch.id's alumni
+ * section): country chips with flag and university count, and a white card
+ * listing the selected country's universities with logos. A pin click selects
+ * its country in the picker. Behaviour: assets/js/alumni-map.js.
  *
  * Pin data is real, loaded from data/alumni-map-data.json - one pin per
  * country, positioned from that file's own lat/lng. Student counts in that
  * file (totalStudents, and per-institution students) are intentionally not
- * displayed anywhere in the UI.
+ * displayed anywhere in the UI; the chips and card show how many
+ * universities, never how many students.
+ *
+ * Logos: template-parts/data/alumni-logos.php maps institution names to logo
+ * files (hand-checked); a university without one gets an initials badge.
+ * Flags: assets/img/flags/ (MIT-licensed flag-icons).
  *
  * How it works
  * ------------
@@ -128,6 +137,38 @@ if ( ! function_exists( 'hp_alumni_country_name' ) ) {
 	}
 }
 
+if ( ! function_exists( 'hp_alumni_map_arc' ) ) {
+	/**
+	 * Route line between two places as a curved SVG path, in the map's own
+	 * space (x = longitude, y = -latitude). A quadratic curve whose control
+	 * point sits above the midpoint, by a share of the distance (capped, so the
+	 * longest routes stay inside the viewBox) - the same swooping arcs as a
+	 * flight map, on a flat projection.
+	 *
+	 * @param float $lng0 Start longitude.
+	 * @param float $lat0 Start latitude.
+	 * @param float $lng1 End longitude.
+	 * @param float $lat1 End latitude.
+	 * @return string SVG path `d`, or '' when the two are too close to draw.
+	 */
+	function hp_alumni_map_arc( $lng0, $lat0, $lng1, $lat1 ) {
+		$x0   = $lng0;
+		$y0   = -$lat0;
+		$x1   = $lng1;
+		$y1   = -$lat1;
+		$dist = sqrt( ( $x1 - $x0 ) * ( $x1 - $x0 ) + ( $y1 - $y0 ) * ( $y1 - $y0 ) );
+
+		if ( $dist < 8 ) {
+			return '';
+		}
+
+		$cx = ( $x0 + $x1 ) / 2;
+		$cy = ( $y0 + $y1 ) / 2 - min( $dist * 0.3, 44 );
+
+		return sprintf( 'M%.2f %.2f Q%.2f %.2f %.2f %.2f', $x0, $y0, $cx, $cy, $x1, $y1 );
+	}
+}
+
 if ( ! function_exists( 'hp_alumni_map_pin_position' ) ) {
 	/**
 	 * Longitude/latitude -> percentage offsets for an HTML pin overlaid on
@@ -237,95 +278,220 @@ $hp_university_logos = array(
 	array( 'file' => 'logo-50.png', 'name' => 'Media Kreatif' ),
 );
 
+/*
+ * Flag file (assets/img/flags/<code>.svg - MIT-licensed flag-icons, 4:3) for
+ * each country in the data file, keyed by its Indonesian name. A country
+ * missing here simply shows no flag.
+ */
+$hp_alumni_flags = array(
+	'Indonesia'       => 'id',
+	'Turki'           => 'tr',
+	'Australia'       => 'au',
+	'Malaysia'        => 'my',
+	'Singapura'       => 'sg',
+	'Hong Kong'       => 'hk',
+	'Jepang'          => 'jp',
+	'Jerman'          => 'de',
+	'Kazakhstan'      => 'kz',
+	'Kanada'          => 'ca',
+	'Amerika Serikat' => 'us',
+	'Belanda'         => 'nl',
+	'Rumania'         => 'ro',
+	'India'           => 'in',
+	'Inggris'         => 'gb',
+	'Taiwan'          => 'tw',
+	'Rusia'           => 'ru',
+	'Korea Selatan'   => 'kr',
+	'Prancis'         => 'fr',
+	'Nigeria'         => 'ng',
+	'Moldova'         => 'md',
+);
+
+// Institution name => logo file, hand-checked (see the data file's docblock).
+$hp_alumni_logos = require __DIR__ . '/data/alumni-logos.php';
+
+if ( ! function_exists( 'hp_alumni_initials' ) ) {
+	/**
+	 * Up to three capital letters for a university with no logo file, shown in
+	 * a badge the size of a logo: "Universitas Gadjah Mada" -> "UGM".
+	 *
+	 * @param string $name Institution name.
+	 * @return string
+	 */
+	function hp_alumni_initials( $name ) {
+		$skip   = array( 'of', 'the', 'and', '&', 'de', 'di', 'dan', 'for' );
+		$result = '';
+
+		foreach ( preg_split( '/[\s\-\/]+/', $name ) as $word ) {
+			$word = trim( $word, "()\"',.&" );
+
+			if ( '' === $word || in_array( strtolower( $word ), $skip, true ) ) {
+				continue;
+			}
+
+			$result .= function_exists( 'mb_substr' ) ? mb_strtoupper( mb_substr( $word, 0, 1 ) ) : strtoupper( substr( $word, 0, 1 ) );
+
+			if ( strlen( $result ) >= 3 ) {
+				break;
+			}
+		}
+
+		return $result;
+	}
+}
+
+// The school (Depok, West Java): where the routes on the map start.
+$hp_home = array(
+	'lng' => 106.80,
+	'lat' => -6.40,
+);
+
 $hp_map_instance = wp_unique_id( 'hp-map-' );
 ?>
 
-<div class="hp-map-wrap hp-reveal">
+<div class="hp-map-wrap hp-reveal" data-hp-alumni>
 
 	<div class="hp-map-canvas">
-		<?php /* Decorative: the same information is in the text list below. */ ?>
+		<?php /* Decorative: the picker below is the accessible way to browse the same data. */ ?>
 		<svg class="hp-map-svg" viewBox="-180 -84 360 140" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">
-			<?php foreach ( $hp_world_shapes as $hp_shape ) : ?>
-				<?php /* evenodd: a shape's ring(s) after the first are holes (lakes, enclosed low-lying areas), not extra landmass. */ ?>
-				<path fill-rule="evenodd" d="<?php echo esc_attr( hp_alumni_map_shape_path( $hp_shape ) ); ?>" />
-			<?php endforeach; ?>
+			<g class="hp-map-land">
+				<?php foreach ( $hp_world_shapes as $hp_shape ) : ?>
+					<?php /* evenodd: a shape's ring(s) after the first are holes (lakes, enclosed low-lying areas), not extra landmass. */ ?>
+					<path fill-rule="evenodd" d="<?php echo esc_attr( hp_alumni_map_shape_path( $hp_shape ) ); ?>" />
+				<?php endforeach; ?>
+			</g>
+
+			<?php
+			/*
+			 * Routes from the school to every destination: a curved line per country,
+			 * in the SVG's own lng/-lat space, so each ends exactly under its pin.
+			 * Indonesia gets none - the school is already there. alumni-map.js marks
+			 * the selected country's route and paints it on top.
+			 */
+			?>
+			<g class="hp-map-arcs">
+				<?php foreach ( $hp_alumni_countries as $hp_index => $hp_place ) : ?>
+					<?php $hp_arc = hp_alumni_map_arc( $hp_home['lng'], $hp_home['lat'], $hp_place['lng'], $hp_place['lat'] ); ?>
+					<?php if ( $hp_arc ) : ?>
+						<path class="hp-map-arc" data-country="<?php echo (int) $hp_index; ?>" d="<?php echo esc_attr( $hp_arc ); ?>" />
+					<?php endif; ?>
+				<?php endforeach; ?>
+			</g>
 		</svg>
+
+		<?php /* The school: where every route starts. Decorative, like the SVG; its name is also the section's subject. */ ?>
+		<?php $hp_home_pos = hp_alumni_map_pin_position( $hp_home['lng'], $hp_home['lat'] ); ?>
+		<div class="hp-map-home" style="left: <?php echo esc_attr( $hp_home_pos['left'] ); ?>%; top: <?php echo esc_attr( $hp_home_pos['top'] ); ?>%;" aria-hidden="true">
+			<span class="hp-map-home-dot"></span>
+			<span class="hp-map-home-label"><?php echo hp_t( 'Pribadi Depok', 'Pribadi Depok' ); ?></span>
+		</div>
 
 		<?php foreach ( $hp_alumni_countries as $hp_index => $hp_place ) : ?>
 			<?php
-			$hp_pos    = hp_alumni_map_pin_position( $hp_place['lng'], $hp_place['lat'] );
-			$hp_tip_id = $hp_map_instance . '-tip-' . $hp_index;
+			$hp_pos  = hp_alumni_map_pin_position( $hp_place['lng'], $hp_place['lat'] );
+			$hp_name = hp_alumni_country_name( $hp_place['country'] );
 
 			/*
-			 * Flip the popup below the pin in the map's upper half. A popup
-			 * for a northern-latitude pin (Russia sits at ~16% from the top)
-			 * would otherwise open upwards and spill out over the section
-			 * heading. Decided from the projected position rather than
-			 * measured in JS, so it is correct on first paint with no
-			 * repositioning flash.
+			 * The name label opens below the pin in the map's upper half: a
+			 * northern pin (Russia sits at ~16% from the top) would otherwise put
+			 * it over the section heading. Decided from the projected position, so
+			 * it is right on first paint with no repositioning flash.
 			 */
-			$hp_tip_below = $hp_pos['top'] < 50;
-
-			$hp_institutions = isset( $hp_place['institutions'] ) && is_array( $hp_place['institutions'] )
-				? $hp_place['institutions']
-				: array();
+			$hp_label_below = $hp_pos['top'] < 50;
+			?>
+			<?php
+			/*
+			 * Pins are a shortcut into the picker below, not a second UI: a click
+			 * selects that country there (alumni-map.js). aria-controls points at
+			 * the country's card, and the label is its accessible name.
+			 */
 			?>
 			<div
-				class="hp-map-point<?php echo $hp_tip_below ? ' hp-map-point--below' : ''; ?>"
+				class="hp-map-point<?php echo $hp_label_below ? ' hp-map-point--below' : ''; ?>"
+				data-country="<?php echo (int) $hp_index; ?>"
 				style="left: <?php echo esc_attr( $hp_pos['left'] ); ?>%; top: <?php echo esc_attr( $hp_pos['top'] ); ?>%;"
 			>
-				<?php
-				/*
-				 * Disclosure, not role="tooltip": this popup is click/tap
-				 * toggleable and its list scrolls, which a tooltip is not
-				 * supposed to be. aria-expanded + aria-controls on the
-				 * trigger is the pattern that actually matches the behaviour.
-				 */
-				?>
-				<button
-					type="button"
-					class="hp-map-pin"
-					aria-expanded="false"
-					aria-controls="<?php echo esc_attr( $hp_tip_id ); ?>"
-				>
-					<span class="screen-reader-text"><?php echo esc_html( hp_alumni_country_name( $hp_place['country'] ) ); ?></span>
-				</button>
-				<span class="hp-map-tip" id="<?php echo esc_attr( $hp_tip_id ); ?>" hidden>
-					<span class="hp-map-tip-country"><?php echo esc_html( hp_alumni_country_name( $hp_place['country'] ) ); ?></span>
-					<?php if ( $hp_institutions ) : ?>
-						<span class="hp-map-tip-list">
-							<?php foreach ( $hp_institutions as $hp_inst ) : ?>
-								<span class="hp-map-tip-item"><?php echo esc_html( $hp_inst['institution'] ); ?></span>
-							<?php endforeach; ?>
-						</span>
-					<?php endif; ?>
-				</span>
+				<button type="button" class="hp-map-pin" aria-controls="<?php echo esc_attr( $hp_map_instance . '-card-' . $hp_index ); ?>" aria-label="<?php echo esc_attr( $hp_name ); ?>"></button>
+				<span class="hp-map-label" aria-hidden="true"><?php echo esc_html( $hp_name ); ?></span>
 			</div>
 		<?php endforeach; ?>
 	</div>
 
 	<?php
 	/*
-	 * Text equivalent of the map. A pin-only map is unusable with a screen
-	 * reader, so the same array is rendered as a plain list - one source, so
-	 * it cannot fall out of sync with the pins above.
+	 * Country picker + detail card, the layout of semesta.sch.id's alumni
+	 * section: a grid of country chips (flag, name, how many universities) and
+	 * a white card for the selected country listing them. Chips are a real
+	 * radio group (arrow keys, form semantics, screen readers for free); only
+	 * the selected country's card is shown. With no JS the first card stays
+	 * visible. Counts are numbers of universities - never student counts, which
+	 * the data file also carries but this site doesn't display.
 	 */
 	?>
-	<h3 class="screen-reader-text"><?php echo hp_t( 'Daftar universitas tujuan alumni', 'List of universities attended by alumni' ); ?></h3>
-	<ul class="screen-reader-text">
-		<?php foreach ( $hp_alumni_countries as $hp_place ) : ?>
-			<li>
-				<?php echo esc_html( hp_alumni_country_name( $hp_place['country'] ) ); ?>
-				<?php if ( ! empty( $hp_place['institutions'] ) && is_array( $hp_place['institutions'] ) ) : ?>
-					<ul>
-						<?php foreach ( $hp_place['institutions'] as $hp_inst ) : ?>
-							<li><?php echo esc_html( $hp_inst['institution'] ); ?></li>
-						<?php endforeach; ?>
-					</ul>
-				<?php endif; ?>
-			</li>
-		<?php endforeach; ?>
-	</ul>
+	<div class="hp-alumni-explore">
+
+		<div class="hp-alumni-index">
+			<p class="hp-alumni-index-label" id="<?php echo esc_attr( $hp_map_instance ); ?>-label"><?php echo hp_t( 'Pilih negara', 'Choose a country' ); ?></p>
+			<div class="hp-alumni-chips" role="radiogroup" aria-labelledby="<?php echo esc_attr( $hp_map_instance ); ?>-label">
+				<?php foreach ( $hp_alumni_countries as $hp_index => $hp_place ) : ?>
+					<?php
+					$hp_name  = hp_alumni_country_name( $hp_place['country'] );
+					$hp_flag  = isset( $hp_alumni_flags[ $hp_place['country'] ] ) ? $hp_alumni_flags[ $hp_place['country'] ] : '';
+					$hp_count = isset( $hp_place['institutions'] ) && is_array( $hp_place['institutions'] ) ? count( $hp_place['institutions'] ) : 0;
+					?>
+					<label class="hp-alumni-chip">
+						<input type="radio" name="<?php echo esc_attr( $hp_map_instance ); ?>-country" value="<?php echo (int) $hp_index; ?>"<?php echo 0 === $hp_index ? ' checked' : ''; ?>>
+						<?php if ( $hp_flag ) : ?>
+							<img class="hp-alumni-chip-flag" src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/img/flags/' . $hp_flag . '.svg' ); ?>" width="24" height="18" alt="" loading="lazy">
+						<?php endif; ?>
+						<span class="hp-alumni-chip-name"><?php echo esc_html( $hp_name ); ?></span>
+						<span class="hp-alumni-chip-count"><?php echo (int) $hp_count; ?></span>
+					</label>
+				<?php endforeach; ?>
+			</div>
+		</div>
+
+		<div class="hp-alumni-panel">
+			<?php foreach ( $hp_alumni_countries as $hp_index => $hp_place ) : ?>
+				<?php
+				$hp_name         = hp_alumni_country_name( $hp_place['country'] );
+				$hp_flag         = isset( $hp_alumni_flags[ $hp_place['country'] ] ) ? $hp_alumni_flags[ $hp_place['country'] ] : '';
+				$hp_institutions = isset( $hp_place['institutions'] ) && is_array( $hp_place['institutions'] ) ? $hp_place['institutions'] : array();
+				$hp_count        = count( $hp_institutions );
+				?>
+				<article class="hp-alumni-card" id="<?php echo esc_attr( $hp_map_instance . '-card-' . $hp_index ); ?>" data-country="<?php echo (int) $hp_index; ?>"<?php echo 0 === $hp_index ? '' : ' hidden'; ?>>
+					<header class="hp-alumni-card-head">
+						<?php if ( $hp_flag ) : ?>
+							<img class="hp-alumni-card-flag" src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/img/flags/' . $hp_flag . '.svg' ); ?>" width="60" height="45" alt="" loading="lazy">
+						<?php endif; ?>
+						<div>
+							<h3 class="hp-alumni-card-title"><?php echo esc_html( $hp_name ); ?></h3>
+							<p class="hp-alumni-card-count"><b><?php echo (int) $hp_count; ?></b> <?php echo esc_html( 1 === $hp_count ? hp_t( 'universitas', 'university' ) : hp_t( 'universitas', 'universities' ) ); ?></p>
+						</div>
+					</header>
+
+					<?php if ( $hp_institutions ) : ?>
+						<ul class="hp-alumni-unis" role="list">
+							<?php foreach ( $hp_institutions as $hp_inst ) : ?>
+								<?php
+								$hp_inst_name = $hp_inst['institution'];
+								$hp_logo_file = isset( $hp_alumni_logos[ $hp_inst_name ] ) ? $hp_alumni_logos[ $hp_inst_name ] : '';
+								?>
+								<li class="hp-alumni-uni">
+									<?php if ( $hp_logo_file ) : ?>
+										<span class="hp-alumni-uni-logo"><img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/img/' . $hp_logo_file ); ?>" alt="" loading="lazy"></span>
+									<?php else : ?>
+										<span class="hp-alumni-uni-logo hp-alumni-uni-logo--initials" aria-hidden="true"><?php echo esc_html( hp_alumni_initials( $hp_inst_name ) ); ?></span>
+									<?php endif; ?>
+									<span class="hp-alumni-uni-name"><?php echo esc_html( $hp_inst_name ); ?></span>
+								</li>
+							<?php endforeach; ?>
+						</ul>
+					<?php endif; ?>
+				</article>
+			<?php endforeach; ?>
+		</div>
+	</div>
 
 	<div class="hp-map-cta">
 		<a class="hp-btn" href="https://www.instagram.com/p/Dck0Q71kYlE/?img_index=1" target="_blank" rel="noopener"><?php echo hp_t( 'Lihat Keseruan Perjalanan Angkatan 2026', 'See the Class of 2026&#8217;s Journey' ); ?></a>

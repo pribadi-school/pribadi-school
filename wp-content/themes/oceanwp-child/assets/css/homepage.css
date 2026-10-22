@@ -48,6 +48,10 @@
 	   can be retuned without affecting every other blue element site-wide. */
 	--color-quote-accent: #0097b2;
 
+	/* Alumni map route line while its country is hovered or selected. A deep red
+	   (by direction), against the quiet blue the other routes keep; see MASTER.md. */
+	--color-route: #c52a25;
+
 	--elevation-1: 0 1px 3px rgba(18, 35, 60, 0.08);
 	--elevation-2: 0 8px 20px rgba(18, 35, 60, 0.1);
 	--elevation-3: 0 20px 40px -12px rgba(18, 35, 60, 0.18);
@@ -1292,11 +1296,79 @@
    the same way the elevation tokens express this navy. Muted on purpose -
    the map is a backdrop for the pins, not the subject. Darker than the
    original 0.10 so it doesn't read as barely-there. */
-#homepage-custom .hp-map-svg path {
+#homepage-custom .hp-map-land path {
 	fill: rgba(18, 35, 60, 0.20);
 	stroke: rgba(18, 35, 60, 0.32);
 	stroke-width: 0.4;
 	stroke-linejoin: round;
+}
+
+/* Routes from the school to each destination country (drawn in
+   template-parts/alumni-map.php). A thin, translucent blue line for all of
+   them so the map reads as one web; the route of the country being hovered or
+   selected turns deep red, solid and thicker (fading in rather than animating
+   a dash: dashes and vector-effect don't mix). vector-effect keeps the width in screen pixels
+   however the SVG is scaled. */
+#homepage-custom .hp-map-arc {
+	fill: none;
+	stroke: var(--color-primary);
+	stroke-opacity: 0.4;
+	stroke-width: 1.25px;
+	stroke-linecap: round;
+	vector-effect: non-scaling-stroke;
+	transition: stroke var(--motion-base) ease, stroke-opacity var(--motion-base) ease, stroke-width var(--motion-base) ease;
+}
+
+#homepage-custom .hp-map-arc.is-selected,
+#homepage-custom .hp-map-arc.is-hover {
+	stroke: var(--color-route);
+	stroke-opacity: 1;
+	stroke-width: 2.4px;
+}
+
+/* The school: a warm dot with a soft ring where every route starts, and its
+   name underneath (below, so it stays clear of the pins above it and the
+   Indonesian pin beside it). Sits under the pins so they stay clickable. */
+#homepage-custom .hp-map-home {
+	position: absolute;
+	z-index: 0;
+	transform: translate(-50%, -50%);
+	pointer-events: none;
+}
+
+#homepage-custom .hp-map-home-dot {
+	display: block;
+	width: 12px;
+	height: 12px;
+	border: 2px solid var(--color-surface);
+	border-radius: 50%;
+	background: var(--color-accent);
+	box-shadow: 0 0 0 5px rgba(242, 101, 34, 0.22), var(--elevation-1);
+}
+
+#homepage-custom .hp-map-home-label {
+	position: absolute;
+	top: calc(100% + 8px);
+	left: 50%;
+	padding: 4px 10px;
+	border-radius: var(--radius-full);
+	background: var(--color-surface);
+	color: var(--color-foreground);
+	border: 1.5px solid var(--color-accent);
+	font-family: 'Inter', sans-serif;
+	font-size: 0.72em;
+	font-weight: 800;
+	line-height: 1.2;
+	white-space: nowrap;
+	box-shadow: var(--elevation-1);
+	transform: translateX(-50%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	#homepage-custom .hp-map-arc {
+		transition: none;
+	}
+
 }
 
 #homepage-custom .hp-map-point {
@@ -1409,7 +1481,7 @@
    from its own centre - the tip doesn't drift off the pin's actual spot. */
 #homepage-custom .hp-map-pin:hover::before,
 #homepage-custom .hp-map-pin:focus-visible::before,
-#homepage-custom .hp-map-point.is-open .hp-map-pin::before {
+#homepage-custom .hp-map-point.is-selected .hp-map-pin::before {
 	transform: translate(-50%, -100%) scale(1.15);
 	filter: drop-shadow(0 2px 4px rgba(18, 35, 60, 0.45)) drop-shadow(0 0 5px rgba(24, 168, 250, 0.55));
 }
@@ -1420,132 +1492,340 @@
 	border-radius: 50%;
 }
 
-/* Popup sits above the pin and is centred on it. z-index keeps an open
-   popup above neighbouring pins instead of tucked behind them.
-   Fixed width rather than max-content: the content is now a list of
-   institution names of wildly varying length, and a width that changed per
-   country would make the popup jump around as you move between pins. */
-#homepage-custom .hp-map-tip {
+/* Country name over the pin: on hover/focus, and kept on the selected pin.
+   The popup lists that used to open here moved into the country card below the
+   map; the pin is now just a shortcut into it (assets/js/alumni-map.js). The
+   label sits above the drop (which rises ~29px over the coordinate) and
+   flips below the pin in the map's upper half, set from the projected
+   latitude in template-parts/alumni-map.php. */
+#homepage-custom .hp-map-label {
 	position: absolute;
-	bottom: calc(100% + 8px);
 	left: 50%;
-	transform: translateX(-50%);
+	bottom: calc(50% + 38px);
 	z-index: 3;
-	display: flex;
-	flex-direction: column;
-	gap: 8px;
-	width: 250px;
-	padding: 12px 14px;
-	border-radius: var(--radius-sm);
-	background: var(--color-surface);
-	color: var(--color-foreground);
-	border: 1.5px solid var(--color-primary);
-	box-shadow: var(--elevation-3);
-	text-align: center;
-	/* Interactive, unlike the old two-line tooltip: the institution list
-	   scrolls for the few countries that overflow, so the pointer has to be
-	   able to reach and scroll it. */
-	pointer-events: auto;
-}
-
-/* Invisible bridge across the 8px gap between pin and popup. Without it,
-   moving the pointer from the pin toward the popup crosses a dead zone that
-   is outside .hp-map-point entirely, firing mouseleave and closing the popup
-   before it can be reached - which would make the scrollable list
-   unusable with a mouse. */
-#homepage-custom .hp-map-tip::before {
-	content: '';
-	position: absolute;
-	left: 0;
-	right: 0;
-	top: 100%;
-	height: 10px;
-}
-
-/* Upper half of the map: open downwards instead, or the popup spills out
-   over the section heading above. Set from the projected latitude in
-   template-parts/alumni-map.php. */
-#homepage-custom .hp-map-point--below .hp-map-tip {
-	bottom: auto;
-	top: calc(100% + 8px);
-}
-
-#homepage-custom .hp-map-point--below .hp-map-tip::before {
-	top: auto;
-	bottom: 100%;
-}
-
-/* `display: flex` above outranks the [hidden] attribute, whose display:none
-   is only a low-specificity user-agent style - without this the JS sets
-   hidden but every tooltip stays on screen. */
-#homepage-custom .hp-map-tip[hidden] {
-	display: none;
-}
-
-#homepage-custom .hp-map-tip::after {
-	content: '';
-	position: absolute;
-	top: 100%;
-	left: 50%;
-	margin-left: -5px;
-	border: 5px solid transparent;
-	border-top-color: var(--color-surface);
-}
-
-/* Arrow flips with the popup so it still points back at its pin. */
-#homepage-custom .hp-map-point--below .hp-map-tip::after {
-	top: auto;
-	bottom: 100%;
-	border-top-color: transparent;
-	border-bottom-color: var(--color-surface);
-}
-
-/* Country is now the heading of the popup; the institutions are the list
-   below it - the inverse of the old name-over-country hierarchy. */
-#homepage-custom .hp-map-tip-country {
-	font-family: 'Inter', sans-serif;
-	font-weight: 700;
-	font-size: 0.86em;
-	line-height: 1.3;
-	letter-spacing: 0.2px;
-}
-
-/* Scroll rather than truncate. 13 of the 18 countries have five or fewer
-   institutions and never scroll at all; capping the height keeps the three
-   long ones (Turkey 26, Malaysia 13, Australia 12) from growing a popup
-   taller than the map itself, without hiding entries behind a "+N more"
-   that has nowhere to link to. */
-#homepage-custom .hp-map-tip-list {
-	display: flex;
-	flex-direction: column;
-	gap: 5px;
-	max-height: 150px;
-	overflow-y: auto;
-	padding-top: 8px;
-	border-top: 1px solid var(--color-primary);
-	scrollbar-width: thin;
-	scrollbar-color: var(--color-primary) transparent;
-	overscroll-behavior: contain;
-}
-
-#homepage-custom .hp-map-tip-list::-webkit-scrollbar {
-	width: 6px;
-}
-
-#homepage-custom .hp-map-tip-list::-webkit-scrollbar-thumb {
-	background: var(--color-primary);
-	border-radius: 999px;
-}
-
-#homepage-custom .hp-map-tip-item {
+	padding: 5px 11px;
+	border-radius: var(--radius-full);
+	background: var(--color-foreground);
+	color: var(--color-on-primary);
 	font-family: 'Inter', sans-serif;
 	font-size: 0.74em;
-	line-height: 1.35;
+	font-weight: 700;
+	line-height: 1.2;
+	white-space: nowrap;
+	pointer-events: none;
+	opacity: 0;
+	transform: translate(-50%, 4px);
+	transition: opacity var(--motion-base) ease, transform var(--motion-base) ease;
+}
+
+#homepage-custom .hp-map-point--below .hp-map-label {
+	bottom: auto;
+	top: calc(50% + 16px);
+	transform: translate(-50%, -4px);
+}
+
+#homepage-custom .hp-map-point:hover .hp-map-label,
+#homepage-custom .hp-map-point:focus-within .hp-map-label,
+#homepage-custom .hp-map-point.is-selected .hp-map-label {
+	opacity: 1;
+	transform: translate(-50%, 0);
+}
+
+/* A hovered or selected pin sits above its neighbours (Europe is crowded). */
+#homepage-custom .hp-map-point:hover,
+#homepage-custom .hp-map-point:focus-within,
+#homepage-custom .hp-map-point.is-selected {
+	z-index: 3;
+}
+
+/* ---- Country picker + detail card (semesta.sch.id's alumni layout) ----
+   Chips on the left, a white card for the selected country on the right;
+   stacked on tablets and phones. Markup: template-parts/alumni-map.php. */
+#homepage-custom .hp-alumni-explore {
+	display: grid;
+	grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+	gap: 28px;
+	align-items: start;
+	margin-top: 40px;
+}
+
+#homepage-custom .hp-alumni-index-label {
+	margin: 0 0 12px;
+	font-family: 'Inter', sans-serif;
+	font-size: 0.8em;
+	font-weight: 700;
+	letter-spacing: 0.6px;
+	text-transform: uppercase;
 	color: var(--color-muted-foreground);
 }
 
-#homepage-custom .hp-map-point.is-open {
-	z-index: 3;
+#homepage-custom .hp-alumni-chips {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(152px, 1fr));
+	gap: 8px;
+}
+
+/* A radio group: the input fills the chip invisibly, so a click anywhere on
+   it works and it stays a real, focusable control. */
+#homepage-custom .hp-alumni-chip {
+	position: relative;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	min-height: 44px;
+	padding: 8px 12px;
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-md);
+	background: var(--color-surface);
+	color: var(--color-foreground);
+	font-family: 'Inter', sans-serif;
+	font-size: 0.86em;
+	font-weight: 700;
+	line-height: 1.2;
+	cursor: pointer;
+	box-shadow: var(--elevation-1);
+	transition: background-color var(--motion-base) ease,
+		color var(--motion-base) ease,
+		transform var(--motion-base) ease,
+		box-shadow var(--motion-base) ease;
+}
+
+#homepage-custom .hp-alumni-chip input {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	opacity: 0;
+	cursor: pointer;
+}
+
+#homepage-custom .hp-alumni-chip:hover {
+	transform: translateY(-1px);
+	box-shadow: var(--elevation-2);
+}
+
+#homepage-custom .hp-alumni-chip:has(input:checked) {
+	border-color: transparent;
+	background: var(--color-primary);
+	color: var(--color-on-primary);
+	box-shadow: var(--elevation-2);
+}
+
+#homepage-custom .hp-alumni-chip:has(input:focus-visible) {
+	outline: 2px solid var(--color-foreground);
+	outline-offset: 2px;
+}
+
+#homepage-custom .hp-alumni-chip-flag {
+	flex: 0 0 auto;
+	width: 24px;
+	height: 18px;
+	border-radius: 3px;
+	object-fit: cover;
+	box-shadow: 0 0 0 1px rgba(18, 35, 60, 0.12);
+}
+
+#homepage-custom .hp-alumni-chip-name {
+	flex: 1;
+	min-width: 0;
+}
+
+#homepage-custom .hp-alumni-chip-count {
+	flex: 0 0 auto;
+	min-width: 24px;
+	padding: 2px 7px;
+	border-radius: var(--radius-full);
+	background: var(--color-surface-muted);
+	font-size: 0.86em;
+	text-align: center;
+}
+
+#homepage-custom .hp-alumni-chip:has(input:checked) .hp-alumni-chip-count {
+	background: rgba(255, 255, 255, 0.28);
+}
+
+/* The detail card. position: sticky keeps it in view beside a long chip list
+   while the page scrolls; the university list inside scrolls on its own. */
+#homepage-custom .hp-alumni-panel {
+	position: sticky;
+	top: 100px;
+	/* Clears the fixed header when the stacked layout scrolls the card into
+	   view (assets/js/alumni-map.js). */
+	scroll-margin-top: 96px;
+}
+
+/* Never taller than the country list beside it: alumni-map.js writes that list's
+   height to --hp-alumni-index-h. A short card (one university) just hugs its
+   content; a long one stops at that height and its university list scrolls
+   inside it (the header stays put). The fallbacks cover no-JS, and 80vh keeps the
+   stacked phone layout from filling more than a screen. */
+#homepage-custom .hp-alumni-card {
+	display: flex;
+	flex-direction: column;
+	max-height: min(var(--hp-alumni-index-h, 560px), 80vh);
+	padding: 24px;
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-lg);
+	background: var(--color-surface);
+	box-shadow: var(--elevation-3);
+}
+
+#homepage-custom .hp-alumni-card[hidden] {
+	display: none;
+}
+
+#homepage-custom .hp-alumni-card-head {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	margin-bottom: 20px;
+	flex: 0 0 auto;
+}
+
+#homepage-custom .hp-alumni-card-flag {
+	flex: 0 0 auto;
+	width: 60px;
+	height: 45px;
+	border-radius: 6px;
+	object-fit: cover;
+	box-shadow: 0 0 0 1px rgba(18, 35, 60, 0.12), var(--elevation-1);
+}
+
+#homepage-custom .hp-alumni-card-title {
+	margin: 0;
+	font-family: 'Inter', sans-serif;
+	font-size: 1.9em;
+	font-weight: 800;
+	line-height: 1.1;
+	letter-spacing: -0.5px;
+	color: var(--color-foreground);
+}
+
+#homepage-custom .hp-alumni-card-count {
+	margin: 4px 0 0;
+	font-family: 'Inter', sans-serif;
+	font-size: 0.86em;
+	font-weight: 600;
+	color: var(--color-muted-foreground);
+}
+
+#homepage-custom .hp-alumni-card-count b {
+	color: var(--color-gradient-start);
+}
+
+/* Two columns of university tiles, like the reference. Fills whatever height the
+   card has left under its header and scrolls inside it, so Indonesia (87) and
+   Turkey (26) stay within the card instead of stretching it. */
+#homepage-custom .hp-alumni-unis {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 8px;
+	align-content: start;
+	flex: 1 1 auto;
+	min-height: 0;
+	margin: 0;
+	padding: 0 4px 0 0;
+	list-style: none;
+	overflow-y: auto;
+	overscroll-behavior: contain;
+	scrollbar-width: thin;
+	scrollbar-color: var(--color-primary) transparent;
+}
+
+#homepage-custom .hp-alumni-unis::-webkit-scrollbar {
+	width: 6px;
+}
+
+#homepage-custom .hp-alumni-unis::-webkit-scrollbar-thumb {
+	background: var(--color-primary);
+	border-radius: var(--radius-full);
+}
+
+#homepage-custom .hp-alumni-uni {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 8px 10px 8px 8px;
+	border-radius: var(--radius-md);
+	background: var(--color-surface-page);
+}
+
+#homepage-custom .hp-alumni-uni-logo {
+	flex: 0 0 auto;
+	display: grid;
+	place-items: center;
+	width: 44px;
+	height: 44px;
+	border-radius: var(--radius-sm);
+	background: var(--color-surface);
+	overflow: hidden;
+}
+
+#homepage-custom .hp-alumni-uni-logo img {
+	max-width: 36px;
+	max-height: 36px;
+	width: auto;
+	height: auto;
+	object-fit: contain;
+}
+
+/* No logo file for this university: initials in a badge of the same size. */
+#homepage-custom .hp-alumni-uni-logo--initials {
+	background: color-mix(in srgb, var(--color-primary) 14%, var(--color-surface));
+	color: var(--color-gradient-start);
+	font-family: 'Inter', sans-serif;
+	font-size: 0.78em;
+	font-weight: 800;
+	letter-spacing: 0.3px;
+}
+
+#homepage-custom .hp-alumni-uni-name {
+	min-width: 0;
+	font-family: 'Inter', sans-serif;
+	font-size: 0.8em;
+	font-weight: 700;
+	line-height: 1.3;
+	color: var(--color-foreground);
+}
+
+@media only screen and (max-width: 900px) {
+	#homepage-custom .hp-alumni-explore {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	#homepage-custom .hp-alumni-panel {
+		position: static;
+	}
+}
+
+@media only screen and (max-width: 767px) {
+	#homepage-custom .hp-alumni-chips {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	#homepage-custom .hp-alumni-card {
+		padding: 18px;
+	}
+
+	#homepage-custom .hp-alumni-card-title {
+		font-size: 1.5em;
+	}
+
+	#homepage-custom .hp-alumni-unis {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	#homepage-custom .hp-alumni-chip,
+	#homepage-custom .hp-map-label {
+		transition: none;
+	}
+
+	#homepage-custom .hp-alumni-chip:hover {
+		transform: none;
+	}
 }
 
 #homepage-custom .hp-map-cta {
@@ -1611,12 +1891,6 @@
 }
 
 @media only screen and (max-width: 767px) {
-	/* The map is already small at this width; shrinking the dots further
-	   would make them hard to hit, so the hit area stays put. */
-	#homepage-custom .hp-map-tip {
-		max-width: 150px;
-	}
-
 	#homepage-custom .hp-map-logos-track {
 		gap: 36px;
 	}

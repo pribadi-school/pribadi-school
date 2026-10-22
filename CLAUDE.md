@@ -66,6 +66,12 @@ page-prestasi.php                 "Prestasi (Custom)" story page, data in
                                   template-parts/data/achievement-stories.php
 page-digital-classroom.php        "Digital Classroom (Custom)" story page, data in
                                   template-parts/data/digital-classroom.php
+template-parts/alumni-map.php     homepage alumni section: map + country picker + detail card;
+                                  data in data/alumni-map-data.json, logos in
+                                  template-parts/data/alumni-logos.php (logo per university; new
+                                  ones in assets/img/alumni-logos/ - the homepage's scrolling
+                                  strip folder assets/img/university-logos/ is hand-edited and
+                                  only ever read), flags in assets/img/flags/
 assets/models/                    3D models (.glb) shown with Google's <model-viewer> on story
                                   pages - a story with 'model' in its data file gets one
                                   (see oceanwp_child_enqueue_model_viewer() in functions.php)

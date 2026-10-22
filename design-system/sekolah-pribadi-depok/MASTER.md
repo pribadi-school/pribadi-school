@@ -71,6 +71,7 @@ properties; these are the canonical source going forward.
 | Surface Muted | `#e9eef5` | `--color-surface-muted` | Alternating section backgrounds — one step down from the page |
 | Border | `rgba(18, 35, 60, 0.08)` | `--color-border` | Subtle card borders (navy-tinted, not flat gray) |
 | Dark Surface | `#0a0a0c` | `--color-dark-surface` | Achievement section backdrop / overlays |
+| Route (deep red) | `#c52a25` | `--color-route` | Alumni map only: a route line from the school to a destination country while that country is hovered or selected (other routes stay brand blue) |
 | Destructive | `#dc2626` | `--color-destructive` | Errors only (not currently used sitewide) |
 
 **Anti-pattern:** Don't introduce new ad-hoc hex values in component CSS.
