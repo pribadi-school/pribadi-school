@@ -138,4 +138,36 @@ return array(
 	'Universitas Islam Negeri Bandung' => 'alumni-logos/universitas-islam-negeri-bandung.webp', // Commons: Logo UIN SGD.jpg
 	'University of Glasgow' => 'alumni-logos/university-of-glasgow.webp', // Commons: University of Glasgow Coat of Arms.png
 	'Middle East Technical University (ODTÜ)' => 'alumni-logos/middle-east-technical-university-odt-u.webp', // Commons: Logo ODTÜ.svg
+
+	// Added from Wikipedia / Wikimedia Commons, checked by eye (second batch).
+	'Sekolah Tinggi Ilmu Statistik' => 'alumni-logos/sekolah-tinggi-ilmu-statistik.webp', // Politeknik Statistika STIS, its current name.
+	'Sekolah Tinggi Teknik PLN' => 'alumni-logos/sekolah-tinggi-teknik-pln.webp', // Now Institut Teknologi PLN.
+	'Karadeniz University' => 'alumni-logos/karadeniz-university.webp', // Karadeniz Technical University.
+	'Yildiz Teknik University' => 'alumni-logos/yildiz-teknik-university.webp',
+	'Uludag University' => 'alumni-logos/uludag-university.webp',
+	'Sutcu Imam University' => 'alumni-logos/sutcu-imam-university.webp',
+	'Saxion Hogeschool Deventer' => 'alumni-logos/saxion-hogeschool-deventer.webp',
+	'National Institute of Applied Sciences' => 'alumni-logos/national-institute-of-applied-sciences.webp',
+	'Universitas Kristen Maranatha' => 'alumni-logos/universitas-kristen-maranatha.webp',
+	'University of Munich' => 'alumni-logos/university-of-munich.webp',
+	'Universitas Gadjah Mada' => 'alumni-logos/universitas-gadjah-mada.webp',
+	'Universitas Pancasila' => 'alumni-logos/universitas-pancasila.webp',
+	'Universitas Pendidikan Indonesia' => 'alumni-logos/universitas-pendidikan-indonesia.webp',
+	'Universitas Mulawarman' => 'alumni-logos/universitas-mulawarman.webp',
+	'Universitas Islam Indonesia' => 'alumni-logos/universitas-islam-indonesia.webp',
+	'Universitas Parahyangan' => 'alumni-logos/universitas-parahyangan.webp',
+	'Universitas Gunadarma' => 'alumni-logos/universitas-gunadarma.webp',
+	'Sekolah Tinggi Akuntansi Negara' => 'alumni-logos/sekolah-tinggi-akuntansi-negara.webp', // STAN.
+	'Izmir Institute of Technology' => 'alumni-logos/izmir-institute-of-technology.webp',
+	'Bogazici University' => 'alumni-logos/bogazici-university.webp',
+	'Istanbul Technical University' => 'alumni-logos/istanbul-technical-university.webp',
+	'Bahcesehir University' => 'alumni-logos/bahcesehir-university.webp',
+	'Victoria University' => 'alumni-logos/victoria-university.webp',
+	'Universiti Utara Malaysia' => 'alumni-logos/universiti-utara-malaysia.webp',
+	'Help University' => 'alumni-logos/help-university.webp', // HELP University.
+	'Nanyang Technological University' => 'alumni-logos/nanyang-technological-university.webp',
+	'The University of Hong Kong' => 'alumni-logos/the-university-of-hong-kong.webp',
+	'Nile University of Nigeria' => 'alumni-logos/nile-university-of-nigeria.webp',
+	'Uttarakhand Ayurved University' => 'alumni-logos/uttarakhand-ayurved-university.webp',
+	'Universiti Teknologi Malaya' => 'alumni-logos/universiti-teknologi-malaysia.webp', // Spelled "Malaya" in the alumni data; this is UTM (Malaysia).
 );
