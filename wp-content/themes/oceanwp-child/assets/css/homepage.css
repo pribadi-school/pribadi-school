@@ -1299,8 +1299,120 @@
 #homepage-custom .hp-map-land path {
 	fill: rgba(18, 35, 60, 0.20);
 	stroke: rgba(18, 35, 60, 0.32);
-	stroke-width: 0.4;
+	/* Screen pixels, not map units: the map zooms by narrowing the viewBox, and
+	   a unit-based outline would swell with it. */
+	stroke-width: 1px;
+	vector-effect: non-scaling-stroke;
 	stroke-linejoin: round;
+}
+
+/* Zoom: + / - / reset buttons bottom-right, scale bar bottom-left (markup in
+   template-parts/alumni-map.php, behaviour in assets/js/alumni-map.js). Both are
+   `hidden` until the script runs. Zoomed in, the map can be dragged. touch-action
+   is only turned off while zoomed, so on a phone the page still scrolls normally
+   over the full-world view. */
+#homepage-custom .hp-map-canvas.is-zoomed {
+	cursor: grab;
+	touch-action: none;
+}
+
+#homepage-custom .hp-map-canvas.is-dragging {
+	cursor: grabbing;
+	user-select: none;
+}
+
+#homepage-custom .hp-map-zoom {
+	position: absolute;
+	right: 4px;
+	bottom: 4px;
+	z-index: 5;
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+#homepage-custom .hp-map-zoom[hidden],
+#homepage-custom .hp-map-zoom-btn[hidden],
+#homepage-custom .hp-map-scale[hidden] {
+	display: none;
+}
+
+#homepage-custom .hp-map-zoom-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	padding: 0;
+	border: 1px solid rgba(18, 35, 60, 0.16);
+	border-radius: var(--radius-full);
+	background: var(--color-surface);
+	color: var(--color-foreground);
+	font-family: 'Inter', sans-serif;
+	font-size: 22px;
+	font-weight: 600;
+	line-height: 1;
+	box-shadow: var(--elevation-1);
+	cursor: pointer;
+	touch-action: manipulation;
+	transition: background var(--motion-base) ease, color var(--motion-base) ease, opacity var(--motion-base) ease;
+}
+
+#homepage-custom .hp-map-zoom-btn:hover:not(:disabled) {
+	background: var(--color-primary);
+	color: var(--color-on-primary);
+}
+
+#homepage-custom .hp-map-zoom-btn:focus-visible {
+	outline: 2px solid var(--color-foreground);
+	outline-offset: 2px;
+}
+
+#homepage-custom .hp-map-zoom-btn:disabled {
+	opacity: 0.4;
+	cursor: default;
+}
+
+#homepage-custom .hp-map-scale {
+	position: absolute;
+	left: 4px;
+	bottom: 4px;
+	z-index: 5;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 3px;
+	padding: 4px 8px 5px;
+	border-radius: 8px;
+	background: rgba(255, 255, 255, 0.8);
+	font-family: 'Inter', sans-serif;
+	font-size: 0.7em;
+	font-weight: 700;
+	line-height: 1;
+	color: var(--color-foreground);
+	pointer-events: none;
+}
+
+#homepage-custom .hp-map-scale-bar {
+	display: block;
+	height: 5px;
+	border: 1.5px solid var(--color-foreground);
+	border-top: 0;
+}
+
+/* Phones: the map is only ~150px tall, so the buttons go in a row, smaller,
+   instead of a column that would cover a third of it. */
+@media (max-width: 600px) {
+	#homepage-custom .hp-map-zoom {
+		flex-direction: row;
+		gap: 4px;
+	}
+
+	#homepage-custom .hp-map-zoom-btn {
+		width: 34px;
+		height: 34px;
+		font-size: 20px;
+	}
 }
 
 /* Routes from the school to each destination country (drawn in

@@ -381,7 +381,7 @@ $hp_map_instance = wp_unique_id( 'hp-map-' );
 
 		<?php /* The school: where every route starts. Decorative, like the SVG; its name is also the section's subject. */ ?>
 		<?php $hp_home_pos = hp_alumni_map_pin_position( $hp_home['lng'], $hp_home['lat'] ); ?>
-		<div class="hp-map-home" style="left: <?php echo esc_attr( $hp_home_pos['left'] ); ?>%; top: <?php echo esc_attr( $hp_home_pos['top'] ); ?>%;" aria-hidden="true">
+		<div class="hp-map-home" data-lng="<?php echo esc_attr( $hp_home['lng'] ); ?>" data-lat="<?php echo esc_attr( $hp_home['lat'] ); ?>" style="left: <?php echo esc_attr( $hp_home_pos['left'] ); ?>%; top: <?php echo esc_attr( $hp_home_pos['top'] ); ?>%;" aria-hidden="true">
 			<span class="hp-map-home-dot"></span>
 			<span class="hp-map-home-label"><?php echo hp_t( 'Pribadi Depok', 'Pribadi Depok' ); ?></span>
 		</div>
@@ -409,12 +409,33 @@ $hp_map_instance = wp_unique_id( 'hp-map-' );
 			<div
 				class="hp-map-point<?php echo $hp_label_below ? ' hp-map-point--below' : ''; ?>"
 				data-country="<?php echo (int) $hp_index; ?>"
+				data-lng="<?php echo esc_attr( $hp_place['lng'] ); ?>"
+				data-lat="<?php echo esc_attr( $hp_place['lat'] ); ?>"
 				style="left: <?php echo esc_attr( $hp_pos['left'] ); ?>%; top: <?php echo esc_attr( $hp_pos['top'] ); ?>%;"
 			>
 				<button type="button" class="hp-map-pin" aria-controls="<?php echo esc_attr( $hp_map_instance . '-card-' . $hp_index ); ?>" aria-label="<?php echo esc_attr( $hp_name ); ?>"></button>
 				<span class="hp-map-label" aria-hidden="true"><?php echo esc_html( $hp_name ); ?></span>
 			</div>
 		<?php endforeach; ?>
+
+		<?php
+		/*
+		 * Zoom controls and scale bar. Hidden until alumni-map.js runs (the map is
+		 * only zoomable with JS). The script zooms by changing the SVG viewBox and
+		 * re-placing the pins from their data-lng/data-lat, so pins keep their size.
+		 */
+		?>
+		<div class="hp-map-zoom" role="group" aria-label="<?php echo esc_attr( hp_t( 'Zoom peta', 'Map zoom' ) ); ?>" hidden>
+			<button type="button" class="hp-map-zoom-btn" data-hp-zoom="in" aria-label="<?php echo esc_attr( hp_t( 'Perbesar peta', 'Zoom in' ) ); ?>">+</button>
+			<button type="button" class="hp-map-zoom-btn" data-hp-zoom="out" aria-label="<?php echo esc_attr( hp_t( 'Perkecil peta', 'Zoom out' ) ); ?>">&minus;</button>
+			<button type="button" class="hp-map-zoom-btn hp-map-zoom-reset" data-hp-zoom="reset" aria-label="<?php echo esc_attr( hp_t( 'Atur ulang peta', 'Reset map' ) ); ?>" hidden>
+				<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+			</button>
+		</div>
+		<div class="hp-map-scale" aria-hidden="true" hidden title="<?php echo esc_attr( hp_t( 'Skala perkiraan (tepat di khatulistiwa)', 'Approximate scale (exact at the equator)' ) ); ?>">
+			<span class="hp-map-scale-text"></span>
+			<span class="hp-map-scale-bar"></span>
+		</div>
 	</div>
 
 	<?php
