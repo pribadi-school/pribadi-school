@@ -170,4 +170,29 @@ return array(
 	'Nile University of Nigeria' => 'alumni-logos/nile-university-of-nigeria.webp',
 	'Uttarakhand Ayurved University' => 'alumni-logos/uttarakhand-ayurved-university.webp',
 	'Universiti Teknologi Malaya' => 'alumni-logos/universiti-teknologi-malaysia.webp', // Spelled "Malaya" in the alumni data; this is UTM (Malaysia).
+
+	// Added from each university's own website, checked by eye (third batch).
+	'Politeknik Negeri Jakarta' => 'alumni-logos/politeknik-negeri-jakarta.webp',
+	'Institut Ilmu Sosial dan Politik' => 'alumni-logos/institut-ilmu-sosial-dan-politik.webp',
+	'Institut Kesenian Jakarta' => 'alumni-logos/institut-kesenian-jakarta.webp',
+	'ESQ Business School' => 'alumni-logos/esq-business-school.webp',
+	'Institut Teknologi Indonesia' => 'alumni-logos/institut-teknologi-indonesia.webp',
+	'LP3I' => 'alumni-logos/lp3i.webp',
+	'Politeknik Negeri Semarang' => 'alumni-logos/politeknik-negeri-semarang.webp',
+	'Universitas Bina Sarana Informatika' => 'alumni-logos/universitas-bina-sarana-informatika.webp',
+	'Institut Teknologi Nasional' => 'alumni-logos/institut-teknologi-nasional.webp',
+	'Universitas Pertahanan Jakarta' => 'alumni-logos/universitas-pertahanan-jakarta.webp',
+	'Sekolah Tinggi Teknologi Informasi I-Tech' => 'alumni-logos/sekolah-tinggi-teknologi-informasi-i-tech.webp',
+	'Universitas Komputer' => 'alumni-logos/universitas-komputer.webp',
+	'Universitas Nurtanio' => 'alumni-logos/universitas-nurtanio.webp',
+	'Universitas Jenderal Achmad Yani' => 'alumni-logos/universitas-jenderal-achmad-yani.webp',
+	'Universitas Wijaya Kusuma Purwokerto' => 'alumni-logos/universitas-wijaya-kusuma-purwokerto.webp',
+	'Universitas Pertamina' => 'alumni-logos/universitas-pertamina.webp',
+	'Selcuk University' => 'alumni-logos/selcuk-university.webp',
+	'Suleyman Demirel University' => 'alumni-logos/suleyman-demirel-university.webp',
+	'Hong Kong University of Science and Technology' => 'alumni-logos/hong-kong-university-of-science-and-technology.webp',
+	'University of Constanta' => 'alumni-logos/university-of-constanta.webp',
+	'Tamkang University' => 'alumni-logos/tamkang-university.webp',
+	'Gubkin Russian State University of Oil and Gas' => 'alumni-logos/gubkin-russian-state-university-of-oil-and-gas.webp',
+	'Sekolah Tinggi Teknologi Informasi NIIT' => 'alumni-logos/sekolah-tinggi-teknologi-informasi-i-tech.webp', // Same school as I-Tech; its logo reads "NIIT" too.
 );
