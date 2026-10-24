@@ -86,7 +86,7 @@ get_header();
 
 				<article class="hp-card hp-reveal">
 					<div class="hp-card-media">
-						<img src="https://pribadidepok.sch.id/wp-content/uploads/2023/10/Digital-Classroom-6-1.jpg" alt="Digital Classroom">
+						<img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/img/programs/Digital-Classroom-6-1.jpg' ); ?>" alt="Digital Classroom">
 					</div>
 					<div class="hp-card-body">
 						<h3>Digital Classroom</h3>
@@ -114,7 +114,7 @@ get_header();
 
 				<article class="hp-card hp-reveal" style="animation-delay: 160ms;">
 					<div class="hp-card-media">
-						<img src="https://pribadidepok.sch.id/wp-content/uploads/2023/10/Character-Building-2.jpg" alt="Character Building">
+						<img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/img/programs/Character-Building-2.jpg' ); ?>" alt="Character Building">
 					</div>
 					<div class="hp-card-body">
 						<h3>Character Building</h3>
@@ -147,7 +147,7 @@ get_header();
 					<iframe src="https://www.youtube.com/embed/EpzFrHNMIiw" title="Pribadi Berbagi" loading="lazy" allowfullscreen></iframe>
 				</div>
 				<div class="hp-program-text hp-reveal" style="animation-delay: 80ms;">
-					<img class="hp-program-logo" src="https://pribadidepok.sch.id/wp-content/uploads/2023/02/Pribadi-Berbagi.png" alt="Pribadi Berbagi">
+					<img class="hp-program-logo" src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/img/programs/Pribadi-Berbagi.png' ); ?>" alt="Pribadi Berbagi">
 					<h3 class="screen-reader-text">Pribadi Berbagi</h3>
 					<p><?php echo hp_t(
 						'Pribadi Berbagi adalah semangat kebaikan dalam tindakan nyata di Sekolah Pribadi Depok. Program ini memberikan modal usaha kepada panti asuhan, bukan sekadar hadiah, tapi peluang untuk berkembang. Dana untuk program ini berasal dari orangtua siswa, partisipasi siswa melalui program market day, dan kolaborasi dengan berbagai pihak. Ini adalah bagian dari upaya komunitas sekolah kami untuk menciptakan dampak positif yang nyata dalam kehidupan yang kami dukung, membuktikan bahwa tindakan kebaikan, sekecil apapun, memiliki dampak besar dalam membangun masa depan yang lebih cerah dan bermakna.',
@@ -162,7 +162,7 @@ get_header();
 					<iframe src="https://www.youtube.com/embed/M2x96TTh1tI" title="Pribadi Mengajar" loading="lazy" allowfullscreen></iframe>
 				</div>
 				<div class="hp-program-text hp-reveal" style="animation-delay: 80ms;">
-					<img class="hp-program-logo" src="https://pribadidepok.sch.id/wp-content/uploads/2023/02/Logo-Pribadi-Mengajar.png" alt="Pribadi Mengajar">
+					<img class="hp-program-logo" src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/img/programs/Logo-Pribadi-Mengajar.png' ); ?>" alt="Pribadi Mengajar">
 					<h3 class="screen-reader-text">Pribadi Mengajar</h3>
 					<p><?php echo hp_t(
 						'Pribadi Mengajar merupakan suatu program pengabdian masyarakat Sekolah Pribadi Depok bekerja sama dengan Dinas Pendidikan Kota Depok dan beberapa SMP Negeri di Kota Depok untuk memberi kesempatan para siswa/i di kota Depok meningkatkan kemampuan bahasa inggris dengan mendatangkan relawan penutur asing dari Australia dengan didampingi oleh siswa SMP dan SMA Pribadi Depok.',
