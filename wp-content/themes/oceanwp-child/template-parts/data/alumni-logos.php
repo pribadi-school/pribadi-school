@@ -9,7 +9,7 @@
  *                           Commons (via each university's Wikidata logo or a Commons
  *                           file search) and checked by eye; resized to 160px WebP.
  *
- * Hand-checked, not fuzzy-matched. A name-similarity pass proposed two wrong
+ * Hand-checked, not fuzzy-matched; several were also rejected by eye after download (a campus photo, a faculty's logo, the wrong university). A name-similarity pass proposed two wrong
  * pairs ("Institut Teknologi Indonesia" -> Universitas Indonesia, "Universiti
  * Teknologi Malaya" -> University of Malaya), which is the failure that matters
  * here: a wrong logo next to a university's name is worse than none. Only clear
@@ -139,7 +139,6 @@ return array(
 	'University of Glasgow' => 'alumni-logos/university-of-glasgow.webp', // Commons: University of Glasgow Coat of Arms.png
 	'Middle East Technical University (ODTÜ)' => 'alumni-logos/middle-east-technical-university-odt-u.webp', // Commons: Logo ODTÜ.svg
 
-	// Added from Wikipedia / Wikimedia Commons, checked by eye (second batch).
 	'Sekolah Tinggi Ilmu Statistik' => 'alumni-logos/sekolah-tinggi-ilmu-statistik.webp', // Politeknik Statistika STIS, its current name.
 	'Sekolah Tinggi Teknik PLN' => 'alumni-logos/sekolah-tinggi-teknik-pln.webp', // Now Institut Teknologi PLN.
 	'Karadeniz University' => 'alumni-logos/karadeniz-university.webp', // Karadeniz Technical University.
@@ -170,19 +169,17 @@ return array(
 	'Nile University of Nigeria' => 'alumni-logos/nile-university-of-nigeria.webp',
 	'Uttarakhand Ayurved University' => 'alumni-logos/uttarakhand-ayurved-university.webp',
 	'Universiti Teknologi Malaya' => 'alumni-logos/universiti-teknologi-malaysia.webp', // Spelled "Malaya" in the alumni data; this is UTM (Malaysia).
-
-	// Added from each university's own website, checked by eye (third batch).
 	'Politeknik Negeri Jakarta' => 'alumni-logos/politeknik-negeri-jakarta.webp',
-	'Institut Ilmu Sosial dan Politik' => 'alumni-logos/institut-ilmu-sosial-dan-politik.webp',
+	'Institut Ilmu Sosial dan Politik' => 'alumni-logos/iisip-jakarta.webp', // supplied by the school (not from Wikimedia)
 	'Institut Kesenian Jakarta' => 'alumni-logos/institut-kesenian-jakarta.webp',
 	'ESQ Business School' => 'alumni-logos/esq-business-school.webp',
-	'Institut Teknologi Indonesia' => 'alumni-logos/institut-teknologi-indonesia.webp',
+	'Institut Teknologi Indonesia' => 'alumni-logos/institut-teknologi-indonesia.webp', // supplied by the school (not from Wikimedia)
 	'LP3I' => 'alumni-logos/lp3i.webp',
 	'Politeknik Negeri Semarang' => 'alumni-logos/politeknik-negeri-semarang.webp',
 	'Universitas Bina Sarana Informatika' => 'alumni-logos/universitas-bina-sarana-informatika.webp',
-	'Institut Teknologi Nasional' => 'alumni-logos/institut-teknologi-nasional.webp',
-	'Universitas Pertahanan Jakarta' => 'alumni-logos/universitas-pertahanan-jakarta.webp',
-	'Sekolah Tinggi Teknologi Informasi I-Tech' => 'alumni-logos/sekolah-tinggi-teknologi-informasi-i-tech.webp',
+	'Institut Teknologi Nasional' => 'alumni-logos/itenas.webp', // supplied by the school (not from Wikimedia)
+	'Universitas Pertahanan Jakarta' => 'alumni-logos/universitas-pertahanan.webp', // supplied by the school (not from Wikimedia)
+	'Sekolah Tinggi Teknologi Informasi I-Tech' => 'alumni-logos/stti-niit-i-tech.webp', // same school as NIIT above; supplied by the school
 	'Universitas Komputer' => 'alumni-logos/universitas-komputer.webp',
 	'Universitas Nurtanio' => 'alumni-logos/universitas-nurtanio.webp',
 	'Universitas Jenderal Achmad Yani' => 'alumni-logos/universitas-jenderal-achmad-yani.webp',
@@ -194,5 +191,23 @@ return array(
 	'University of Constanta' => 'alumni-logos/university-of-constanta.webp',
 	'Tamkang University' => 'alumni-logos/tamkang-university.webp',
 	'Gubkin Russian State University of Oil and Gas' => 'alumni-logos/gubkin-russian-state-university-of-oil-and-gas.webp',
-	'Sekolah Tinggi Teknologi Informasi NIIT' => 'alumni-logos/sekolah-tinggi-teknologi-informasi-i-tech.webp', // Same school as I-Tech; its logo reads "NIIT" too.
+	'Sekolah Tinggi Teknologi Informasi NIIT' => 'alumni-logos/stti-niit-i-tech.webp', // supplied by the school (not from Wikimedia)
+	'Universitas Muhammadiyah Lampung' => 'alumni-logos/universitas-muhammadiyah-lampung.webp', // from the university's own site (uml.ac.id), via Google Images
+	'Bali International Flight Academy' => 'alumni-logos/bali-international-flight-academy.webp', // from the academy's own site (baliflightacademy.com)
+	'Sekolah Tinggi Pertanahan Nasional (STPN)' => 'alumni-logos/stpn.webp', // Wikipedia (id, logo file on the wiki itself): Logo STPN.png
+	'Sampurna School of Business' => 'alumni-logos/sampoerna-university.webp', // Sampoerna University logo (the business school is part of it), Wikipedia (id): Logo USBI.jpg
+	'Indonesian Banking School' => 'alumni-logos/indonesia-banking-school.webp', // supplied by the school (not from Wikimedia)
+	'London School of Public Relations' => 'alumni-logos/london-school-of-public-relations.webp', // supplied by the school (not from Wikimedia)
+	'Sekolah Tinggi Ekonomi, Keuangan & Perbankan Indonesia' => 'alumni-logos/stie-perbanas-indonesia.webp', // supplied by the school (not from Wikimedia)
+	'National Hotel Institute' => 'alumni-logos/national-hotel-institute.webp', // supplied by the school (not from Wikimedia)
+	'Universitas Pembangunan Nasional' => 'alumni-logos/universitas-pembangunan-nasional.webp', // Commons: Logo UPNVJ.png
+	'Universitas Prasetya Mulya' => 'alumni-logos/universitas-prasetya-mulya.webp', // Wikipedia (id, logo file on the wiki itself): Logo_Universitas Prasetiya Mulya.png
+	'Universitas Tama Jagakarsa' => 'alumni-logos/universitas-tama-jagakarsa.webp', // Wikipedia (id, logo file on the wiki itself): Logo Universitas Tama Jagakarsa.png
+	'STIE Perbanas' => 'alumni-logos/stie-perbanas.webp', // Wikipedia (id, logo file on the wiki itself): Logo Perbanas Institute horizontal.png
+	'Sekolah Tinggi Ilmu Ekonomi Perbanas' => 'alumni-logos/stie-perbanas.webp', // same school as STIE Perbanas
+	'Sekolah Tinggi Transportasi Darat' => 'alumni-logos/sekolah-tinggi-transportasi-darat.webp', // Wikipedia (id, logo file on the wiki itself): Logo PTDI-STTD.png
+	'Universitas 17 Agustus' => 'alumni-logos/universitas-17-agustus.webp', // Wikipedia (id, logo file on the wiki itself): Logo Untag Jakarta.jpg
+	'Universitas Sebelas Maret' => 'alumni-logos/universitas-sebelas-maret.webp', // Wikipedia (id, logo file on the wiki itself): UNS LOGO.png
+	'Fatih University' => 'alumni-logos/fatih-university.webp', // Wikipedia (en, logo file on the wiki itself): Fatih universitesi.png
+	'Moldova State University' => 'alumni-logos/moldova-state-university.webp', // Commons: Stema USM.svg
 );

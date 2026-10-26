@@ -1863,27 +1863,33 @@
 	background: var(--color-surface-page);
 }
 
+/* Every logo sits in the same fixed 48px tile, whatever its shape: the image is
+   scaled to fit inside it (object-fit: contain, so nothing is cropped or
+   stretched), and the tile never grows - a wide wordmark or a tall crest can't
+   change the row or push the university name around. Initials badges are the
+   same tile. */
 #homepage-custom .hp-alumni-uni-logo {
-	flex: 0 0 auto;
+	flex: 0 0 48px;
 	display: grid;
 	place-items: center;
-	width: 44px;
-	height: 44px;
+	width: 48px;
+	height: 48px;
+	padding: 4px;
+	box-sizing: border-box;
 	border-radius: var(--radius-sm);
 	background: var(--color-surface);
 	overflow: hidden;
 }
 
 #homepage-custom .hp-alumni-uni-logo img {
-	max-width: 36px;
-	max-height: 36px;
-	width: auto;
-	height: auto;
+	width: 100%;
+	height: 100%;
 	object-fit: contain;
 }
 
 /* No logo file for this university: initials in a badge of the same size. */
 #homepage-custom .hp-alumni-uni-logo--initials {
+	padding: 0;
 	background: color-mix(in srgb, var(--color-primary) 14%, var(--color-surface));
 	color: var(--color-gradient-start);
 	font-family: 'Inter', sans-serif;

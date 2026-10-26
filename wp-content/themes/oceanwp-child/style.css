@@ -263,6 +263,24 @@ body {
 	padding-bottom: 8px !important;
 }
 
+/* Six top-level items (with Programs) don't fit on one row between the logo
+   and the language switch on narrower desktops - "Careers" wrapped onto a
+   second line. Tighter side padding below 1280px keeps them on one row. */
+@media only screen and (min-width: 1025px) and (max-width: 1279px) {
+	#site-header .elementor-nav-menu--main .elementor-item {
+		padding-left: 7px !important;
+		padding-right: 7px !important;
+	}
+
+	#site-header .hp-lang-switch {
+		margin-right: 8px;
+	}
+
+	#site-header .elementor-widget-image img {
+		margin-left: 24px;
+	}
+}
+
 /* Center the menu items within their column instead of hugging its left
    edge next to the logo. The <ul> itself shrinks to its content width, so
    centering it needs auto margins on the <ul>, not just justify-content
@@ -353,11 +371,13 @@ body {
 	display: inline-flex;
 	align-items: center;
 	flex-shrink: 0;
-	/* Pulls the switch away from the Admission button so it centres in the
-	   gap between the last nav item (Careers/Karier) and the button,
-	   instead of sitting flush against the button's left edge. Measured
-	   directly against the rendered gap, not guessed. */
-	margin-right: 63px;
+	/* A little air between the switch and the Admission button. This was 63px
+	   to centre the switch in the gap after Indonesian's short last nav item
+	   (Karier), but the button's column is a fixed width: with the longer
+	   English menu (and its Programs item) that margin pushed the switch left
+	   over the last nav item (Careers). Kept small so the switch stays inside
+	   its own column in both languages. */
+	margin-right: 16px;
 	border: 1.5px solid rgba(24, 168, 250, 0.35);
 	border-radius: 999px;
 	padding: 2px;
