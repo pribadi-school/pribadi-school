@@ -128,7 +128,8 @@ return array(
 	'Istanbul University' => 'alumni-logos/istanbul-university.webp', // Commons: Logo of Istanbul University (1933).png
 	'The University of Melbourne' => 'alumni-logos/the-university-of-melbourne.webp', // Commons: MelbourneLogo.png
 	'Universitas Jenderal Soedirman' => 'alumni-logos/universitas-jenderal-soedirman.webp', // Commons: Logo-UNSOED.png
-	'Universitas Multimedia Nusantara' => 'alumni-logos/universitas-multimedia-nusantara.webp', // Commons: Logo UMN LowRes.jpg
+	'Universitas Multimedia Nusantara' => 'alumni-logos/universitas-multimedia-nusantara.webp', // Supplied by the school.
+	'Universitas Media Nusantara' => 'alumni-logos/universitas-multimedia-nusantara.webp', // Same university (UMN), short spelling in the alumni data.
 	'Universiti Teknologi Malaysia' => 'alumni-logos/universiti-teknologi-malaysia.webp', // Commons: UTM-LOGO-FULL.png
 	'Universitas Sultan Ageng Tirtayasa' => 'alumni-logos/universitas-sultan-ageng-tirtayasa.webp', // Commons: Logountirta.jpg
 	'Universitas Negeri Jakarta' => 'alumni-logos/universitas-negeri-jakarta.webp', // Commons: Logo dan Moto baru UNJ-PTNBH.png
