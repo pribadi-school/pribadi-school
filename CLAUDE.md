@@ -211,6 +211,17 @@ IDs). Don't try to fix the symptoms one at a time with CSS or PHP filters —
 `ocean_display_page_header`, but that is a guarantee for that one template,
 not a substitute for the settings.
 
+### Production's PHP session folder is missing
+
+Since 2026-10 production's `session.save_path` points to
+`/var/cpanel/php/sessions/ea-php56`, which doesn't exist (the site runs PHP
+8.1), and changing it in cPanel's Select PHP Version didn't take. Any plugin
+that calls `session_start()` (PixelYourSite) then printed "Failed to read
+session data" on every page. `mu-plugins/session-path-fix.php` in the theme
+redirects sessions to `~/tmp` when the configured folder is missing; it's
+loaded from `functions.php` and can also be installed as a real must-use
+plugin (command in its header). It steps aside once the host fixes the path.
+
 ### PHP changes can lag behind file changes on the live host
 
 Production is LiteSpeed on Hostinger with OPcache. After a deploy, CSS,

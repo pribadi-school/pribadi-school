@@ -1,4 +1,11 @@
 <?php
+
+/*
+ * Production's PHP session folder is missing, so any plugin calling
+ * session_start() (PixelYourSite) printed an error on every page. See
+ * mu-plugins/session-path-fix.php for the why and the must-use install.
+ */
+require_once __DIR__ . '/mu-plugins/session-path-fix.php';
 /**
  * OceanWP Child theme functions.
  *
