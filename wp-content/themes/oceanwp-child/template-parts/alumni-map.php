@@ -428,9 +428,6 @@ $hp_map_instance = wp_unique_id( 'hp-map-' );
 		<div class="hp-map-zoom" role="group" aria-label="<?php echo esc_attr( hp_t( 'Zoom peta', 'Map zoom' ) ); ?>" hidden>
 			<button type="button" class="hp-map-zoom-btn" data-hp-zoom="in" aria-label="<?php echo esc_attr( hp_t( 'Perbesar peta', 'Zoom in' ) ); ?>">+</button>
 			<button type="button" class="hp-map-zoom-btn" data-hp-zoom="out" aria-label="<?php echo esc_attr( hp_t( 'Perkecil peta', 'Zoom out' ) ); ?>">&minus;</button>
-			<button type="button" class="hp-map-zoom-btn hp-map-zoom-reset" data-hp-zoom="reset" aria-label="<?php echo esc_attr( hp_t( 'Atur ulang peta', 'Reset map' ) ); ?>" hidden>
-				<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-			</button>
 		</div>
 		<div class="hp-map-scale" aria-hidden="true" hidden title="<?php echo esc_attr( hp_t( 'Skala perkiraan (tepat di khatulistiwa)', 'Approximate scale (exact at the equator)' ) ); ?>">
 			<span class="hp-map-scale-text"></span>

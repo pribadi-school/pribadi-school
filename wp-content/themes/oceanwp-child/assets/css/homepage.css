@@ -1306,7 +1306,7 @@
 	stroke-linejoin: round;
 }
 
-/* Zoom: + / - / reset buttons bottom-right, scale bar bottom-left (markup in
+/* Zoom: + / - buttons bottom-right, scale bar bottom-left (markup in
    template-parts/alumni-map.php, behaviour in assets/js/alumni-map.js). Both are
    `hidden` until the script runs. Zoomed in, the map can be dragged. touch-action
    is only turned off while zoomed, so on a phone the page still scrolls normally

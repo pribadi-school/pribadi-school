@@ -72,7 +72,7 @@ template-parts/alumni-map.php     homepage alumni section: map + country picker 
                                   ones in assets/img/alumni-logos/ - the homepage's scrolling
                                   strip folder assets/img/university-logos/ is hand-edited and
                                   only ever read), flags in assets/img/flags/
-                                  The map zooms (+ / - / reset, drag to pan, km scale bar) by narrowing the
+                                  The map zooms (+ / - buttons, drag to pan, km scale bar) by narrowing the
                                   SVG viewBox and re-placing pins from data-lng/data-lat in
                                   assets/js/alumni-map.js - not by CSS scaling, which would resize the pins
 assets/models/                    3D models (.glb) shown with Google's <model-viewer> on story

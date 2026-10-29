@@ -12,7 +12,7 @@
  * - makes a pin click select its country in the picker - the pins are a
  *   shortcut into the picker, not a second place to read the lists.
  *
- * It also runs the map's zoom (+ / - / reset buttons, drag to pan, scale bar,
+ * It also runs the map's zoom (+ / - buttons, drag to pan, scale bar,
  * distance from the school on each pin's label); see the "Zoom" block below.
  *
  * Without JS the first country's card simply stays visible and the map stays
@@ -258,7 +258,6 @@
 
 		var btnIn = controls.querySelector( '[data-hp-zoom="in"]' );
 		var btnOut = controls.querySelector( '[data-hp-zoom="out"]' );
-		var btnReset = controls.querySelector( '[data-hp-zoom="reset"]' );
 		var scaleBar = scaleBox ? scaleBox.querySelector( '.hp-map-scale-bar' ) : null;
 		var scaleText = scaleBox ? scaleBox.querySelector( '.hp-map-scale-text' ) : null;
 
@@ -389,10 +388,6 @@
 			btnIn.disabled = view.s >= MAX_ZOOM - 0.001;
 			btnOut.disabled = ! zoomed;
 
-			if ( btnReset ) {
-				btnReset.hidden = ! zoomed;
-			}
-
 			updateScale();
 		}
 
@@ -478,12 +473,6 @@
 		btnOut.addEventListener( 'click', function () {
 			zoomBy( 0.5 );
 		} );
-
-		if ( btnReset ) {
-			btnReset.addEventListener( 'click', function () {
-				goTo( fullView() );
-			} );
-		}
 
 		// Choosing a country while zoomed in slides the map to it.
 		window.hpAlumniMapFocus = function ( key ) {
