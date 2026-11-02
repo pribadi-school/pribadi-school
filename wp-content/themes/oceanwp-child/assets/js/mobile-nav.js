@@ -190,6 +190,33 @@
 		panel.hidden = true;
 		panel.appendChild( list );
 
+		// The Admission button lives in the desktop header row's .btn-admission
+		// column, which is hidden below tablet width like the rest of that
+		// row - so mobile visitors had no way to reach it. Its href and label
+		// are read from the rendered button (label already swapped to
+		// Indonesian by language-switch.js when that's active), so this never
+		// drifts from whatever the Elementor header points it at.
+		var admissionSource = header.querySelector( '.btn-admission a.elementor-button' );
+
+		if ( admissionSource && admissionSource.getAttribute( 'href' ) ) {
+			var admissionText = admissionSource.querySelector( '.elementor-button-text' );
+			var admissionWrap = document.createElement( 'div' );
+			admissionWrap.className = 'hp-mnav-admission';
+			var admissionLink = makeLink(
+				admissionSource.getAttribute( 'href' ),
+				( admissionText || admissionSource ).textContent.trim() || ( isIndonesian ? 'DAFTAR' : 'ADMISSION' ),
+				'hp-mnav-link hp-mnav-admission-btn'
+			);
+
+			if ( admissionSource.target ) {
+				admissionLink.target = admissionSource.target;
+				admissionLink.rel = 'noopener';
+			}
+
+			admissionWrap.appendChild( admissionLink );
+			panel.appendChild( admissionWrap );
+		}
+
 		// The ID/EN switch (language-switch.js) only has a slot in the
 		// desktop header row, which is hidden below tablet width - so mobile
 		// visitors had no way to change language at all. Reuses that file's
