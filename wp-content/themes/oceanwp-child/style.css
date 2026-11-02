@@ -665,3 +665,42 @@ body {
 		transition: none;
 	}
 }
+
+/* ---------------------------------------------------------------
+   Floating WhatsApp chat button (printed by functions.php on every
+   page). Green is WhatsApp's own brand colour, token
+   --color-whatsapp in MASTER.md.
+   --------------------------------------------------------------- */
+.owpc-wa-float {
+	position: fixed;
+	right: 20px;
+	bottom: 20px;
+	z-index: 998;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 56px;
+	height: 56px;
+	border-radius: 50%;
+	background: #25d366;
+	color: #ffffff;
+	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+	transition: transform 0.2s ease;
+}
+
+.owpc-wa-float:hover,
+.owpc-wa-float:focus-visible {
+	color: #ffffff;
+	transform: scale(1.08);
+}
+
+.owpc-wa-float:focus-visible {
+	outline: 2px solid #18a8fa;
+	outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.owpc-wa-float {
+		transition: none;
+	}
+}

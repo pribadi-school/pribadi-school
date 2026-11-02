@@ -62,6 +62,7 @@ properties; these are the canonical source going forward.
 | Gradient Start (on dark) | `#2bb6ff` | `--color-gradient-start-on-dark` | Same gradient role, but over the dark achievement tiles |
 | Gradient End (on dark) | `#4fe0da` | `--color-gradient-end-on-dark` | Paired with gradient-start-on-dark |
 | Accent (warm) | `#f26522` | `--color-accent` | Sparingly: student names, achievement highlights, warmth cues |
+| WhatsApp green | `#25d366` | `--color-whatsapp` | Only the floating WhatsApp chat button (WhatsApp's own brand colour) |
 | On Primary | `#ffffff` | `--color-on-primary` | Text/icons on blue or dark surfaces |
 | Foreground (headings) | `#12233c` | `--color-foreground` | Headings, high-emphasis text |
 | Foreground (body dark variant) | `#1c2733` | `--color-foreground-alt` | Body text on light card surfaces |
