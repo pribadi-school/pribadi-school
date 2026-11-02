@@ -613,6 +613,35 @@ body {
 	font-weight: 400;
 }
 
+/* Admission button copied into the mobile panel by mobile-nav.js (the
+   desktop one's column is hidden below tablet width). */
+#site-header .hp-mnav-cta {
+	margin-top: 8px;
+	padding: 16px 24px 4px;
+	border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+#site-header .hp-mnav-link.hp-mnav-admission {
+	padding: 12px 24px;
+	border-radius: 999px;
+	background: #18a8fa;
+	color: #fff;
+	font-weight: 600;
+	letter-spacing: 0.5px;
+	text-align: center;
+}
+
+#site-header .hp-mnav-link.hp-mnav-admission:hover,
+#site-header .hp-mnav-link.hp-mnav-admission:focus {
+	background: #0d8fdb;
+	color: #fff;
+}
+
+#site-header .hp-mnav-cta + .hp-mnav-lang {
+	margin-top: 0;
+	border-top: 0;
+}
+
 /* Second instance of the ID/EN switch, built by mobile-nav.js reusing
    language-switch.js's own switcher. That file's desktop copy is hidden
    below 767px (its column has no mobile equivalent) - the extra

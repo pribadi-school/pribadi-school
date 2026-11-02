@@ -190,6 +190,23 @@
 		panel.hidden = true;
 		panel.appendChild( list );
 
+		// The header's Admission button sits in a column that's hidden below
+		// tablet width, the same as the ID/EN switch below, so mobile visitors
+		// had no way to reach it. Its href and label are read from that
+		// button (label already swapped to DAFTAR by language-switch.js).
+		var admission = header.querySelector( '.btn-admission a.elementor-button' );
+
+		if ( admission && admission.getAttribute( 'href' ) ) {
+			var admissionWrap = document.createElement( 'div' );
+			admissionWrap.className = 'hp-mnav-cta';
+			admissionWrap.appendChild( makeLink(
+				admission.getAttribute( 'href' ),
+				admission.textContent.trim(),
+				'hp-mnav-link hp-mnav-admission'
+			) );
+			panel.appendChild( admissionWrap );
+		}
+
 		// The ID/EN switch (language-switch.js) only has a slot in the
 		// desktop header row, which is hidden below tablet width - so mobile
 		// visitors had no way to change language at all. Reuses that file's
