@@ -116,6 +116,9 @@ get_header();
 					); ?></p>
 					<a class="au-btn hp-reveal" style="animation-delay: 240ms;" href="#visi"><?php echo esc_html( hp_t( 'Jelajahi', 'Explore' ) ); ?></a>
 				</div>
+				<figure class="au-hero-art hp-reveal hp-reveal--up">
+					<img src="<?php echo esc_url( $au_up . '2023/03/Praktek-Kimia-Trans-Stroke.png' ); ?>" alt="<?php echo esc_attr( hp_t( 'Siswa Pribadi School Depok di laboratorium', 'Pribadi School Depok students in the lab' ) ); ?>" fetchpriority="high">
+				</figure>
 			</div>
 		</div>
 	</section>
